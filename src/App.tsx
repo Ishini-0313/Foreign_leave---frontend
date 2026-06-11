@@ -4,6 +4,9 @@ import Login from './pages/login.tsx';
 import Register from './pages/register.tsx';
 import Register_2 from './pages/register_2.tsx';
 import Register_3 from './pages/register_3.tsx';
+import Dashboard from './pages/dashboard.tsx';
+import MinistryManagement from './pages/minstrymng.tsx';
+import Navbar from './components/navbar.tsx';
 
 
 function App() {
@@ -11,8 +14,11 @@ function App() {
     <Routes>
       <Route path="/" element={<Login/>}></Route>
       <Route path="/register" element={<Register/>}></Route>
-      <Route path="register_2" element={<Register_2/>}></Route>
-      <Route path="register_3" element={<Register_3/>}></Route>
+      <Route path="/register_2" element={<Register_2/>}></Route>
+      <Route path="/register_3" element={<Register_3/>}></Route>
+      <Route path="/dashboard" element={<Dashboard/>}></Route>
+      <Route path="/offices" element={<MinistryManagement/>}></Route>
+      <Route path="/nav" element={<Navbar/>}></Route>
     </Routes>
   )
 }

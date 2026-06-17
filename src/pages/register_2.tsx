@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useRegister } from "../context/RegisterContext";
 
 const steps = [
   { number: 1, label: "Personal Info" },
@@ -9,14 +10,16 @@ const steps = [
 
 export default function Register_2() {
   const [currentStep] = useState(2);
-  const [form, setForm] = useState({
-    ministry: "",
-    department: "",
-    designation: ""
-  });
+  // const [form, setForm] = useState({
+  //   ministry: "",
+  //   department: "",
+  //   designation: ""
+  // });
+
+  const {formData, setFormData} = useRegister();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -108,7 +111,7 @@ export default function Register_2() {
             <hr className="border-[#C4C6CF] mb-6" />
 
             {/* Ministry/Counsil */}
-            <div className="mb-5">
+            {/* <div className="mb-5">
               <label className="block text-sm font-medium text-[#44474E] mb-2 leading-5">
                 අමාත්‍යාංශය / පළාත් සභාව
               </label>
@@ -120,17 +123,17 @@ export default function Register_2() {
                 placeholder=""
                 className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
               />
-            </div>
+            </div> */}
 
             {/* Department/Institute */}
             <div className="mb-5">
                 <label className="block text-sm font-medium text-[#44474E] mb-2 leading-5">
-                  දෙපාර්තමේන්තුව / ආයතනය
+                  ආයතනය
                 </label>
                 <input
                   type="text"
                   name="dept"
-                  value={form.department}
+                  value={formData.department}
                   onChange={handleChange}
                   placeholder=""
                   className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
@@ -145,7 +148,7 @@ export default function Register_2() {
               <input
                 type="text"
                 name="designation"
-                value={form.designation}
+                value={formData.designation}
                 onChange={handleChange}
                 placeholder=""
                 className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"

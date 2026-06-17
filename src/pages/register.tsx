@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useRegister } from "../context/RegisterContext";
 
 const steps = [
   { number: 1, label: "Personal Info" },
@@ -9,15 +10,17 @@ const steps = [
 
 export default function Register() {
   const [currentStep] = useState(1);
-  const [form, setForm] = useState({
-    fullName: "",
-    nic: "",
-    mobile: "",
-    email: "",
-  });
+  // const [form, setForm] = useState({
+  //   fullName: "",
+  //   nic: "",
+  //   mobile: "",
+  //   email: "",
+  // });
+
+  const {formData, setFormData} = useRegister();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -116,11 +119,12 @@ export default function Register() {
               <input
                 type="text"
                 name="fullName"
-                value={form.fullName}
+                value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Enter your full name as per NIC"
                 className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
               />
+
             </div>
 
             {/* NIC + Mobile row */}
@@ -132,7 +136,7 @@ export default function Register() {
                 <input
                   type="text"
                   name="nic"
-                  value={form.nic}
+                  value={formData.nic}
                   onChange={handleChange}
                   placeholder="e.g. 199012345678"
                   className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
@@ -145,7 +149,7 @@ export default function Register() {
                 <input
                   type="tel"
                   name="mobile"
-                  value={form.mobile}
+                  value={formData.mobile}
                   onChange={handleChange}
                   placeholder="e.g. 0771234567"
                   className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
@@ -161,7 +165,7 @@ export default function Register() {
               <input
                 type="email"
                 name="email"
-                value={form.email}
+                value={formData.email}
                 onChange={handleChange}
                 placeholder="name@example.com"
                 className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"

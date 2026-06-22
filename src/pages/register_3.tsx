@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "../context/RegisterContext";
+import axios from "axios";
 
 const steps = [
   { number: 1, label: "Personal Info" },
@@ -10,16 +11,57 @@ const steps = [
 
 export default function Register_3() {
   const [currentStep] = useState(3);
-  // const [form, setForm] = useState({
-  //   username: "",
-  //   pwd: "",
-  //   confirm_pwd: ""
-  // });
 
   const {formData, setFormData} = useRegister();
 
+  const navigate = useNavigate();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async() => {
+    try{
+      if(!formData.username.trim()){
+        alert("Username is required");
+        return;
+      }
+
+      if(!formData.password.trim()){
+        alert("Password is required");
+        return;
+      }
+
+      if(formData.password !== formData.confirmPassword){
+        alert("Passwords do not match");
+        return;
+      }
+
+      if(formData.password.length < 8){
+        alert("Password must be at least 8 characters");
+        return;
+      }
+
+      const response = await axios.post('http://127.0.0.1:8000/api/register', {
+        full_name: formData.fullName,
+        nic: formData.nic,
+        phone: formData.mobile,
+        email: formData.email,
+        designation: formData.designation,
+
+        office_id: formData.office_id,
+
+        username: formData.username,
+        password: formData.password,
+        password_confirmation: formData.confirmPassword,
+      });
+
+      alert(response.data.message);
+
+      navigate("/");
+    }catch(error:any){
+      console.log(error.response?.data);
+    }
   };
 
   return (
@@ -132,8 +174,8 @@ export default function Register_3() {
                 </label>
                 <input
                   type="text"
-                  name="pwd"
-                  value={formData.pwd}
+                  name="password"
+                  value={formData.password}
                   onChange={handleChange}
                   placeholder=""
                   className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
@@ -147,8 +189,8 @@ export default function Register_3() {
               </label>
               <input
                 type="text"
-                name="confirm_pwd"
-                value={formData.confirm_pwd}
+                name="confirmPassword"
+                value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder=""
                 className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
@@ -176,8 +218,8 @@ export default function Register_3() {
                 Back
               </Link>
 
-              <Link
-                to="/"
+              <button
+                onClick={handleRegister}
                 className="flex items-center gap-2 h-12 px-8 bg-[#002046] hover:bg-[#002d5c] text-white text-sm font-semibold rounded transition-colors"
               >
                 Register
@@ -193,7 +235,7 @@ export default function Register_3() {
                     fill="white"
                   />
                 </svg> */}
-              </Link>
+              </button>
             </div>
           </div>
         </div>

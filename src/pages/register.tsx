@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "../context/RegisterContext";
 
 const steps = [
@@ -10,17 +10,37 @@ const steps = [
 
 export default function Register() {
   const [currentStep] = useState(1);
-  // const [form, setForm] = useState({
-  //   fullName: "",
-  //   nic: "",
-  //   mobile: "",
-  //   email: "",
-  // });
 
   const {formData, setFormData} = useRegister();
 
+  const navigate = useNavigate();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleNext = () => {
+    if(!formData.fullName.trim()){
+      alert("Full name is required!");
+      return;
+    }
+
+    if(!formData.nic.trim()){
+      alert("NIC is required!");
+      return;
+    }
+
+    if(!formData.mobile.trim()){
+      alert("Phone number is required!");
+      return;
+    }
+
+    if(!formData.email.trim()){
+      alert("Email is required!");
+      return;
+    }
+
+    navigate("/register_2");
   };
 
   return (
@@ -193,8 +213,8 @@ export default function Register() {
                 Back
               </Link>
 
-              <Link
-                to="/register_2"
+              <button
+                onClick={handleNext}
                 className="flex items-center gap-2 h-12 px-8 bg-[#002046] hover:bg-[#002d5c] text-white text-sm font-semibold rounded transition-colors"
               >
                 Next
@@ -210,7 +230,7 @@ export default function Register() {
                     fill="white"
                   />
                 </svg>
-              </Link>
+              </button>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "../context/RegisterContext";
+import axios from "axios";
 
 const steps = [
   { number: 1, label: "Personal Info" },
@@ -10,16 +11,41 @@ const steps = [
 
 export default function Register_2() {
   const [currentStep] = useState(2);
-  // const [form, setForm] = useState({
-  //   ministry: "",
-  //   department: "",
-  //   designation: ""
-  // });
 
   const {formData, setFormData} = useRegister();
 
+  const [offices, setOffices] = useState([]);
+
+  useEffect(()=>{
+    const fetchOffice = async()=>{
+      try{
+        const response = await axios.get('http://127.0.0.1:8000/api/office');
+        setOffices(response.data);
+      }catch(error){
+        console.error(error);
+      }
+    };
+    fetchOffice();
+  }, []);
+
+  const navigate = useNavigate();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleNext = () => {
+    if(!formData.office_id){
+      alert("Institute is required!");
+      return;
+    }
+
+    if(!formData.designation.trim()){
+      alert("Designation is required!");
+      return;
+    }
+
+    navigate("/register_3");
   };
 
   return (
@@ -110,34 +136,38 @@ export default function Register_2() {
             </h2>
             <hr className="border-[#C4C6CF] mb-6" />
 
-            {/* Ministry/Counsil */}
-            {/* <div className="mb-5">
-              <label className="block text-sm font-medium text-[#44474E] mb-2 leading-5">
-                අමාත්‍යාංශය / පළාත් සභාව
-              </label>
-              <input
-                type="text"
-                name="ministry"
-                value={form.ministry}
-                onChange={handleChange}
-                placeholder=""
-                className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
-              />
-            </div> */}
-
-            {/* Department/Institute */}
+            {/* Institute */}
             <div className="mb-5">
                 <label className="block text-sm font-medium text-[#44474E] mb-2 leading-5">
                   ආයතනය
                 </label>
-                <input
+                {/* <input
                   type="text"
-                  name="dept"
-                  value={formData.department}
+                  name="office"
+                  value={formData.office}
                   onChange={handleChange}
                   placeholder=""
                   className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
-                />
+                /> */}
+                <select 
+                  name="office_id" 
+                  value={formData.office_id}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      office_id: e.target.value,
+                    })
+                  }
+                  className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm"
+                >
+                  <option value="">-- Select Institute --</option>
+
+                  {offices.map((office: any) => (
+                    <option key={office.id} value={office.id}>
+                      {office.name}
+                    </option>
+                  ))}
+                </select>
             </div>
 
             {/* Designation */}
@@ -176,8 +206,8 @@ export default function Register_2() {
                 Back
               </Link>
 
-              <Link
-                to="/register_3"
+              <button
+                onClick={handleNext}
                 className="flex items-center gap-2 h-12 px-8 bg-[#002046] hover:bg-[#002d5c] text-white text-sm font-semibold rounded transition-colors"
               >
                 Next
@@ -193,7 +223,7 @@ export default function Register_2() {
                     fill="white"
                   />
                 </svg>
-              </Link>
+              </button>
             </div>
           </div>
         </div>

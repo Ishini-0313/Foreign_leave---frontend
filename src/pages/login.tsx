@@ -1,10 +1,40 @@
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogin = async()=>{
+    try{
+      if(!username.trim()){
+        alert("Username is required!");
+        return;
+      }
+      if(!password.trim()){
+        alert("Password is required!");
+        return;
+      }
+
+      const response = await axios.post('http://127.0.0.1:8000/api/login',{
+        username,password
+      });
+
+      alert(response.data.message);
+
+      localStorage.setItem("token",response.data.token);
+      // save user
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+
+      navigate('/dashboard');
+    }catch(error){
+      console.error(error);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "linear-gradient(0deg, #FAF9FD 0%, #FAF9FD 100%), #FFF" }}>
@@ -104,7 +134,8 @@ export default function Login() {
 
               {/* Login Button */}
               <button
-                type="submit"
+                type="button"
+                onClick={handleLogin}
                 className="w-full h-12 flex items-center justify-center gap-2 bg-[#002046] hover:bg-[#002d5c] text-white text-sm font-medium leading-5 tracking-[0.14px] rounded shadow-sm transition-colors mb-3"
               >
                 Login to Dashboard

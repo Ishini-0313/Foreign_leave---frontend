@@ -141,7 +141,7 @@ export default function Register() {
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
-                placeholder="Enter your full name as per NIC"
+                placeholder="Enter your name "
                 className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
               />
 

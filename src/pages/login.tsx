@@ -6,7 +6,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  
   const navigate = useNavigate();
 
   const handleLogin = async()=>{
@@ -27,17 +27,19 @@ export default function Login() {
       alert(response.data.message);
 
       localStorage.setItem("token",response.data.token);
-      // save user
-      // localStorage.setItem("user", JSON.stringify(response.data.user));
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(response.data.user)
-      );
+      
+      localStorage.setItem("user",JSON.stringify(response.data.user));
 
       console.log(response.data.user);
 
-      navigate('/dashboard');
+      const user = response.data.user;
+      
+      if (user.role?.role_name === "Applicant") {
+          navigate("/new-application");
+      } else {
+          navigate("/dashboard");
+      }
+      
     }catch(error){
       console.error(error);
     }

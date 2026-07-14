@@ -1,69 +1,38 @@
 import axios from "axios";
-import { LayoutDashboard, FileText, Settings, FilePlusCorner } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-const navItems = [
-  {
-    label: "Dashboard",
-    active: true,
-    icon: LayoutDashboard
-  },
-  {
-    label: "Applications",
-    icon: FileText,
-  },
-  {
-    label: "New Application",
-    icon: FilePlusCorner
-  },
-  {
-    label: "Settings",
-    icon: Settings
-  },
-];
-
-// const applications = [
-//   { id: "LV/SP/2024/0842", name: "Anura Siriwardena", office: "Agriculture Dept", date: "24 Oct 2024", status: "Pending" },
-//   { id: "LV/SP/2024/0841", name: "Kamala Perera", office: "Education Ministry", date: "24 Oct 2024", status: "Pending" },
-//   { id: "LV/SP/2024/0839", name: "Rohan Madugalle", office: "Provincial Council HQ", date: "23 Oct 2024", status: "Pending" },
-//   { id: "LV/SP/2024/0835", name: "Dilini Jayasuriya", office: "Irrigation Dept", date: "23 Oct 2024", status: "Pending" },
-// ];
-
-
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/navbar";
 
 export default function Dashboard() {
-  const [activeFilter, setActiveFilter] = useState<"all" | "queue">("queue");
+  const [activeFilter, setActiveFilter] = useState("queue");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [applications, setApplications] = useState<any[]>([]);
-  const [role, setRole] =useState("");
-
   const navigate = useNavigate();
 
   useEffect(()=>{
     const storedUser = localStorage.getItem("user");
-
     if(!storedUser){
       navigate("/");
       return;
     }
-
     setUser(JSON.parse(storedUser));
-
-    fetchPendingApplications();
+    loadMyQueue();
   }, []);
 
-  const fetchPendingApplications = async ()=>{
+  useEffect(() => {
+    console.log("User details", user);
+  }, [user]);
+
+  const loadMyQueue = async ()=>{
     try{
       const token = localStorage.getItem("token");
 
       const response = await axios.get('http://127.0.0.1:8000/api/officer/pending-applications',{
         headers:{
           Authorization: `Bearer ${token}`,
-          Accept: "application/json",
         }
       });
 
@@ -78,92 +47,45 @@ export default function Dashboard() {
     }
   };
 
-  useEffect(()=>{
-    if (!user?.role_id) return;
-    axios.get(
-          `http://127.0.0.1:8000/api/role-by-id`,
-          {
-              params: {
-                  id: user?.role_id
-              }
-          }
-      )
-      .then((res) => {
-        console.log("Role Response:", res.data);
-        setRole(res.data.role_name);
-      })
-      .catch((err) => {
-          console.log(err);
+  const loadAll = async ()=>{
+    try{
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get('http://127.0.0.1:8000/api/officer/all-applications',{
+        headers:{
+          Authorization: `Bearer ${token}`,
+        }
       });
 
-  },[user]);
+      const data = await response.data;
+
+      console.log(data);
+
+      setApplications(data);
+
+    }catch(error){
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (activeFilter == "queue") {
+        loadMyQueue();
+    } else {
+        loadAll();
+    }
+  }, [activeFilter]);
+
 
   return (
     <div className="flex h-screen bg-[#FAF9FD] font-[Inter,sans-serif] overflow-hidden relative">
       {/* Sidebar */}
       {/* Mobile Overlay */}
-      <>
-        {sidebarOpen && (
-          <div
-            className="fixed inset-0 bg-black/40 z-40 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-        <aside className={`
-            fixed lg:static
-            top-0 left-0 z-50
-            h-full w-64
-            border-r border-[#C4C6CF]
-            bg-[#F4F3F7]
-            overflow-y-auto
-            transform transition-transform duration-300
-            ${
-              sidebarOpen
-                ? "translate-x-0"
-                : "-translate-x-full lg:translate-x-0"
-            }
-          `}>
-          <div className="px-4 pt-8 pb-10">
-            <div className="flex items-center gap-3">
-              <img
-                src="./public/images.png"
-                alt="Government Seal"
-                className="w-12 h-10 rounded-sm shrink-0"
-              />
-              <div>
-                <p className="text-[#002046] font-bold text-sm leading-[17.5px] tracking-[0.14px]">
-                  Southern Provincial Council
-                </p>
-                <p className="text-[#44474E] font-semibold text-[10px] leading-3.75 tracking-[0.5px] uppercase mt-0.5">
-                  Government of Sri Lanka
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <nav className="flex flex-col gap-1 px-2 flex-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                to={item.active ? "" : `/${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-                className={`flex items-center gap-3 px-4 py-3 rounded-sm] transition-colors ${
-                  item.active
-                    ? "bg-[#1B365D] text-[#87A0CD]"
-                    : "text-[#44474E] hover:bg-[#E8E7EC]"
-                }`}
-              >
-                {/* <span className={item.active ? "text-[#87A0CD]" : "text-[#44474E]"}>
-                  {item.icon}
-                </span> */}
-                <item.icon size={20} />
-                <span className="font-medium text-sm leading-5 tracking-[0.14px]">
-                  {item.label}
-                </span>
-              </Link>
-            ))}
-          </nav>
-        </aside>
-      </>
+      <Navbar
+        user={user}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
 
       {/* Main Area */}
       <div className="flex flex-col flex-1 min-w-0 h-full overflow-hidden">
@@ -215,7 +137,7 @@ export default function Dashboard() {
                 <p className="text-[#1A1B1E] font-bold text-sm leading-5 tracking-[0.14px]" onClick={()=>navigate('/profile')}>
                   {user?.full_name}
                 </p>
-                <p className="text-[#4e7ce5] text-[12px] leading-3.75">{role}</p>
+                <p className="text-[#4e7ce5] text-[12px] leading-3.75">{user?.role?.role_name}</p>
               </div>
             </div>
           </div>
@@ -236,7 +158,7 @@ export default function Dashboard() {
               </div>
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => setActiveFilter("all")}
+                  onClick={() => {setActiveFilter("all")}}
                   className={`px-4 py-2 rounded-sm border border-[#C4C6CF] font-bold text-base leading-6 transition-colors ${
                     activeFilter === "all"
                       ? "bg-[#002046] text-white border-[#002046]"
@@ -246,7 +168,7 @@ export default function Dashboard() {
                   All
                 </button>
                 <button
-                  onClick={() => setActiveFilter("queue")}
+                  onClick={() => {setActiveFilter("queue")} }
                   className={`px-4 py-2 rounded-sm border border-[#C4C6CF] font-bold text-base leading-6 transition-colors ${
                     activeFilter === "queue"
                       ? "bg-[#002046] text-white border-[#002046]"

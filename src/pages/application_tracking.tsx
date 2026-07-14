@@ -1,23 +1,8 @@
 import axios from "axios";
-import {  FilePlusCorner, FileText, LayoutDashboard } from "lucide-react";
+import {  Check, Hourglass, Undo2 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-
-const navItems = [
-  {
-    label: "Dashboard",
-    icon: LayoutDashboard,
-    active:true
-  },
-  {
-    label: "Applications",
-    icon: FileText,
-  },
-  {
-    label: "New Application",
-    icon: FilePlusCorner,
-  },
-];
+import { useNavigate, useParams } from "react-router-dom";
+import Navbar from "../components/navbar";
 
 export default function ApplicationTracking() {
   const [user, setUser] = useState<any>(null);
@@ -80,68 +65,11 @@ export default function ApplicationTracking() {
   return (
     <div className="flex h-screen bg-[#FAF9FD] font-[Inter,sans-serif] overflow-hidden relative">
       {/* Mobile sidebar overlay */}
-      <>
-        {sidebarOpen && (
-        <div
-            className="fixed inset-0 bg-black/40 z-40 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
+      <Navbar
+            user={user}
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
         />
-        )}
-            <aside className={`
-                fixed lg:static
-                top-0 left-0 z-50
-                h-full w-64
-                border-r border-[#C4C6CF]
-                bg-[#F4F3F7]
-                overflow-y-auto
-                transform transition-transform duration-300
-                ${
-                sidebarOpen
-                    ? "translate-x-0"
-                    : "-translate-x-full lg:translate-x-0"
-                }
-            `}>
-            <div className="px-4 pt-8 pb-10">
-                <div className="flex items-center gap-3">
-                <img
-                    src="/images.png"
-                    alt="Government Seal"
-                    className="w-12 h-10 rounded-sm shrink-0"
-                />
-                <div>
-                    <p className="text-[#002046] font-bold text-sm leading-[17.5px] tracking-[0.14px]">
-                    Southern Provincial Council
-                    </p>
-                    <p className="text-[#44474E] font-semibold text-[10px] leading-3.75 tracking-[0.5px] uppercase mt-0.5">
-                    Government of Sri Lanka
-                    </p>
-                </div>
-                </div>
-            </div>
-
-            <nav className="flex flex-col gap-1 px-2 flex-1">
-                {navItems.map((item) => (
-                <Link
-                    key={item.label}
-                    to={item.active ? "" : `/${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-sm] transition-colors ${
-                    item.active
-                        ? "bg-[#1B365D] text-[#87A0CD]"
-                        : "text-[#44474E] hover:bg-[#E8E7EC]"
-                    }`}
-                >
-                    {/* <span className={item.active ? "text-[#87A0CD]" : "text-[#44474E]"}>
-                    {item.icon}
-                    </span> */}
-                    <item.icon size={20} />
-                    <span className="font-medium text-sm leading-5 tracking-[0.14px]">
-                    {item.label}
-                    </span>
-                </Link>
-                ))}
-            </nav>
-            </aside>
-      </>
 
       {/* Main area */}
       <div className="flex flex-col flex-1 min-w-0 h-full overflow-hidden">
@@ -197,14 +125,27 @@ export default function ApplicationTracking() {
             <div className="bg-white rounded-lg shadow p-6">
                 <h2 className="font-bold mb-6">Workflow Progress</h2>
                 {tracking?.steps.map((step:any, index:any)=>{
-                    const completed = tracking.history.find((h:any)=>h.workflow_step_id===step.id);
+                    const completed = step.status === 'completed';
+                    const current = step.status === 'current';
+                    const returned = step.status === 'returned';
                     return(
                         <div key={step.id} className="flex gap-4">
                             <div className="flex flex-col items-center">
                                 <div className={`w-10 h-10 rounded-md flex items-center justify-center border-2
-                                    ${completed ? "border-green-500 bg-green-100" : "border-gray-300 bg-gray-100"}`}
-                                    >
-                                    {completed?"✓":step.sequence_no}
+                                    ${
+                                        step.status === 'completed' ? "border-green-500 bg-green-100" : 
+                                        step.status === 'current' ? "border-blue-500 bg-blue-100" : 
+                                        step.status === 'returned' ? "border-yellow-500 bg-yellow-100" : 
+                                        "border-gray-300 bg-gray-100"
+                                    }`
+                                }
+                                >
+                                    {
+                                        step.status === 'completed' ? <Check className="w-5 text-green-500"/> : 
+                                        step.status === 'current' ? <Hourglass className="w-5 text-blue-500"/>:
+                                        step.status === 'returned' ? <Undo2 className="w-5 text-yellow-500"/> :
+                                        step.sequence_no
+                                    }
                                 </div>
                                 {/* Vertical Line (don't show after last step) */}
                                 {index !== tracking.steps.length - 1 && (
@@ -217,8 +158,9 @@ export default function ApplicationTracking() {
 
                             <div>
                                 {
-                                    completed?
-                                    <div className="text-green-600 ">{step.role.role_name}</div>:
+                                    step.status === 'completed'?<div className="text-green-600 ">{step.role.role_name}</div>:
+                                    step.status === 'current' ? <div className="text-blue-500 ">{step.role.role_name}</div>:
+                                    step.status === 'returned' ? <div className="text-yellow-500 ">{step.role.role_name}</div>:
                                     <div className="text-gray-500 ">{step.role.role_name}</div>
                                 }
                                 <div className="text-xs text-gray-500">

@@ -61,7 +61,21 @@ export default function Register_3() {
 
       navigate("/");
     }catch(error:any){
-      console.log(error.response?.data);
+      console.error(error);
+
+      if(error.response?.status === 422){
+        const errors = error.response.data.errors;
+        Object.values(errors).forEach((messages:any)=>{
+          toast.error(messages[0]);
+        });
+        return;
+      }
+
+      toast.error(
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Something went wrong."
+      );
     }
   };
 

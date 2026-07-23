@@ -207,6 +207,9 @@ export default function ApplicationTracking() {
                                 {item.action === "Approved" && (
                                     <span className="px-2 py-1 rounded bg-green-100">{item.action}</span>
                                 )}
+                                {item.action === "Resubmited" && (
+                                    <span className="px-2 py-1 rounded bg-blue-100">{item.action}</span>
+                                )}
                             </td>
                             <td>
                                 {item.remarks}

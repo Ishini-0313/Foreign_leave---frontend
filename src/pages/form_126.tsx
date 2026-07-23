@@ -87,12 +87,12 @@ export default function Form_126() {
         1.
       </div> */}
 
-      <div className="col-span-4 p-3 font-medium">
+      <div className="col-span-4 p-3 ">
         <p className='text-sm'>1. දෙපාර්තමේන්තුව</p>
-        <p className='ml-3'>Department</p>
+        <p className='ml-3 text-sm'>Department</p>
       </div>
 
-      <div className="col-span-8 p-3">
+      <div className="col-span-8 p-3 text-sm">
         {department}
       </div>
     </div>
@@ -105,12 +105,12 @@ export default function Form_126() {
         2.
       </div> */}
 
-      <div className="col-span-4  p-3 font-medium">
+      <div className="col-span-4  p-3 ">
         <p className='text-sm'>2. නම හා නිලනාමය</p>
-        <p className='ml-3'>Name and Designation</p>
+        <p className='ml-3 text-sm'>Name and Designation</p>
       </div>
 
-      <div className="col-span-8 p-3">
+      <div className="col-span-8 p-3 text-sm">
         {applicationData.name_and_designation}
       </div>
     </div>
@@ -123,12 +123,12 @@ export default function Form_126() {
         3.
       </div> */}
 
-      <div className="col-span-4  p-3 font-medium">
+      <div className="col-span-4  p-3 ">
         <p className='text-sm'>3. සේවය, පංතිය හෝ ශ්‍රේණිය</p>
-        <p className='ml-3'>Service, Class or Grade</p>
+        <p className='ml-3 text-sm'>Service, Class or Grade</p>
       </div>
 
-      <div className="col-span-8 p-3">
+      <div className="col-span-8 p-3 text-sm">
         {applicationData.service_id}{" - "}{grade}
       </div>
     </div>
@@ -141,12 +141,12 @@ export default function Form_126() {
         4.
       </div> */}
 
-      <div className="col-span-4  p-3 font-medium">
+      <div className="col-span-4  p-3 ">
         <p className='text-sm'>4. මුලින්ම පත් වූ දිනය</p>
-        <p className='ml-3'>Date of first appoinment</p>
+        <p className='ml-3 text-sm'>Date of first appoinment</p>
       </div>
 
-      <div className="col-span-8 p-3">
+      <div className="col-span-8 p-3 text-sm">
         {applicationData.first_appoinment_date}
       </div>
     </div>
@@ -159,12 +159,12 @@ export default function Form_126() {
         5.
       </div> */}
 
-      <div className="col-span-4  p-3 font-medium">
+      <div className="col-span-4  p-3 ">
         <p className='text-sm'>5. මීට පෙරද නිවාඩු ගත්තේ නම් පසු ගිය වර ශ්‍රී ලංකාවට ආපසු පැමිණි දිනය</p>
-        <p className='ml-3'>If leave was taken earlier,date of last return to Sri Lanka</p>
+        <p className='ml-3 text-sm'>If leave was taken earlier,date of last return to Sri Lanka</p>
       </div>
 
-      <div className="col-span-8 p-3">
+      <div className="col-span-8 p-3 text-sm">
         {applicationData.last_return_date}
       </div>
     </div>
@@ -177,14 +177,14 @@ export default function Form_126() {
         6.
       </div> */}
 
-      <div className="col-span-4  p-3 font-medium">
+      <div className="col-span-4  p-3">
         <p className='text-sm'>6. දැන් ඉල්ලා සිටින නිවාඩු කාලය (නිවාඩු පටන් ගන්නා දිනය හා අවසන් වන දිනය සදහන් කරන්න)</p>
-        <p className='ml-3'>Period of leave now applied for(Give dates of commencement and completion)</p>
+        <p className='ml-3 text-sm'>Period of leave now applied for(Give dates of commencement and completion)</p>
       </div>
 
       <div className="col-span-8 p-3">
         <div>
-          <span className="ml-2 ">
+          <span className="ml-2 text-sm">
             {applicationData.leave_start_date}{"  සිට  "}{applicationData.leave_end_date}{"  දක්වා  "}
           </span>
 
@@ -207,12 +207,12 @@ export default function Form_126() {
         7.
       </div> */}
 
-      <div className="col-span-4  p-3 font-medium">
+      <div className="col-span-4  p-3 ">
         <p className='text-sm'>7. නිවාඩු ඉල්ලීමට හේතු</p>
-        <p className='ml-3'>Reasons for leave</p>
+        <p className='ml-3 text-sm'>Reasons for leave</p>
       </div>
 
-      <div className="col-span-8 p-3">
+      <div className="col-span-8 p-3 text-sm">
         {applicationData.reason_for_leave}
       </div>
     </div>
@@ -225,12 +225,12 @@ export default function Form_126() {
         8.
       </div> */}
 
-      <div className="col-span-4  p-3 font-medium">
+      <div className="col-span-4  p-3 ">
         <p className='text-sm'>8. (අ) ගමන් කරන්නේ කලින් මුදල් ගෙවූ ටිකට්ටුවකින්ද</p>
-        <p className='ml-3'>(a) Is travel on pre-paid ticket</p>
+        <p className='ml-3 text-sm'>(a) Is travel on pre-paid ticket</p>
       </div>
 
-      <div className="col-span-8 p-3">
+      <div className="col-span-8 p-3 text-sm">
         {applicationData.is_travel_on_a_pre_paid_ticket
           ? "ඔව්"
           : "නැත"}
@@ -245,12 +245,12 @@ export default function Form_126() {
         
       </div> */}
 
-      <div className="col-span-4  p-3 font-medium">
+      <div className="col-span-4  p-3 ">
         <p className='text-sm ml-3'>(ආ) එය එවන පුද්ගලයා හා ඉල්ලුම්කරු අතර ඇති සම්බන්ධය</p>
-        <p className='ml-3'>(b) Relationship of the person sending it</p>
+        <p className='ml-3 text-sm'>(b) Relationship of the person sending it</p>
       </div>
 
-      <div className="col-span-8 p-3">
+      <div className="col-span-8 p-3 text-sm">
         {applicationData.relationship_of_the_person_sending_it}
       </div>
     </div>
@@ -263,12 +263,12 @@ export default function Form_126() {
         9.
       </div> */}
 
-      <div className="col-span-4  p-3 font-medium">
+      <div className="col-span-4  p-3 ">
         <p className='text-sm'>9. (අ) පිටරට තමාගේ නඩත්තු වියදම් දරන්නේ කෙසේද?</p>
-        <p className='ml-3'>(a) How is the cost maintenance abroad met?</p>
+        <p className='ml-3 text-sm'>(a) How is the cost maintenance abroad met?</p>
       </div>
 
-      <div className="col-span-8 p-3">
+      <div className="col-span-8 p-3 text-sm">
         {applicationData.cost_maintanence_abroad}
       </div>
     </div>
@@ -281,12 +281,12 @@ export default function Form_126() {
         
       </div> */}
 
-      <div className="col-span-4  p-3 font-medium">
+      <div className="col-span-4  p-3 ">
         <p className='text-sm ml-3'>(ආ) එම වියදම් දරන පුද්ගලයා හා ඉල්ලුම්කරු අතර ඇති සම්බන්ධය</p>
-        <p className='ml-3'>(b) Relationship of person meeting such expenditure</p>
+        <p className='ml-3 text-sm'>(b) Relationship of person meeting such expenditure</p>
       </div>
 
-      <div className="col-span-8 p-3 whitespace-pre-line">
+      <div className="col-span-8 p-3 whitespace-pre-line text-sm">
         {applicationData.relationship_of_person_meeting_expenditure}
       </div>
     </div>
@@ -299,12 +299,12 @@ export default function Form_126() {
         10.
       </div> */}
 
-      <div className="col-span-4 p-3 font-medium">
+      <div className="col-span-4 p-3 ">
         <p className='text-sm'>10. නිවාඩු කාලයේදී ඉල්ලුම්කරුගේ ලිපිනය</p>
-        <p className='ml-4'>Address when on leave</p>
+        <p className='ml-4 text-sm'>Address when on leave</p>
       </div>
 
-      <div className="col-span-8 p-3 whitespace-pre-line">
+      <div className="col-span-8 p-3 whitespace-pre-line text-sm">
         {applicationData.foreign_address}
       </div>
     </div>
@@ -313,10 +313,10 @@ export default function Form_126() {
   {/* Signature */}
   <div className="flex justify-between items-end mt-16">
     <div>
-        <div className="w-40 pt-2">
+        <div className="w-40 pt-2 text-sm">
             {new Date(applicationData.created_at).toLocaleDateString()}
         </div>
-        <div className="border-t w-64 pt-2 mt-2">
+        <div className="border-t w-64 pt-2 mt-2 text-sm">
             Date
         </div>
     </div>
@@ -330,8 +330,91 @@ export default function Form_126() {
         />
       )}
 
-      <div className="border-t w-64 pt-2 mt-2">
+      <div className="border-t w-64 pt-2 mt-2 text-sm">
         Applicant Signature
+      </div>
+    </div>
+  </div>
+
+  {/* office use only */}
+  <div className="border-t border-b  mt-8 bg-amber-100">
+    <div className="grid grid-cols-12 ">
+      {/* fields */}
+      <div className="col-span-6 p-3 text-sm bg-amber-200">
+
+        <p>කාර්යාලයීය ප්‍රයෝජනය සදහා පමණි</p>
+        <p>For Office use only</p>
+
+        <p className='mt-1'>ඉතිරි නිවාඩු පිළිබද විස්තර</p>
+        <p>Particulars of available leave</p>
+
+        {/* <p className='mt-2'>විවේක නිවාඩු</p>
+        <p>Vacation Leave</p>
+        
+        <p className='mt-2'>පරිවර්තිත අඩ වැටුප් නිවාඩු</p>
+        <p>Commuted half-pay leave</p>
+
+        <p className='mt-2'>අඩ වැටුප් නිවාඩු</p>
+        <p>Half-pay leave</p>
+
+        <p className='mt-2'>වැටුප් රහිත නිවාඩු</p>
+        <p>No-pay leave</p> */}
+      </div>
+
+      {/* table */}
+      <div className="col-span-6 p-3 text-sm ">
+        <div className=' bg-amber-200'>
+          <div className='grid grid-cols-2 gap-6'>
+            <div className='w-full text-center bg-green-200'>
+              <p>මාස</p>
+              <p>Months</p>
+            </div>
+            <div className='w-full text-center bg-gray-100'>
+              <p>දින</p>
+              <p>Days</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div className="border-t border-b bg-amber-100">
+    <div className="grid grid-cols-12 ">
+      {/* fields */}
+      <div className="col-span-6 p-3 text-sm ">
+        <p className='mt-2'>විවේක නිවාඩු</p>
+        <p>Vacation Leave</p>
+        
+        <p className='mt-2'>පරිවර්තිත අඩ වැටුප් නිවාඩු</p>
+        <p>Commuted half-pay leave</p>
+
+        <p className='mt-2'>අඩ වැටුප් නිවාඩු</p>
+        <p>Half-pay leave</p>
+
+        <p className='mt-2'>වැටුප් රහිත නිවාඩු</p>
+        <p>No-pay leave</p>
+      </div>
+
+      {/* table */}
+      <div className="col-span-6 p-3 text-sm ">
+        <div className=' bg-amber-200'>
+          <div className='grid grid-cols-2 gap-6'>
+            {/* <div className='w-full text-center bg-green-200'>
+              <p className='p-4'>{applicationData.available_leave_info.vacation_months}</p>
+              <p className='p-4'>{applicationData.available_leave_info.commuted_halfpay_months}</p>
+              <p className='p-4'>{applicationData.available_leave_info.halfpay_months}</p>
+              <p className='p-4'>{applicationData.available_leave_info.nopay_months}</p>
+            </div>
+            <div className='w-full text-center bg-gray-100'>
+              <p className='p-4'>{applicationData.available_leave_info.vacation_days}</p>
+              <p className='p-4'>{applicationData.available_leave_info.commuted_halfpay_days}</p>
+              <p className='p-4'>{applicationData.available_leave_info.halfpay_days}</p>
+              <p className='p-4'>{applicationData.available_leave_info.nopay_days}</p>
+            </div> */}
+          </div>
+        </div>
       </div>
     </div>
   </div>

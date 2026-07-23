@@ -286,12 +286,30 @@ export default function Dashboard() {
                             </span>
                           </td>
                           <td className="px-4 py-5.5">
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FEF3C7]">
-                              <span className="w-[5.33px] h-1.5 rounded-full bg-[#D97706] shrink-0" />
-                              <span className="text-[#92400E] font-bold text-xs leading-4">
-                                {app.status}
-                              </span>
-                            </span>
+                            {
+                              app.status=="Pending" ? (
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100">
+                                  <span className="w-[5.33px] h-1.5 rounded-full bg-blue-700 shrink-0" />
+                                  <span className="text-blue-700 font-bold text-xs leading-4">
+                                    {app.status}
+                                  </span>
+                                </span>
+                              ):app.status=="Returned" ? (
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-yellow-100">
+                                  <span className="w-[5.33px] h-1.5 rounded-full bg-yellow-700 shrink-0" />
+                                  <span className="text-yellow-700 font-bold text-xs leading-4">
+                                    {app.status}
+                                  </span>
+                                </span>
+                              ):(
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-green-100">
+                                  <span className="w-[5.33px] h-1.5 rounded-full bg-green-700 shrink-0" />
+                                  <span className="text-green-700 font-bold text-xs leading-4">
+                                    {app.status}
+                                  </span>
+                                </span>
+                              )
+                            }
                           </td>
                           <td className="px-4 py-6 text-right">
                             <button className="px-4 py-2 rounded-sm bg-[#002046] text-white font-bold text-xs leading-4 hover:bg-[#001530] transition-colors"

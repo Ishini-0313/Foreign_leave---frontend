@@ -12,62 +12,53 @@ import {
   Bell,
   CircleQuestionMark
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-export default function MinistryManagement() {
+export default function District_offices_mng() {
   const navigate = useNavigate();
+  const {id} = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [ministryName, setMinistryName] = useState("");
+  const [dist_office_name, setDist_office_name] = useState("");
 
-  interface Ministry{
+  interface District_office{
     id: number;
     name: string;
+    dept_id: number;
     status: string;
   }
-  const [ministries, setMinistries] = useState<Ministry[]>([]);
+  const [district_offices, setDistrict_offices] = useState<District_office[]>([]);
 
-  const addMinistry = async () => {
+  const add = async () => {
     try{
-        await axios.post("http://127.0.0.1:8000/api/ministries",{
-            name : ministryName
+        await axios.post("http://127.0.0.1:8000/api/districtOffices",{
+            name : dist_office_name,
+            dept_id: id
         });
-        alert("Ministry added sucessfully!");
-        setMinistryName("");
+        alert("District Office added sucessfully!");
+        setDist_office_name("");
         setShowModal(false);
     }catch(error){
         console.error(error);
-        alert("Failed to add ministry !");
+        alert("Failed to add District Office !");
     }
   };
 
-  const loadMinistries = async () => {
-    try{
-      const response = await axios.get('http://127.0.0.1:8000/api/ministries');
-      setMinistries(response.data);
-    }
-    catch(error){
-        console.error(error);
-    }
-  };
-
-  // const ministries = [
-  //   {
-  //     name: "Ministry of Education",
-  //     type: "Ministry",
-  //     status: "Active",
-  //   },
-  //   {
-  //     name: "Ministry of Health",
-  //     type: "Ministry",
-  //     status: "Active",
-  //   },
-  // ];
+  
 
   useEffect(()=>{
-    loadMinistries();
-  }, [ministries]);
+    const loadDistrictOffices = async()=>{
+        try{
+            const response = await axios.get(`http://127.0.0.1:8000/api/${id}/districtOffices`);
+            setDistrict_offices(response.data);
+        }
+        catch(error){
+            console.error(error);
+        }
+    };
+    loadDistrictOffices();
+  }, [district_offices]);
 
   const navItems = [
     { icon: LayoutDashboard, label: "Dashboard" },
@@ -106,7 +97,7 @@ export default function MinistryManagement() {
           <div className="px-4 pt-8 pb-10">
             <div className="flex items-center gap-3">
               <img
-                src="./public/images.png"
+                src="/images.png"
                 alt="Government Seal"
                 className="w-12 h-10 rounded-sm shrink-0"
               />
@@ -218,24 +209,24 @@ export default function MinistryManagement() {
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8">
                     <div>
                     <h3 className="text-2xl font-semibold text-[#0B2957]">
-                        Ministries
+                        District Offices
                     </h3>
 
                     <p className="text-gray-600">
-                        Level 1: Provincial Ministries
+                        District Offices of 
                     </p>
                     </div>
                     <button className="bg-[#002A5C] text-white px-6 py-3 rounded-lg hover:bg-[#001F47]"
                         onClick={()=>setShowModal(true)}>
-                    + Add Ministry
+                    + Add District Office
                     </button>
                 </div>
                 <div className="space-y-5">
-                    {ministries.map((ministry) => (
+                    {district_offices.map((office) => (
                     <div
-                        key={ministry.id}
+                        key={office.id}
                         className="bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between hover:shadow-sm transition"
-                        onClick={()=>navigate(`/departments/${ministry.id}`)}
+                        onClick={()=> navigate(`/offices/${office.id}`)}
                     >
                         <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center">
@@ -247,18 +238,18 @@ export default function MinistryManagement() {
 
                         <div>
                             <h4 className=" font-medium text-gray-800">
-                            {ministry.name}
+                            {office.name}
                             </h4>
 
                             <div className="flex items-center gap-2 mt-1">
                             <span className="text-gray-500">
-                                Ministry
+                                Department
                             </span>
 
                             <span>•</span>
 
                             <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-                                {ministry.status}
+                                {office.status}
                             </span>
                             </div>
                         </div>
@@ -284,9 +275,9 @@ export default function MinistryManagement() {
                                 </label>
                                 <input
                                     type="text"
-                                    value={ministryName}
+                                    value={dist_office_name}
                                     onChange={(e) =>
-                                        setMinistryName(e.target.value)
+                                        setDist_office_name(e.target.value)
                                     }
                                     className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0B2957]"
                                     placeholder="Enter ministry name"
@@ -296,7 +287,7 @@ export default function MinistryManagement() {
                                 <button
                                     onClick={() => {
                                         setShowModal(false);
-                                        setMinistryName("");
+                                        setDist_office_name("");
                                     }}
                                     className="px-4 py-2 border rounded-lg"
                                     >
@@ -304,7 +295,7 @@ export default function MinistryManagement() {
                                 </button>
 
                                 <button
-                                    onClick={addMinistry}
+                                    onClick={add}
                                     className="bg-[#002A5C] text-white px-5 py-2 rounded-lg"
                                     >
                                     Add

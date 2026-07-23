@@ -22,6 +22,10 @@ interface Documents {
 }
 
 export const ApplicationProvider = ({children}: any) => {
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [applicationId, setApplicationId] = useState<number | null>(null);
+    const [existingDocs, setExistingDocs] = useState<any>({});
+    const [existingSignature, setExistingSignature] = useState<string | null>(null);
     const [applicationData, setApplicationData] = useState({
         // 1
         name: "",
@@ -129,7 +133,7 @@ export const ApplicationProvider = ({children}: any) => {
 
     return (
         <ApplicationContext.Provider
-            value={{applicationData, setApplicationData}}
+            value={{applicationData, setApplicationData, isEditMode, setIsEditMode, applicationId, setApplicationId, existingDocs, setExistingDocs, existingSignature, setExistingSignature}}
         >
             {children}
         </ApplicationContext.Provider>

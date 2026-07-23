@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -12,11 +13,11 @@ export default function Login() {
   const handleLogin = async()=>{
     try{
       if(!username.trim()){
-        alert("Username is required!");
+        toast.error("Username is required!");
         return;
       }
       if(!password.trim()){
-        alert("Password is required!");
+        toast.error("Password is required!");
         return;
       }
 
@@ -24,13 +25,13 @@ export default function Login() {
         username,password
       });
 
-      alert(response.data.message);
+      toast.success(response.data.message);
 
       localStorage.setItem("token",response.data.token);
       
       localStorage.setItem("user",JSON.stringify(response.data.user));
 
-      console.log(response.data.user);
+      //console.log(response.data.user);
 
       const user = response.data.user;
       
@@ -40,8 +41,22 @@ export default function Login() {
           navigate("/dashboard");
       }
       
-    }catch(error){
+    }catch(error:any){
       console.error(error);
+
+      if(error.response?.status === 422){
+        const errors = error.response.data.errors;
+        Object.values(errors).forEach((messages:any)=>{
+          toast.error(messages[0]);
+        });
+        return;
+      }
+
+      toast.error(
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Something went wrong."
+      );
     }
   };
 

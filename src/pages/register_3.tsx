@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "../context/RegisterContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const steps = [
   { number: 1, label: "Personal Info" },
@@ -56,7 +57,7 @@ export default function Register_3() {
         password_confirmation: formData.confirmPassword,
       });
 
-      alert(response.data.message);
+      toast.success(response.data.message);
 
       navigate("/");
     }catch(error:any){

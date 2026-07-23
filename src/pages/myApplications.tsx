@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import { BookCheck, Eye, Settings2, SquarePen} from "lucide-react";
+import Footer from "../components/footer";
 
 export default function MyApplications() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -253,24 +254,7 @@ export default function MyApplications() {
           </div>
 
           {/* Footer */}
-          <footer className="border-t border-[#C4C6CF] bg-white mt-2">
-            <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
-              <p className="text-[#44474E] font-semibold text-xs leading-4">
-                © 2024 Southern Provincial Government of Sri Lanka. All Rights Reserved.
-              </p>
-              <nav className="flex items-center gap-6">
-                <a href="#" className="text-[#44474E] font-semibold text-xs leading-4 hover:text-[#002046] transition-colors">
-                  Privacy Policy
-                </a>
-                <a href="#" className="text-[#44474E] font-semibold text-xs leading-4 hover:text-[#002046] transition-colors">
-                  Terms of Service
-                </a>
-                <a href="#" className="text-[#44474E] font-semibold text-xs leading-4 hover:text-[#002046] transition-colors">
-                  Contact Support
-                </a>
-              </nav>
-            </div>
-          </footer>
+          <Footer/>
         </main>
       </div>
     </div>

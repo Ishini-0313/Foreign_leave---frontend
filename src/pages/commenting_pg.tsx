@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 
 function ChevronRight() {
@@ -215,24 +216,7 @@ export default function ApplicationReview() {
         </div>
 
         {/* Footer */}
-        <footer className="border-t border-[#C4C6CF] px-6 py-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-[#44474E] text-xs font-semibold leading-4">
-            © 2024 Southern Provincial Government of Sri Lanka. All Rights Reserved.
-            </p>
-            <div className="flex items-center gap-6">
-            <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                Privacy Policy
-            </a>
-            <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                Terms of Service
-            </a>
-            <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                Contact Support
-            </a>
-            </div>
-        </div>
-        </footer>
+        <Footer/>
         </main>
       </div>
     </div>

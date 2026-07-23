@@ -7,6 +7,7 @@ import { useApplication } from "../context/ApplicationContext";
 import type { PreviousTravel } from "../context/ApplicationContext";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
+import Footer from "../components/footer";
 
 function FormCard({ children }: { children: React.ReactNode }) {
   return (
@@ -324,7 +325,7 @@ export default function Form() {
                   <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
                     1:3 නිලධාරියා අයත්වන සේවය
                   </label>
-                  <select 
+                  {/* <select 
                     name="service_id"
                     className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     value={applicationData.service_id}
@@ -336,7 +337,20 @@ export default function Form() {
                           {service.name}
                         </option>
                     ))}
-                  </select>
+                  </select> */}
+                  <select 
+                        name="service_id"
+                        value={applicationData.service_id}
+                        onChange={(e)=> setApplicationData({...applicationData, service_id:e.target.value})}
+                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    >
+                        <option value="">-- Select Service --</option>
+                        {services.map((service:any)=>(
+                          <option key={service.id} value={service.name}>
+                            {service.name}
+                          </option>
+                        ))}
+                    </select>
                 </div>
               </div>
             </FormCard>
@@ -647,24 +661,28 @@ export default function Form() {
                   <div className="flex flex-col gap-3">
                     <input
                       type="text"
+                      placeholder="විදේශ ලිපිනය"
                       value={applicationData.foreign_address}
                       onChange={(e)=> setApplicationData({...applicationData, foreign_address:e.target.value})}
                       className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                     <input
                       type="text"
+                      placeholder="දුරකතන අංකය"
                       value={applicationData.foreign_phone}
                       onChange={(e)=> setApplicationData({...applicationData, foreign_phone:e.target.value})}
                       className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                     <input
                       type="text"
+                      placeholder="ෆැක්ස්"
                       value={applicationData.foreign_fax}
                       onChange={(e)=> setApplicationData({...applicationData, foreign_fax:e.target.value})}
                       className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                     <input
                       type="text"
+                      placeholder="විද්‍යුත් ලිපිනය"
                       value={applicationData.foreign_email}
                       onChange={(e)=> setApplicationData({...applicationData, foreign_email:e.target.value})}
                       className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
@@ -844,24 +862,7 @@ export default function Form() {
           </div>
 
           {/* Footer */}
-          <footer className="border-t border-[#C4C6CF] px-6 py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <p className="text-[#44474E] text-xs font-semibold leading-4">
-              © 2024 Southern Provincial Government of Sri Lanka. All Rights Reserved.
-              </p>
-              <div className="flex items-center gap-6">
-              <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                  Privacy Policy
-              </a>
-              <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                  Terms of Service
-              </a>
-              <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                  Contact Support
-              </a>
-              </div>
-          </div>
-          </footer>
+          <Footer/>
         </main>
       </div>
     </div>

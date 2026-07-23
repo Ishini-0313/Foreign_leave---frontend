@@ -1,5 +1,8 @@
-import { LayoutDashboard, FileText, FilePlusCorner} from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { LayoutDashboard, FileText, FilePlusCorner, LogOut} from 'lucide-react';
+import toast from 'react-hot-toast';
+import { NavLink, useNavigate } from 'react-router-dom';
+import ConfirmDialog from './confirmDialog';
+import { useState } from 'react';
 
 interface navbarProps{
     user: any;
@@ -8,6 +11,8 @@ interface navbarProps{
 }
 
 export default function Navbar({user, sidebarOpen, setSidebarOpen}:navbarProps) {
+    const [showConfirm, setShowConfirm] = useState<boolean>(false);
+
     const applicantItems = [
       {
         label: "My Applications",
@@ -41,6 +46,15 @@ export default function Navbar({user, sidebarOpen, setSidebarOpen}:navbarProps) 
 
     const items = user?.role?.role_name === "Applicant"? applicantItems : officerItems;
 
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        //const confirm = window.confirm("Are you sure you want to logout?");
+        //if(!confirm) return;
+        localStorage.clear();
+        navigate("/");
+    };
+
     return(
         <>
             {sidebarOpen && (
@@ -54,8 +68,9 @@ export default function Navbar({user, sidebarOpen, setSidebarOpen}:navbarProps) 
                 top-0 left-0 z-50
                 h-full w-64
                 border-r border-[#C4C6CF]
-                bg-[#F4F3F7]
+                bg-[#1B365D]
                 overflow-y-auto
+                flex flex-col
                 transform transition-transform duration-300
                 ${
                 sidebarOpen
@@ -66,15 +81,15 @@ export default function Navbar({user, sidebarOpen, setSidebarOpen}:navbarProps) 
             <div className="px-4 pt-8 pb-10">
                 <div className="flex items-center gap-3">
                 <img
-                    src="./public/images.png"
+                    src="/Emblem_of_Sri_Lanka.svg"
                     alt="Government Seal"
-                    className="w-12 h-10 rounded-sm shrink-0"
+                    className="w-10 rounded-sm shrink-0"
                 />
                 <div>
-                    <p className="text-[#002046] font-bold text-sm leading-[17.5px] tracking-[0.14px]">
+                    <p className="text-white font-bold text-sm leading-[17.5px] tracking-[0.14px]">
                     Southern Provincial Council
                     </p>
-                    <p className="text-[#44474E] font-semibold text-[10px] leading-3.75 tracking-[0.5px] uppercase mt-0.5">
+                    <p className="text-[#87A0CD] font-semibold text-[10px] leading-3.75 tracking-[0.5px] uppercase mt-0.5">
                     Government of Sri Lanka
                     </p>
                 </div>
@@ -86,10 +101,10 @@ export default function Navbar({user, sidebarOpen, setSidebarOpen}:navbarProps) 
                 <NavLink
                     key={item.label}
                     to={item.path}
-                    className={({isActive})=>`flex items-center gap-3 px-4 py-3 rounded-sm] transition-colors ${
+                    className={({isActive})=>`flex items-center gap-3 px-4 py-3 rounded-sm transition-colors ${
                     isActive
-                        ? "bg-[#1B365D] text-[#87A0CD]"
-                        : "text-[#44474E] hover:bg-[#E8E7EC]"
+                        ? "bg-[#4381d7] text-white"
+                        : "text-white hover:bg-[#E8E7EC] hover:text-[#1B365D]"
                     }`}
                 >
                     <item.icon size={20} />
@@ -98,8 +113,32 @@ export default function Navbar({user, sidebarOpen, setSidebarOpen}:navbarProps) 
                     </span>
                 </NavLink>
                 ))}
+                <div className="mt-auto mb-2 border-t border-[#35527d]">
+                    <button
+                        onClick={() => setShowConfirm(true)}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-sm text-white hover:bg-red-400 transition-colors"
+                    >
+                        <LogOut size={20} />
+                        <span className="font-medium text-sm leading-5 tracking-[0.14px]">
+                            Logout
+                        </span>
+                    </button>
+                </div>
+                
             </nav>
             </aside>
+            {showConfirm && (
+                    <ConfirmDialog
+                        message="Are you sure you want to logout?"
+                        onCancel={() => 
+                            setShowConfirm(false)
+                        }
+                        onConfirm={() => {
+                            handleLogout();
+                            setShowConfirm(false);
+                        }}
+                    />
+             )}
         </>
     );
 }

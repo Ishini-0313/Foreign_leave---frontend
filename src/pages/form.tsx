@@ -1,30 +1,12 @@
 import axios from "axios";
-import { FilePlusCorner, FileText, LayoutDashboard } from "lucide-react";
+import { ChevronsRight} from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SignaturePad from "signature_pad";
 import { useApplication } from "../context/ApplicationContext";
 import type { PreviousTravel } from "../context/ApplicationContext";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
-
-// const navItems = [
-//   {
-//     label: "Dashboard",
-//     icon: LayoutDashboard
-    
-//   },
-//   {
-//     label: "Applications",
-//     icon: FileText,
-//   },
-//   {
-//     label: "New Application",
-//     icon: FilePlusCorner,
-//     active: true,
-//   },
-// ];
-
 
 function FormCard({ children }: { children: React.ReactNode }) {
   return (
@@ -66,33 +48,95 @@ const fundOptions = [
 ];
 
 export default function Form() {
+  const {id} = useParams();
   const [user, setUser] = useState<any>(null);
   const navigate = useNavigate();
 
+  // load logged user data
   useEffect(()=>{
     const storedUser = localStorage.getItem("user");
-
     console.log("Stored User:", storedUser);
-
     if(!storedUser){
       navigate("/");
       return;
     }
-
     setUser(JSON.parse(storedUser));
   },[]);
   
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const [services, setServices] = useState([]);
   const [ministries, setMinistries] = useState([]);
   const [institutes, setInstitutes] = useState([]);
   
-
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const signaturePadRef = useRef<SignaturePad | null>(null);
 
-  const {applicationData, setApplicationData} = useApplication();
+  const {applicationData, setApplicationData, setIsEditMode, setApplicationId, setExistingDocs, setExistingSignature} = useApplication();
+
+  const loadApplication = async () => {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+          `http://127.0.0.1:8000/api/applications/${id}`,
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+          }
+      );
+  
+      const app = response.data;
+      const funds = app.gosl_funds?.[0];
+      if(id){
+        setApplicationId(Number(id));
+        setIsEditMode(true);
+      }
+      
+      setApplicationData({...app, 
+          has_previous_trip_report_submitted:Boolean(app.has_previous_trip_report_submitted),
+          goslFunds: {
+              air_travel: {
+                  selected: !!funds?.air_travel_selected,
+                  amount: funds?.air_travel_amount ?? "",
+              },
+              subsistence: {
+                  selected: !!funds?.subsistence_selected,
+                  amount: funds?.subsistence_amount ?? "",
+              },
+              course_fees: {
+                  selected: !!funds?.course_fees_selected,
+                  amount: funds?.course_fees_amount ?? "",
+              },
+              additional_expenses: {
+                  selected: !!funds?.additional_expenses_selected,
+                  amount: funds?.additional_expenses_amount ?? "",
+              },
+              other_personal_expenses: {
+                  selected: !!funds?.other_personal_expenses_selected,
+                  amount: funds?.other_personal_expenses_amount ?? "",
+              },
+          },
+          previousTravels : app.previous_travels.map((travel:any)=>({
+            year : String(travel.year),
+            purpose : travel.purpose,
+            period : travel.period,
+            country : travel.country,
+          })),
+          address_during_leave:app.foreign_address,
+      });
+
+      const docs:any = {};
+      app.documents.forEach((doc:any)=>{
+        docs[doc.document_type] = doc;
+      });
+
+      setExistingDocs(docs);
+      setExistingSignature(app.signature_path ? `http://127.0.0.1:8000/storage/${app.signature_path}`: null)
+  };
+  
+  useEffect(() => {
+    if(!id) return;
+    loadApplication();
+  }, [id]);
 
 
   const addTravelRow = () => {
@@ -128,11 +172,10 @@ export default function Form() {
     });
   };
 
+  // sign canvas
   useEffect(() => {
     const canvas = canvasRef.current;
-
     if (!canvas) return;
-
     const resizeCanvas = () => {
       const ratio = Math.max(window.devicePixelRatio || 1, 1);
 
@@ -163,6 +206,7 @@ export default function Form() {
     };
   }, []);
 
+  // fetch services and ministries
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -181,6 +225,7 @@ export default function Form() {
     fetchData();
   }, []);
 
+  // fetch suboffices
   useEffect(() => {
     if (!applicationData.ministry_id) return;
 
@@ -204,10 +249,8 @@ export default function Form() {
     fetchSubOffices();
   }, [applicationData.ministry_id]);
 
-  
-
   const handleNext = ()=>{
-    navigate("/form2");
+    navigate(`/form2/edit/${id}`);
   };
 
   return (
@@ -779,32 +822,46 @@ export default function Form() {
               </div>
             </FormCard>
 
-            <button className="flex items-center gap-4 px-8 py-1 bg-[#002046] text-white text-base font-semibold leading-10 tracking-tight rounded-lg hover:bg-[#001533] transition-colors w-full"
+            {/* <button className="flex items-center gap-4 px-8 py-1 bg-[#002046] text-white text-base font-semibold leading-10 tracking-tight rounded-lg hover:bg-[#001533] transition-colors w-full"
             onClick={handleNext}>
                     <span>Next</span>
                     <ChevronRight/>
-            </button>
+            </button> */}
+            {/*  Buttons */}
+            <div className="flex justify-end mt-8 gap-4">
+                <button className="px-6 py-3 border rounded-lg" onClick={()=>navigate("/my-applications")}>
+                    Back
+                </button>
+                <button
+                    onClick={handleNext}
+                    //disabled={!allUploaded}
+                    className={`flex items-center gap-2 px-8 py-3 rounded-lg text-white font-semibold transition bg-[#1B365D] hover:bg-[#001533]`}>
+                    
+                    Next
+                    <ChevronsRight size={18} />
+                </button>
+            </div>
           </div>
 
           {/* Footer */}
-        <footer className="border-t border-[#C4C6CF] px-6 py-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-[#44474E] text-xs font-semibold leading-4">
-            © 2024 Southern Provincial Government of Sri Lanka. All Rights Reserved.
-            </p>
-            <div className="flex items-center gap-6">
-            <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                Privacy Policy
-            </a>
-            <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                Terms of Service
-            </a>
-            <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                Contact Support
-            </a>
-            </div>
-        </div>
-        </footer>
+          <footer className="border-t border-[#C4C6CF] px-6 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p className="text-[#44474E] text-xs font-semibold leading-4">
+              © 2024 Southern Provincial Government of Sri Lanka. All Rights Reserved.
+              </p>
+              <div className="flex items-center gap-6">
+              <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
+                  Privacy Policy
+              </a>
+              <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
+                  Terms of Service
+              </a>
+              <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
+                  Contact Support
+              </a>
+              </div>
+          </div>
+          </footer>
         </main>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ChevronsRight } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useApplication } from "../context/ApplicationContext";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
@@ -24,10 +24,11 @@ function ChevronRight() {
 
 
 export default function Form2() {
+  const {id} = useParams();
   const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const {applicationData, setApplicationData} = useApplication();
+  const {applicationData, setApplicationData, isEditMode, applicationId} = useApplication();
 
   const [services, setServices] = useState([]);
   const [grades, setGrades] = useState([]);
@@ -36,20 +37,18 @@ export default function Form2() {
   const navigate = useNavigate();
 
   useEffect(()=>{
+    console.log("form2: "+isEditMode);
     const storedUser = localStorage.getItem("user");
-
     console.log("Stored User:", storedUser);
-
     if(!storedUser){
       navigate("/");
       return;
     }
-
     setUser(JSON.parse(storedUser));
   },[]);
 
   const handleNext = ()=>{
-    navigate("/documents");
+    navigate(`/documents/edit/${id}`);
   };
 
 
@@ -327,11 +326,24 @@ export default function Form2() {
               </div>
             </FormCard>
 
-            <button className="flex items-center gap-4 px-8 py-1 bg-[#002046] text-white text-base font-semibold leading-10 tracking-tight rounded-lg hover:bg-[#001533] transition-colors w-full"
+            {/* <button className="flex items-center gap-4 px-8 py-1 bg-[#002046] text-white text-base font-semibold leading-10 tracking-tight rounded-lg hover:bg-[#001533] transition-colors w-full"
               onClick={handleNext}>
                     <span>Next</span>
                     <ChevronsRight/>
-            </button>
+            </button> */}
+            <div className="flex justify-end mt-8 gap-4">
+                <button className="px-6 py-3 border rounded-lg" onClick={()=>navigate(`/form/edit/${id}`)}>
+                    Back
+                </button>
+                <button
+                    onClick={handleNext}
+                    //disabled={!allUploaded}
+                    className={`flex items-center gap-2 px-8 py-3 rounded-lg text-white font-semibold transition bg-[#1B365D] hover:bg-[#001533]`}>
+                    
+                    Next
+                    <ChevronsRight size={18} />
+                </button>
+            </div>
           </div>
 
           {/* Footer */}

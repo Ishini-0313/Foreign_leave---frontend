@@ -1,9 +1,10 @@
 import { Upload, CheckCircle, Trash2, ChevronsRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useApplication } from "../context/ApplicationContext";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
+import toast from "react-hot-toast";
 
 function ChevronRight() {
   return (
@@ -15,24 +16,25 @@ function ChevronRight() {
 
 
 export default function DocumentUpload() {
+  const {id} = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const { applicationData, setApplicationData, isEditMode, applicationId, existingDocs} = useApplication();
 
+  // load logged user
   useEffect(()=>{
+      console.log("documents :"+ isEditMode );
       const storedUser = localStorage.getItem("user");
-  
       console.log("Stored User:", storedUser);
-  
       if(!storedUser){
         navigate("/");
         return;
       }
-  
       setUser(JSON.parse(storedUser));
-    },[]);
+  },[]);
 
-  const { applicationData, setApplicationData } = useApplication();
   
+
   interface DocumentItem {
     key: string;
     label: string;
@@ -97,44 +99,45 @@ export default function DocumentUpload() {
     },
   ]);
 
+  
   const navigate = useNavigate();
  
 
   const handleFileChange = (
-  documentKey: string,
-  file: File | null
-) => {
-  if (!file) return;
+    documentKey: string,
+    file: File | null
+  ) => {
+    if (!file) return;
 
-  setApplicationData((prev: any) => ({
-    ...prev,
-    documents: {
-      ...prev.documents,
-      [documentKey]: file,
-    },
-  }));
-};
+    setApplicationData((prev: any) => ({
+      ...prev,
+      documents: {
+        ...prev.documents,
+        [documentKey]: file,
+      },
+    }));
+  };
 
   const removeFile = (documentKey: string) => {
-  setApplicationData((prev: any) => ({
-    ...prev,
-    documents: {
-      ...prev.documents,
-      [documentKey]: null,
-    },
-  }));
-};
+    setApplicationData((prev: any) => ({
+      ...prev,
+      documents: {
+        ...prev.documents,
+        [documentKey]: null,
+      },
+    }));
+  };
   
   const requiredDocs = documents.filter(
     (doc) => doc.isRequired
   );
 
   const uploadedRequiredDocs = requiredDocs.filter(
-    (doc) => applicationData.documents?.[doc.key]
+    (doc) => applicationData.documents?.[doc.key] || existingDocs?.[doc.key]
   );
 
   const uploadedCount = requiredDocs.filter(
-    (doc) => applicationData.documents?.[doc.key]
+    (doc) => applicationData.documents?.[doc.key] || existingDocs?.[doc.key]
   ).length;
 
   const allUploaded =
@@ -143,17 +146,18 @@ export default function DocumentUpload() {
   const progress = (uploadedRequiredDocs.length/requiredDocs.length)*100;
 
   const handleNext = () => {
+
     const missingRequiredDocs = documents.filter(
-      (doc) => doc.isRequired && !applicationData.documents?.[doc.key]
+      (doc) => doc.isRequired && !applicationData.documents?.[doc.key] && !existingDocs?.[doc.key]
     );
 
     if(missingRequiredDocs.length > 0){
-      alert(`Please upload ${missingRequiredDocs.length} required document(s).`);
+      toast.error(`Please upload ${missingRequiredDocs.length} required document(s).`);
       return;
     }
 
-    alert("document uploaded successfully");
-    navigate("/sign");
+    toast.success("document uploaded successfully");
+    navigate(`/sign/edit/${id}`);
   };
 
   return (
@@ -197,8 +201,6 @@ export default function DocumentUpload() {
 
           {/* content sections */}
           <div className="flex flex-col gap-8">
-
-                
                 {/* Progress Card */}
                 <div className="bg-white rounded-xl border p-6 mb-8">
                     <div className="flex justify-between items-center mb-3">
@@ -244,52 +246,67 @@ export default function DocumentUpload() {
                                 )}
                               </div>
                               {
-                                applicationData.documents[doc.key]?(
-                                  <div className="flex items-center gap-2 text-green-600 mt-2">
-                                    <CheckCircle size={16} />
-                                    <span className="text-sm">
-                                      {applicationData.documents[doc.key].name}
-                                    </span>
-                                  </div>
-                                ):(
-                                  <p className="text-sm text-gray-500 mt-2">
-                                    No file uploaded
-                                  </p>
-                                )
+                                applicationData.documents[doc.key] ? 
+                                  (
+                                    <div className="flex items-center gap-2 text-green-600 mt-2">
+                                      <CheckCircle size={16} />
+                                      <span className="text-sm">
+                                        {applicationData.documents[doc.key].name}
+                                      </span>
+                                    </div>
+                                  ):
+                                  existingDocs?.[doc.key] ?
+                                  (
+                                    <div className="flex items-center gap-2 text-green-600">
+                                      <CheckCircle size={16} />
+                                      <a
+                                        href={`http://127.0.0.1:8000/storage/${existingDocs[doc.key].file_path}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-sm underline hover:text-blue-700"
+                                      >
+                                        {existingDocs[doc.key].file_name}
+                                      </a>
+                                    </div>
+                                  ):
+                                  (
+                                    <p className="text-sm text-gray-500 mt-2">
+                                      No file uploaded
+                                    </p>
+                                  )
                               }
                             </div>
 
-                            {/* right side */}
                             <div className="flex items-center gap-3">
-                              <label className="cursor-pointer">
-                                <input
-                                  type="file"
-                                  className="hidden"
-                                  accept=".pdf,.jpg,.jpeg,.png"
-                                  onChange={(e) =>
-                                    handleFileChange(
-                                      doc.key,
-                                      e.target.files?.[0] || null
-                                    )
-                                  }
-                                />
+                                <label className="cursor-pointer">
+                                  <input
+                                    type="file"
+                                    className="hidden"
+                                    accept=".pdf,.jpg,.jpeg,.png"
+                                    onChange={(e) =>
+                                      handleFileChange(
+                                        doc.key,
+                                        e.target.files?.[0] || null
+                                      )
+                                    }
+                                  />
 
-                                <div className="flex items-center gap-2 px-4 py-2 bg-[#002046] text-white rounded-lg hover:bg-[#001533]">
-                                  <Upload size={18} />
-                                  Upload
-                                </div>
-                              </label>
+                                  <div className="flex items-center gap-2 px-4 py-2 text-[#1B365D] rounded-lg hover:bg-[#1B365D] hover:text-white">
+                                    <Upload size={18} />
+                                    {existingDocs?.[doc.key] || applicationData.documents?.[doc.key]
+                                      ? "Replace"
+                                      : "Upload"}
+                                  </div>
+                                </label>
 
-                              {applicationData.documents?.[doc.key] && (
-                                <button
-                                  onClick={() =>
-                                    removeFile(doc.key)
-                                  }
-                                  className="p-2 border rounded-lg text-red-500 hover:bg-red-50"
-                                >
-                                  <Trash2 size={18} />
-                                </button>
-                              )}
+                                {(applicationData.documents?.[doc.key]) && (
+                                  <button
+                                    onClick={() => removeFile(doc.key)}
+                                    className="p-2 border rounded-lg text-red-500 hover:bg-red-50"
+                                  >
+                                    <Trash2 size={18} />
+                                  </button>
+                                )}
                             </div>
                           </div>
                         </div>
@@ -301,7 +318,7 @@ export default function DocumentUpload() {
 
                 {/*  Buttons */}
                 <div className="flex justify-end mt-8 gap-4">
-                    <button className="px-6 py-3 border rounded-lg">
+                    <button className="px-6 py-3 border rounded-lg" onClick={()=>navigate(`/form2/edit/${id}`)}>
                         Back
                     </button>
 
@@ -319,29 +336,27 @@ export default function DocumentUpload() {
                         <ChevronsRight size={18} />
                     </button>
                 </div>
-
-
           </div>
 
           {/* Footer */}
-        <footer className="border-t border-[#C4C6CF] px-6 py-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-[#44474E] text-xs font-semibold leading-4">
-            © 2024 Southern Provincial Government of Sri Lanka. All Rights Reserved.
-            </p>
-            <div className="flex items-center gap-6">
-            <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                Privacy Policy
-            </a>
-            <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                Terms of Service
-            </a>
-            <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
-                Contact Support
-            </a>
-            </div>
-        </div>
-        </footer>
+          <footer className="border-t border-[#C4C6CF] px-6 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p className="text-[#44474E] text-xs font-semibold leading-4">
+              © 2024 Southern Provincial Government of Sri Lanka. All Rights Reserved.
+              </p>
+              <div className="flex items-center gap-6">
+              <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
+                  Privacy Policy
+              </a>
+              <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
+                  Terms of Service
+              </a>
+              <a href="#" className="text-[#44474E] text-base leading-6 hover:text-[#002046] transition-colors">
+                  Contact Support
+              </a>
+              </div>
+          </div>
+          </footer>
         </main>
       </div>
     </div>

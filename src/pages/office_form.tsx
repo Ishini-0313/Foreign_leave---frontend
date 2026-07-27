@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
+import toast from "react-hot-toast";
 
 function ChevronRight() {
   return (
@@ -44,10 +45,25 @@ export default function OfficeForm() {
           }
         }
       );
-      alert("Saved successfully !");
-    }catch(error){
-      console.log(error);
-      alert("Saving failed !");
+      toast.success("Saved successfully !");
+    }catch(error:any){
+      console.error(error);
+
+      // validate errors
+      if(error.response?.status === 422){
+        const errors = error.response.data.errors;
+        Object.values(errors).forEach((messages:any)=>{
+          toast.error(messages[0]);
+        });
+        return;
+      }
+
+      // backend returned an error message
+      toast.error(
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Something went wrong."
+      );
     }
   };
 

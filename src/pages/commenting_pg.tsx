@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+import toast from "react-hot-toast";
 
 
 function ChevronRight() {
@@ -20,7 +21,6 @@ export default function ApplicationReview() {
   const [applicationData, setApplicationData]= useState<any>(null);
   const [role, setRole] = useState("");
   const [remarks, setRemarks] = useState("");
-  const [loading,setLoading]=useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(()=>{
@@ -78,9 +78,8 @@ export default function ApplicationReview() {
 
   const handleForward = async () => {
     try{
-        setLoading(true);
         const token=localStorage.getItem("token");
-        await axios.post(
+        const response = await axios.post(
             `http://127.0.0.1:8000/api/applications/${id}/forward`,{remarks},
             {
                 headers:{
@@ -88,23 +87,33 @@ export default function ApplicationReview() {
                 }
             }
         );
-        alert("Application forwarded successfully.");
+        toast.success(response.data.message);
         navigate("/dashboard");
-    }catch(err:any){
-        alert(
-            err.response?.data?.message ??
-            "Unable to forward."
-        );
-    }finally{
-        setLoading(false);
+    }catch(error:any){
+        console.error(error);
+
+      // validate errors
+      if(error.response?.status === 422){
+        const errors = error.response.data.errors;
+        Object.values(errors).forEach((messages:any)=>{
+          toast.error(messages[0]);
+        });
+        return;
+      }
+
+      // backend returned an error message
+      toast.error(
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Something went wrong."
+      );
     }
   };
 
   const handleReturn = async()=>{
     try{
-      setLoading(true);
       const token = localStorage.getItem("token");
-      await axios.post(
+      const response = await axios.post(
         `http://127.0.0.1:8000/api/applications/${id}/return`,{remarks},
         {
             headers:{
@@ -112,15 +121,26 @@ export default function ApplicationReview() {
             }
         }
       );
-      alert("Application forwarded successfully.");
+      toast.success(response.data.message);
       navigate("/dashboard");
-    }catch(err:any){
-      alert(
-            err.response?.data?.message ??
-            "Unable to return."
-        );
-    }finally{
-      setLoading(false);
+    }catch(error:any){
+      console.error(error);
+
+      // validate errors
+      if(error.response?.status === 422){
+        const errors = error.response.data.errors;
+        Object.values(errors).forEach((messages:any)=>{
+          toast.error(messages[0]);
+        });
+        return;
+      }
+
+      // backend returned an error message
+      toast.error(
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Something went wrong."
+      );
     }
   };
 
@@ -201,15 +221,15 @@ export default function ApplicationReview() {
           {/* textarea sections */}
           <div className="flex flex-col gap-8  p-8">
             <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Review</h2>
-            <label className="block text-sm font-medium mb-2">Comments</label>
+            <h2 className="text-xl font-semibold mb-4">Add Your Comment</h2>
+            {/* <label className="block text-sm font-medium mb-2">Comments</label> */}
             <textarea rows={5} value={remarks} onChange={(e)=>setRemarks(e.target.value)} className="w-full border rounded-lg p-3" placeholder="Write your review remarks..."/>
             <div className="flex justify-end mt-5 gap-2">
-                <button onClick={handleReturn} disabled={loading} className="bg-[#8b090d] text-white px-6 py-2 rounded">
-                  {loading ? "Returning..." : "Return"}
+                <button onClick={handleReturn}  className="bg-[#8b090d] text-white px-6 py-2 rounded">
+                  Return
                 </button>
-                <button onClick={handleForward} disabled={loading} className="bg-[#002046] text-white px-6 py-2 rounded">
-                  {loading ? "Forwarding..." : "Forward"}
+                <button onClick={handleForward}  className="bg-[#002046] text-white px-6 py-2 rounded">
+                  Forward
                 </button>
             </div>
           </div>

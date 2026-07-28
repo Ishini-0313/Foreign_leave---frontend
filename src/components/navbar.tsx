@@ -1,5 +1,4 @@
-import { LayoutDashboard, FileText, FilePlusCorner, LogOut} from 'lucide-react';
-import toast from 'react-hot-toast';
+import { LayoutDashboard, FileText, FilePlusCorner, LogOut, Settings} from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import ConfirmDialog from './confirmDialog';
 import { useState } from 'react';
@@ -23,6 +22,11 @@ export default function Navbar({user, sidebarOpen, setSidebarOpen}:navbarProps) 
         label: "New Application",
         icon: FilePlusCorner,
         path: "/new-application"
+      },
+      {
+        label: "Setting",
+        icon: Settings,
+        path: "/setting"
       }
     ];
 
@@ -41,6 +45,11 @@ export default function Navbar({user, sidebarOpen, setSidebarOpen}:navbarProps) 
         label: "New Application",
         icon: FilePlusCorner,
         path: "/new-application"
+      },
+      {
+        label: "Setting",
+        icon: Settings,
+        path: "/setting"
       }
     ];
 

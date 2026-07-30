@@ -119,7 +119,7 @@ export default function Login() {
                   <label className="text-sm font-medium text-[#44474E] leading-5 tracking-[0.14px]">
                     Password
                   </label>
-                  <button className="text-xs font-semibold text-[#002046] leading-4 hover:underline">
+                  <button className="text-xs font-semibold text-[#002046] leading-4 hover:underline" onClick={()=>navigate('/forgot-password')}>
                     Forgot Password?
                   </button>
                 </div>

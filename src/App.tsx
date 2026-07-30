@@ -29,6 +29,8 @@ import MyApplications from './pages/myApplications.tsx';
 import AmedmentDocumentUpload from './pages/amedment_doc_upload.tsx';
 import AmendmentTracking from './pages/amendment_tracking.tsx';
 import Amendments from './pages/amendments.tsx';
+import ForgotPassword from './pages/forgotPassword.tsx';
+import ResetPassword from './pages/resetPassword.tsx';
 
 
 
@@ -70,6 +72,8 @@ function App() {
       <Route path='/form2/edit/:id' element={<Form2/>}></Route>
       <Route path='/documents/edit/:id' element={<DocumentUpload/>}></Route>
       <Route path='/sign/edit/:id' element={<SignPage/>}></Route>
+      <Route path='/forgot-password' element={<ForgotPassword/>}></Route>
+      <Route path='/reset-password' element={<ResetPassword/>}></Route>
     </Routes>
   )
 }

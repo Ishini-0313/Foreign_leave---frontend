@@ -110,6 +110,12 @@ export default function Navbar({user, sidebarOpen, setSidebarOpen}:navbarProps) 
                 <NavLink
                     key={item.label}
                     to={item.path}
+                    onClick={() => {
+                        setSidebarOpen(false);
+                        setTimeout(() => {
+                        window.location.reload();
+                        }, 0);
+                    }}
                     className={({isActive})=>`flex items-center gap-3 px-4 py-3 rounded-sm transition-colors ${
                     isActive
                         ? "bg-[#4381d7] text-white"

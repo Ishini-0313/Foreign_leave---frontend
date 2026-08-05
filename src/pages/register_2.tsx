@@ -15,7 +15,9 @@ export default function Register_2() {
   const {formData, setFormData} = useRegister();
 
   const [offices, setOffices] = useState([]);
+  const [designations, setDesignations] = useState([]);
 
+  // fetch offices
   useEffect(()=>{
     const fetchOffice = async()=>{
       try{
@@ -26,6 +28,19 @@ export default function Register_2() {
       }
     };
     fetchOffice();
+  }, []);
+
+  // fetch designations
+  useEffect(()=>{
+    const fetchDesignation = async()=>{
+      try{
+        const response = await axios.get('http://127.0.0.1:8000/api/designations');
+        setDesignations(response.data);
+      }catch(error){
+        console.error(error);
+      }
+    };
+    fetchDesignation();
   }, []);
 
   const navigate = useNavigate();
@@ -40,7 +55,7 @@ export default function Register_2() {
       return;
     }
 
-    if(!formData.designation.trim()){
+    if(!formData.designation_id){
       alert("Designation is required!");
       return;
     }
@@ -171,7 +186,7 @@ export default function Register_2() {
             </div>
 
             {/* Designation */}
-            <div className="mb-8">
+            {/* <div className="mb-8">
               <label className="block text-sm font-medium text-[#44474E] mb-2 leading-5">
                 තනතුර
               </label>
@@ -183,6 +198,30 @@ export default function Register_2() {
                 placeholder=""
                 className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm text-[#1A1B1E] placeholder:text-[#9CA3AF] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
               />
+            </div> */}
+            <div className="mb-5">
+                <label className="block text-sm font-medium text-[#44474E] mb-2 leading-5">
+                  තනතුර
+                </label>
+                <select 
+                  name="designation_id" 
+                  value={formData.designation_id}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      designation_id: e.target.value,
+                    })
+                  }
+                  className="w-full h-12 px-4 border border-[#C4C6CF] rounded bg-white text-sm"
+                >
+                  <option value="">-- Select Designation --</option>
+
+                  {designations.map((designation: any) => (
+                    <option key={designation.id} value={designation.id}>
+                      {designation.name}
+                    </option>
+                  ))}
+                </select>
             </div>
 
             {/* Navigation buttons */}

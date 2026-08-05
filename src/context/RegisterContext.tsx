@@ -10,7 +10,7 @@ export const RegisterProvider = ({children}:any)=>{
         email: "",
 
         office_id: "",
-        designation: "",
+        designation_id: "",
 
         username: "",
         password: "",

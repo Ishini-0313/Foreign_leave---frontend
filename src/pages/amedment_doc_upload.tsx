@@ -6,6 +6,7 @@ import Topbar from "../components/topbar";
 import { useAmendment } from "../context/AmendmentContext";
 import axios from "axios";
 import Footer from "../components/footer";
+import toast from "react-hot-toast";
 
 function ChevronRight() {
   return (
@@ -75,30 +76,27 @@ export default function AmedmentDocumentUpload() {
 
   const navigate = useNavigate();
  
-  const handleFileChange = (
-  documentKey: string,
-  file: File | null
-) => {
-  if (!file) return;
+  const handleFileChange = (documentKey: string,file: File | null) => {
+    if (!file) return;
 
-  setAmendmentData((prev: any) => ({
-    ...prev,
-    documents: {
-      ...prev.documents,
-      [documentKey]: file,
-    },
-  }));
-};
+    setAmendmentData((prev: any) => ({
+      ...prev,
+      documents: {
+        ...prev.documents,
+        [documentKey]: file,
+      },
+    }));
+  };
 
   const removeFile = (documentKey: string) => {
-  setAmendmentData((prev: any) => ({
-    ...prev,
-    documents: {
-      ...prev.documents,
-      [documentKey]: null,
-    },
-  }));
-};
+    setAmendmentData((prev: any) => ({
+      ...prev,
+      documents: {
+        ...prev.documents,
+        [documentKey]: null,
+      },
+    }));
+  };
   
   const requiredDocs = documents.filter(
     (doc) => doc.isRequired
@@ -118,41 +116,53 @@ export default function AmedmentDocumentUpload() {
   const progress = (uploadedRequiredDocs.length/requiredDocs.length)*100;
 
   const submitAmendment = async()=>{
-    console.log({
-    application_id: amendmentData.application_id,
-    new_leave_start_date: amendmentData.new_leave_start_date,
-    new_leave_end_date: amendmentData.new_leave_end_date,
-    reason_for_change: amendmentData.reason_for_change
-});
-    const formData = new FormData();
-    formData.append("application_id", amendmentData.application_id );
-    formData.append("new_leave_start_date", amendmentData.new_leave_start_date );
-    formData.append("new_leave_end_date", amendmentData.new_leave_end_date );
-    formData.append("reason", amendmentData.reason_for_change);
+    try{
+      const formData = new FormData();
+      formData.append("application_id", amendmentData.application_id );
+      formData.append("new_leave_start_date", amendmentData.new_leave_start_date );
+      formData.append("new_leave_end_date", amendmentData.new_leave_end_date );
+      formData.append("reason", amendmentData.reason_for_change);
 
-    Object.entries(amendmentData.documents).forEach(
-      ([key, file]) => {
-        if(file){
-          formData.append(key, file as File)
+      Object.entries(amendmentData.documents).forEach(
+        ([key, file]) => {
+          if(file){
+            formData.append(key, file as File)
+          }
         }
+      );
+
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/amendment",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      toast.success(response.data.message);
+    }catch(error:any){
+      console.error(error);
+      // validate errors
+      if(error.response?.status === 422){
+        const errors = error.response.data.errors;
+        Object.values(errors).forEach((messages:any)=>{
+          toast.error(messages[0]);
+        });
+        return;
       }
-    );
 
-    const token = localStorage.getItem("token");
-
-    await axios.post(
-      "http://127.0.0.1:8000/api/amendment",
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-
-    alert("Amendment submitted succesfully!");
-
+      // backend returned an error message
+      toast.error(
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Something went wrong."
+      );
+    }
+    
     // Reset amendment data
     setAmendmentData({
       application_id: "",
@@ -315,7 +325,7 @@ export default function AmedmentDocumentUpload() {
 
                 {/*  Buttons */}
                 <div className="flex justify-end mt-8 gap-4">
-                    <button className="px-6 py-3 border rounded-lg">
+                    <button className="px-6 py-3 border rounded-lg" onClick={()=>navigate(`/application/${id}/amendment-form`)}>
                         Back
                     </button>
 

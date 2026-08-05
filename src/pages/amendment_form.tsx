@@ -116,7 +116,7 @@ export default function AmendmentForm() {
                   </label>
                   <input
                     type="text"
-                    value={applicationData?.name ?? ""}
+                    value={applicationData?.application.name ?? ""}
                     className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors " 
                     readOnly
                   />
@@ -128,7 +128,7 @@ export default function AmendmentForm() {
                   </label>
                   <input
                     type="text"
-                    value={applicationData?.position ?? ""}
+                    value={applicationData?.application.position ?? ""}
                     className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     readOnly
                   />
@@ -140,7 +140,7 @@ export default function AmendmentForm() {
                   </label>
                   <input
                     type="text"
-                    value={applicationData?.institute.name ?? ""}
+                    value={applicationData?.application.institute.name ?? ""}
                     className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     readOnly
                   />
@@ -152,7 +152,7 @@ export default function AmendmentForm() {
                   </label>
                   <input
                     type="text"
-                    value={applicationData?.reason_for_leave ?? ""}
+                    value={applicationData?.application.reason_for_leave ?? ""}
                     className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     readOnly
                   />
@@ -164,7 +164,7 @@ export default function AmendmentForm() {
                   </label>
                   <input
                     type="text"
-                    value={applicationData?.country ?? ""}
+                    value={applicationData?.application.country ?? ""}
                     className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     readOnly
                   />
@@ -177,13 +177,13 @@ export default function AmendmentForm() {
                   <div className="flex gap-6">
                     <input
                       type="date"
-                      value={applicationData?.leave_start_date ?? ""}
+                      value={applicationData?.application.leave_start_date ?? ""}
                       className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                       readOnly
                     />
                     <input
                       type="date"
-                      value={applicationData?.leave_end_date ?? ""}
+                      value={applicationData?.application.leave_end_date ?? ""}
                       className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                       readOnly
                     />

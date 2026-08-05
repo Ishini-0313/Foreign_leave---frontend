@@ -7,6 +7,7 @@ import { RegisterProvider } from './context/RegisterContext.tsx'
 import { ApplicationProvider } from './context/ApplicationContext.tsx'
 import { AmendmentProvider } from './context/AmendmentContext.tsx'
 import { Toaster } from 'react-hot-toast'
+import { LeaveCategoryProvider } from './context/LeaveCategoryContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -14,7 +15,9 @@ createRoot(document.getElementById('root')!).render(
       <RegisterProvider>
         <ApplicationProvider>
           <AmendmentProvider>
-            <App />
+            <LeaveCategoryProvider>
+              <App />
+            </LeaveCategoryProvider>
             <Toaster 
               position="top-right"
               reverseOrder={false}

@@ -53,17 +53,14 @@ export default function Dashboard() {
     try{
       const token = localStorage.getItem("token");
 
-      const response = await axios.get('http://127.0.0.1:8000/api/officer/all-applications',{
+      const response = await axios.get('http://127.0.0.1:8000/api/officer/all-sub-applications',{
         headers:{
           Authorization: `Bearer ${token}`,
-        }
+        },
       });
 
-      const data = await response.data;
-
-      console.log(data);
-
-      setApplications(data);
+      console.log("Office hierarchy applications:", response.data);
+      setApplications(response.data);
 
     }catch(error){
       console.error(error);

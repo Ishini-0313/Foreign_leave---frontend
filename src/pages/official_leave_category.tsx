@@ -8,47 +8,40 @@ import { useLeaveCategory } from '../context/LeaveCategoryContext';
 //const categories = ['කෙටි සංචාර සදහා','අධ්‍යයන සදහා','රැකියාව සදහා', 'අධ්‍යයන හා රැකියාව සදහා', 'කාලත්‍රය සදහා' ];
 
 type PersonalLeaveCategory =
-    | "short_trip"
-    | "study"
-    | "employment"
-    | "study_and_employment"
-    | "spouse";
+    | "leave_without_offers"
+    | "leave_with_warm_cloths_offer"
+    | "leave_with_additional_offer"
+    | "leave_with_warm_cloths_and_additional_offer";
 
-export default function Personal_leave_category() {
-    const {leaveCategory,natureOfTrip,setNatureOfTrip,setLeaveCategory} = useLeaveCategory();
+export default function OfficialLeaveCategory() {
+    const {leaveCategory,setNatureOfTrip,setLeaveCategory, natureOfTrip} = useLeaveCategory();
     const categories: {id:PersonalLeaveCategory,name:String}[] = [
         {
-            id: "short_trip",
-            name: "කෙටි සංචාර සදහා",
+            id: "leave_without_offers",
+            name: "දීමනා රහිත නිවඩු",
         },
         {
-            id: "study",
-            name: "අධ්‍යයන සදහා",
+            id: "leave_with_warm_cloths_offer",
+            name: "උණුසුම් ඇදුම් දීමනාව සහිත නිවාඩු",
         },
         {
-            id: "employment",
-            name: "රැකියාව සදහා",
+            id: "leave_with_additional_offer",
+            name: "අනියම් දීමනාව සහිත නිවාඩු",
         },
         {
-            id: "study_and_employment",
-            name: "අධ්‍යයන හා රැකියාව සදහා",
-        },
-        {
-            id: "spouse",
-            name: "කාලත්‍රය සදහා",
+            id: "leave_with_warm_cloths_and_additional_offer",
+            name: "උණුසුම් ඇදුම් සහ අනියම් දීමනා සහිත නිවාඩු",
         },
     ];
     
-    
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [user, setUser] = useState<any>(null);
-
     const navigate = useNavigate();
 
     useEffect(()=>{
+        setLeaveCategory(null);
         console.log("nature of trip: " + natureOfTrip);
         console.log("leave category: " + leaveCategory);
-        setLeaveCategory(null);
         const storedUser = localStorage.getItem("user");
 
         console.log("Stored User:", storedUser);
@@ -85,32 +78,30 @@ export default function Personal_leave_category() {
                     <div className="flex flex-col flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8 lg:py-12">
                         {/* Page Header */}
                         <div className="text-center mb-10 lg:mb-14">
-
                             {/* Small label */}
                             <div className="inline-flex items-center gap-2 px-4 py-2 mb-4 rounded-full bg-white shadow-sm border border-gray-100">
                                 <span className="w-2.5 h-2.5 rounded-full bg-[#5B8DEF]"></span>
-                                <span className="text-sm font-medium text-[#526070]">Personal Foreign Leave</span>
+                                <span className="text-sm font-medium text-[#526070]"> Official Foreign Leave</span>
                             </div>
-
+        
                             {/* Main heading */}
                             <h2 className="font-bold text-3xl sm:text-4xl lg:text-[40px] leading-tight
                                             bg-linear-to-r from-[#002046] via-[#315FA5] to-[#7B4FA3]
                                             bg-clip-text text-transparent">
-                                Select Personal Leave Category
+                                Select Official Leave Category
                             </h2>
-
+        
                             {/* Description */}
                             <p className="mt-4 text-[#5E6470] text-base sm:text-lg leading-7 max-w-2xl mx-auto">
                                 Please choose the sub-category that describes the purpose of your
                                 personal travel to ensure correct administrative routing.
                             </p>
                         </div>
-
+        
                         {/* Selection Cards */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 lg:gap-6">
-
                             {categories.map((category, index) => {
-
+            
                                 const cardColors = [
                                 {
                                     bg: "from-[#EAF2FF] to-[#F7FAFF]",
@@ -143,35 +134,57 @@ export default function Personal_leave_category() {
                                     text: "text-[#C44D78]",
                                 },
                                 ];
-
+            
                                 const color = cardColors[index];
-
+            
                                 return (
-                                <button key={category.id} className={`relative overflow-hidden bg-linear-to-br ${color.bg} border border-white rounded-3xl p-6 text-left shadow-[0_4px_20px_rgba(0,32,70,0.06)] ${color.border} hover:shadow-[0_12px_30px_rgba(0,32,70,0.12)] hover:-translate-y-2 transition-all duration-300 group min-h-52.5 flex flex-col justify-between`}
-                                    onClick={() => {setNatureOfTrip("personal");setLeaveCategory(category.id);navigate("/options");}}
-                                >
-                                    {/* Decorative circle */}
-                                    <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-white/50 group-hover:scale-125 transition-transform duration-500"></div>
-
-                                    <div>
-                                        {/* Number / Icon */}
-                                        <div className={`relative z-10 w-12 h-12 rounded-2xl ${color.icon} text-white flex items-center justify-center font-bold text-lg shadow-md mb-5 group-hover:scale-110 transition-transform duration-300 `}>
-                                            {index + 1}
+                                    <button
+                                        key={category.id}
+                                        className={`
+                                        relative overflow-hidden
+                                        bg-linear-to-br ${color.bg}
+                                        border border-white
+                                        rounded-3xl
+                                        p-6
+                                        text-left
+                                        shadow-[0_4px_20px_rgba(0,32,70,0.06)]
+                                        ${color.border}
+                                        hover:shadow-[0_12px_30px_rgba(0,32,70,0.12)]
+                                        hover:-translate-y-2
+                                        transition-all duration-300
+                                        group
+                                        min-h-52.5
+                                        flex flex-col justify-between
+                                        `}
+                                        onClick={() => {
+                                        setNatureOfTrip("official");
+                                        setLeaveCategory(category.id);
+                                        navigate("/options");
+                                        }}
+                                    >
+                
+                                        {/* Decorative circle */}
+                                        <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-white/50 group-hover:scale-125 transition-transform duration-500"></div>
+                
+                                        <div>
+                                            {/* Number / Icon */}
+                                            <div className={`relative z-10 w-12 h-12 rounded-2xl ${color.icon} text-white flex items-center justify-center font-bold text-lg shadow-md mb-5 group-hover:scale-110 transition-transform duration-300`}>{index + 1}</div>
+                
+                                            {/* Category name */}
+                                            <h3 className={`${color.text} font-bold text-lg leading-7`}>{category.name}</h3>
                                         </div>
-                                        {/* Category name */}
-                                        <h3 className={`${color.text} font-bold text-lg leading-7`}>{category.name}</h3>
-                                    </div>
-
-                                    {/* Bottom section */}
-                                    <div className="flex items-center justify-between mt-6">
-                                        <span className="text-sm text-[#697386] font-medium">Apply Leave</span>
-                                        <span className={`w-9 h-9 rounded-full bg-white ${color.text}flex items-center justify-center shadow-sm group-hover:translate-x-1 transition-transform duration-300`}>→</span>
-                                    </div>
-
-                                </button>
+                
+                                        {/* Bottom section */}
+                                        <div className="flex items-center justify-between mt-6">
+                                            <span className="text-sm text-[#697386] font-medium">Apply Leave</span>
+                                            <span className={`w-9 h-9 rounded-full bg-white  ${color.text} flex items-center justify-center shadow-sm group-hover:translate-x-1 transition-transform duration-300 `}>
+                                                →
+                                            </span>
+                                        </div>
+                
+                                    </button>
                                 );
                             })}
-
                         </div>
                     </div>
                     <Footer />
@@ -180,3 +193,4 @@ export default function Personal_leave_category() {
         </div>
     );
 }
+

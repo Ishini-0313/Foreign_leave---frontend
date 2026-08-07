@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "../context/RegisterContext";
+import toast from "react-hot-toast";
 
 const steps = [
   { number: 1, label: "Personal Info" },
@@ -21,22 +22,22 @@ export default function Register() {
 
   const handleNext = () => {
     if(!formData.fullName.trim()){
-      alert("Full name is required!");
+      toast.error("Full name is required!");
       return;
     }
 
     if(!formData.nic.trim()){
-      alert("NIC is required!");
+      toast.error("NIC is required!");
       return;
     }
 
     if(!formData.mobile.trim()){
-      alert("Phone number is required!");
+      toast.error("Phone number is required!");
       return;
     }
 
     if(!formData.email.trim()){
-      alert("Email is required!");
+      toast.error("Email is required!");
       return;
     }
 
@@ -58,7 +59,7 @@ export default function Register() {
             src="./public/images.png" alt="Sri Lanka Emblem" className="w-14 h-10"
           />
           <span className="text-xl font-bold text-[#002046] leading-7">
-            Southern Provincial Government
+            Southern Provincial Council
           </span>
           {/* <button
             className="w-8 h-8 rounded-full border-2 border-[#002046] flex items-center justify-center text-[#002046] font-bold text-sm hover:bg-[#002046] hover:text-white transition-colors"
@@ -134,7 +135,7 @@ export default function Register() {
             {/* Full Name */}
             <div className="mb-5">
               <label className="block text-sm font-medium text-[#44474E] mb-2 leading-5">
-                සම්පූර්ණ නම
+                සම්පූර්ණණ නම
               </label>
               <input
                 type="text"
@@ -238,7 +239,7 @@ export default function Register() {
         {/* Trust badges */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16 mb-4">
           {/* Secure SSL */}
-          <div className="flex flex-col items-center gap-2 text-center">
+          {/* <div className="flex flex-col items-center gap-2 text-center">
             <svg
               width="28"
               height="28"
@@ -268,10 +269,10 @@ export default function Register() {
                 End-to-end encrypted data
               </p>
             </div>
-          </div>
+          </div> */}
 
           {/* Official Gateway */}
-          <div className="flex flex-col items-center gap-2 text-center">
+          {/* <div className="flex flex-col items-center gap-2 text-center">
             <svg
               width="28"
               height="28"
@@ -295,10 +296,10 @@ export default function Register() {
                 Authorized Govt. Access
               </p>
             </div>
-          </div>
+          </div> */}
 
           {/* 24/7 Support */}
-          <div className="flex flex-col items-center gap-2 text-center">
+          {/* <div className="flex flex-col items-center gap-2 text-center">
             <svg
               width="28"
               height="28"
@@ -329,7 +330,7 @@ export default function Register() {
                 Help Desk available
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
 

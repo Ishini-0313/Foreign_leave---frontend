@@ -9,11 +9,12 @@ import toast from "react-hot-toast";
 export default function Setting() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [user, setUser] = useState<any>(null);
+    const [designations, setDesignations] = useState([]);
     const [profile, setProfile] = useState({
         full_name: "",
         email: "",
         phone: "",
-        designation: "",
+        designation_id: 0,
     });
 
     const [pwd, setPwd] = useState({
@@ -36,6 +37,20 @@ export default function Setting() {
         console.log("stored user" +storedUser);
         setUser(JSON.parse(storedUser));
     }, []);
+
+    // fetch designations
+    useEffect(()=>{
+    const fetchDesignation = async()=>{
+        try{
+        const response = await axios.get('http://127.0.0.1:8000/api/designations');
+        setDesignations(response.data);
+        }catch(error){
+        console.error(error);
+        }
+    };
+    fetchDesignation();
+    }, []);
+    
 
     useEffect(()=>{
         axios.get("http://127.0.0.1:8000/api/profile",{
@@ -418,45 +433,20 @@ export default function Setting() {
                     {/* Designation */}
 
                     <div>
-
-                        <label className="
-                            block
-                            text-sm
-                            font-semibold
-                            text-[#344054]
-                            mb-2
-                        ">
+                        <label className="block  text-sm font-semibold text-[#344054] mb-2">
                             තනතුර
                         </label>
-
                         <div className="relative">
-
-                            <div className="
-                                absolute
-                                left-3
-                                top-1/2
-                                -translate-y-1/2
-                                w-8
-                                h-8
-                                rounded-lg
-                                bg-[#FFF0DF]
-                                text-[#B86F2E]
-                                flex
-                                items-center
-                                justify-center
-                                text-xs
-                                font-bold
-                            ">
+                            <div className="absolute  left-3  top-1/2 -translate-y-1/2 w-8 h-8  rounded-lg  bg-[#FFF0DF] text-[#B86F2E]  flex items-center justify-center text-xs font-bold">
                                 ත
                             </div>
-
-                            <input
-                                type="text"
-                                value={profile.designation}
+                            {/* <input
+                                type="number"
+                                value={profile.designation_id}
                                 onChange={(e) =>
                                     setProfile({
                                         ...profile,
-                                        designation: e.target.value
+                                        designation_id: e.target.value
                                     })
                                 }
                                 className="
@@ -477,7 +467,27 @@ export default function Setting() {
                                     transition-all
                                 "
                                 placeholder="Enter your designation"
-                            />
+                            /> */}
+
+                            <select 
+                                name="designation_id" 
+                                value={profile.designation_id}
+                                onChange={(e) =>
+                                    setProfile({
+                                    ...profile,
+                                    designation_id: Number(e.target.value)
+                                    })
+                                }
+                                className="w-full  pl-14  pr-4  py-3.5  rounded-xl  border border-[#D9DEE7]  bg-[#FBFCFE]  text-[#1D2B3A]  text-sm outline-none  focus:border-[#D28A4B]  focus:ring-4 focus:ring-[#D28A4B]/10 transition-all"
+                                >
+                                    <option value={0}>-- Select Designation --</option>
+
+                                    {designations.map((designation: any) => (
+                                        <option key={designation.id} value={designation.id}>
+                                            {designation.name}
+                                        </option>
+                                    ))}
+                            </select>
 
                         </div>
 

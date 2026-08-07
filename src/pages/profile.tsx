@@ -147,7 +147,7 @@ export default function Profile() {
                                 relative
                                 overflow-hidden
                                 rounded-3xl
-                                bg-gradient-to-r
+                                bg-linear-to-r
                                 from-[#002046]
                                 via-[#163D6B]
                                 to-[#315F91]
@@ -241,7 +241,7 @@ export default function Profile() {
                                             {profile?.full_name || "Loading..."}
                                         </h2>
                                         <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2 mt-3 ">
-                                            {profile?.designation && (
+                                            {profile?.designation_id && (
                                                 <span className="
                                                     px-3
                                                     py-1
@@ -253,7 +253,7 @@ export default function Profile() {
                                                     text-xs
                                                     font-medium
                                                 ">
-                                                    {profile.designation}
+                                                    {profile.designation.name}
                                                 </span>
                                             )}
 
@@ -372,7 +372,7 @@ export default function Profile() {
                                             </label>
                                         </div>
                                         <p className="text-[#1D2B3A] font-semibold text-base wrap-break-word">
-                                            {loading ? "Loading..." : profile?.designation || "-"}
+                                            {loading ? "Loading..." : profile?.designation.name || "-"}
                                         </p>
                                     </div>
 

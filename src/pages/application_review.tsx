@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ChevronsRight, ClipboardPenLine, FileStack, FileUser, MessageSquareMore, TrendingUp } from "lucide-react";
+import { ChevronsRight, ClipboardPenLine, FileStack, FileUser, FolderUp, MessageSquareMore, TrendingUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
@@ -76,7 +76,7 @@ export default function ApplicationReview() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Particulars of Available Leave form will be filled only by subject officer(current assinged)
-  const canFillOfficeForm = user && applicationData && user.id === applicationData.current_assigned_user_id && role === "Subject Officer";
+  const canFillOfficeForm = user && applicationData && user.id === applicationData.application.current_assigned_user_id && user.office.id === applicationData.application.institute_id && role === "Subject Officer";
 
 
   return (
@@ -115,10 +115,10 @@ export default function ApplicationReview() {
             </h2>
             <div className="flex items-center gap-3 mt-1">
                 <div className="text-gray text-sm bg-blue-200 px-3 rounded-xl">
-                  {applicationData?.status}
+                  {applicationData?.application.status}
                 </div>
                 <div className="text-gray-500">
-                  Submitted on: {new Date(applicationData?.created_at).toLocaleDateString()} : {new Date(applicationData?.created_at).toLocaleTimeString()}
+                  Submitted on: {new Date(applicationData?.application.created_at).toLocaleDateString()} : {new Date(applicationData?.application.created_at).toLocaleTimeString()}
                 </div>
             </div>
             
@@ -156,13 +156,22 @@ export default function ApplicationReview() {
 
             {
               canFillOfficeForm && (
-                <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]" onClick={()=>navigate(`/application/${id}/office-form`)}>
-                  <div className="flex gap-2 items-center">
-                      <ClipboardPenLine/>
-                      <p>Particulars of Available Leave</p>
+                <div className="flex flex-col gap-8">
+                  <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]" onClick={()=>navigate(`/application/${id}/office-form`)}>
+                    <div className="flex gap-2 items-center">
+                        <ClipboardPenLine/>
+                        <p>Particulars of Available Leave</p>
+                    </div>
+                    <ChevronsRight/>
                   </div>
-                  <ChevronsRight/>
-              </div>
+                  <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]" onClick={()=>navigate(`/application/${id}/office-documents`)}>
+                    <div className="flex gap-2 items-center">
+                        <FolderUp/>
+                        <p>Upload Supporting Documents</p>
+                    </div>
+                    <ChevronsRight/>
+                  </div>
+                </div>
               )
             }
             

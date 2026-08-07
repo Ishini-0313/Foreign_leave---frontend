@@ -6,6 +6,7 @@ import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import toast from "react-hot-toast";
 import Footer from "../components/footer";
+import { useLeaveCategory } from "../context/LeaveCategoryContext";
 
 function ChevronRight() {
   return (
@@ -20,10 +21,13 @@ export default function DocumentUpload() {
   const {id} = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const { applicationData, setApplicationData, isEditMode, applicationId, existingDocs} = useApplication();
+  const {applicationData, setApplicationData, isEditMode, existingDocs} = useApplication();
+  const {leaveCategory} = useLeaveCategory();
+  
 
   // load logged user
   useEffect(()=>{
+      console.log("officialLeaveCategory : "+ leaveCategory);
       console.log("documents :"+ isEditMode );
       const storedUser = localStorage.getItem("user");
       console.log("Stored User:", storedUser);
@@ -35,7 +39,6 @@ export default function DocumentUpload() {
   },[]);
 
   
-
   interface DocumentItem {
     key: string;
     label: string;
@@ -43,62 +46,459 @@ export default function DocumentUpload() {
     file: File | null;
   }
 
-  const [documents, setDocuments]  = useState<DocumentItem[]>([
-    {
-      key: "invitation_letter",
-      label: "අදාළ නිලධාරියා නමට එවන ලද කැඳවීම් ලිපිය",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "service_confirmation",
-      label: "සේවය ස්ථීර කිරීමේ ලිපිය",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "southern_absorption",
-      label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "duty_cover_letter",
-      label: "රාජකාරි ආවරණ ලිපිය",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "passport_copy",
-      label: "විදේශ ගමන් බලපත්‍රය",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "flight_details",
-      label: "ගුවන් ගමන් විස්තරය",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "request_letter",
-      label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "disciplinary_clearance",
-      label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "agreement",
-      label: "ගිවිසුම",
-      isRequired: false,
-      file: null
-    },
-  ]);
+  const documentsByCategory = {
+    short_trip: [
+      {
+        key: "request_letter",
+        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+        isRequired: true,
+        file:null
+      },
+      {
+        key: "passport_copy",
+        label: "විදේශ ගමන් බලපත්‍රය",
+        isRequired: true,
+        file:null
+      },
+    ],
+
+    study: [
+      {
+        key: "request_letter",
+        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+        isRequired: true,
+        file:null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "admission_letter",
+        label: "අධ්‍යයන ආයතනයේ ලිපිය",
+        isRequired: true,
+        file:null
+      }, 
+      {
+        key: "passport_copy",
+        label: "විදේශ ගමන් බලපත්‍රය",
+        isRequired: true,
+        file:null
+      },
+    ],
+
+    employment: [
+      {
+        key: "request_letter",
+        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+        isRequired: true,
+        file:null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "employment_letter",
+        label: "රැකියා ආයතනයේ ලිපිය",
+        isRequired: true,
+        file:null
+      }, 
+      {
+        key: "passport_copy",
+        label: "විදේශ ගමන් බලපත්‍රය",
+        isRequired: true,
+        file:null
+      },
+    ],
+
+    study_and_employment: [
+      {
+        key: "request_letter",
+        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+        isRequired: true,
+        file:null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "admission_letter",
+        label: "අධ්‍යයන ආයතනයේ ලිපිය",
+        isRequired: true,
+        file:null
+      }, 
+      {
+        key: "passport_copy",
+        label: "විදේශ ගමන් බලපත්‍රය",
+        isRequired: true,
+        file:null
+      },
+    ],
+
+    spouse: [
+      {
+        key: "request_letter",
+        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+        isRequired: true,
+        file:null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "spouse_invitation",
+        label: "කාලත්‍රයාගේ ආරාධනා ලිපිය",
+        isRequired: true,
+        file:null
+      },
+      {
+        key: "passport_copy",
+        label: "විදේශ ගමන් බලපත්‍රය",
+        isRequired: true,
+        file:null
+      },
+    ],
+
+    leave_without_offers: [
+      {
+        key: "invitation_letter",
+        label: "අදාළ නිලධාරියා නමට එවන ලද කැඳවීම් ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "service_confirmation",
+        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "southern_absorption",
+        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "duty_cover_letter",
+        label: "රාජකාරි ආවරණ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "passport_copy",
+        label: "විදේශ ගමන් බලපත්‍රය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "flight_details",
+        label: "ගුවන් ගමන් විස්තරය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "request_letter",
+        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: false,
+        file: null
+      },
+    ],
+
+    leave_with_warm_cloths_offer: [
+      {
+        key: "invitation_letter",
+        label: "අදාළ නිලධාරියා නමට එවන ලද කැඳවීම් ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "service_confirmation",
+        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "southern_absorption",
+        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "duty_cover_letter",
+        label: "රාජකාරි ආවරණ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "passport_copy",
+        label: "විදේශ ගමන් බලපත්‍රය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "flight_details",
+        label: "ගුවන් ගමන් විස්තරය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "request_letter",
+        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: false,
+        file: null
+      },
+      {
+        key: "letter_stating_that_allowances_will_not_be_paid",
+        label: "දීමනා නොගෙවන බවට ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "recommendation_of_secratary_ministry",
+        label: "අමාත්‍යාංශය ලේකම්වරයගේ නිර්දේශය",
+        isRequired: true,
+        file: null
+      },
+    ],
+
+    leave_with_additional_offer: [
+      {
+        key: "invitation_letter",
+        label: "අදාළ නිලධාරියා නමට එවන ලද කැඳවීම් ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "service_confirmation",
+        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "southern_absorption",
+        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "duty_cover_letter",
+        label: "රාජකාරි ආවරණ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "passport_copy",
+        label: "විදේශ ගමන් බලපත්‍රය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "flight_details",
+        label: "ගුවන් ගමන් විස්තරය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "request_letter",
+        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: false,
+        file: null
+      },
+      {
+        key: "letter_stating_that_allowances_will_not_be_paid",
+        label: "දීමනා නොගෙවන බවට ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "recommendation_of_secratary_ministry",
+        label: "අමාත්‍යාංශය ලේකම්වරයගේ නිර්දේශය",
+        isRequired: true,
+        file: null
+      },
+    ],
+    
+    leave_with_warm_cloths_and_additional_offer: [
+      {
+        key: "invitation_letter",
+        label: "අදාළ නිලධාරියා නමට එවන ලද කැඳවීම් ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "service_confirmation",
+        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "southern_absorption",
+        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "duty_cover_letter",
+        label: "රාජකාරි ආවරණ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "passport_copy",
+        label: "විදේශ ගමන් බලපත්‍රය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "flight_details",
+        label: "ගුවන් ගමන් විස්තරය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "request_letter",
+        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: false,
+        file: null
+      },
+      {
+        key: "letter_stating_that_allowances_will_not_be_paid",
+        label: "දීමනා නොගෙවන බවට ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "recommendation_of_secratary_ministry",
+        label: "අමාත්‍යාංශය ලේකම්වරයගේ නිර්දේශය",
+        isRequired: true,
+        file: null
+      },
+    ],
+  };
+
+  const documents: DocumentItem[] =
+    leaveCategory && documentsByCategory[leaveCategory]
+        ? documentsByCategory[leaveCategory].map((doc) => ({
+            ...doc,
+            file: null,
+        }))
+        : [];
+  
+  // const [documents, setDocuments]  = useState<DocumentItem[]>([
+  //   {
+  //     key: "invitation_letter",
+  //     label: "අදාළ නිලධාරියා නමට එවන ලද කැඳවීම් ලිපිය",
+  //     isRequired: true,
+  //     file: null
+  //   },
+  //   {
+  //     key: "service_confirmation",
+  //     label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+  //     isRequired: true,
+  //     file: null
+  //   },
+  //   {
+  //     key: "southern_absorption",
+  //     label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+  //     isRequired: true,
+  //     file: null
+  //   },
+  //   {
+  //     key: "duty_cover_letter",
+  //     label: "රාජකාරි ආවරණ ලිපිය",
+  //     isRequired: true,
+  //     file: null
+  //   },
+  //   {
+  //     key: "passport_copy",
+  //     label: "විදේශ ගමන් බලපත්‍රය",
+  //     isRequired: true,
+  //     file: null
+  //   },
+  //   {
+  //     key: "flight_details",
+  //     label: "ගුවන් ගමන් විස්තරය",
+  //     isRequired: true,
+  //     file: null
+  //   },
+  //   {
+  //     key: "request_letter",
+  //     label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+  //     isRequired: true,
+  //     file: null
+  //   },
+  //   {
+  //     key: "disciplinary_clearance",
+  //     label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+  //     isRequired: true,
+  //     file: null
+  //   },
+  //   {
+  //     key: "agreement",
+  //     label: "ගිවිසුම",
+  //     isRequired: false,
+  //     file: null
+  //   },
+  // ]);
 
   
   const navigate = useNavigate();
@@ -129,22 +529,42 @@ export default function DocumentUpload() {
     }));
   };
   
+  // const requiredDocs = documents.filter(
+  //   (doc) => doc.isRequired
+  // );
+
+  // const uploadedRequiredDocs = requiredDocs.filter(
+  //   (doc) => applicationData.documents?.[doc.key] || existingDocs?.[doc.key]
+  // );
+
   const requiredDocs = documents.filter(
     (doc) => doc.isRequired
-  );
+);
 
-  const uploadedRequiredDocs = requiredDocs.filter(
-    (doc) => applicationData.documents?.[doc.key] || existingDocs?.[doc.key]
-  );
+const uploadedRequiredDocs = requiredDocs.filter(
+    (doc) =>
+        applicationData?.documents?.[doc.key] ||
+        existingDocs?.[doc.key]
+);
 
-  const uploadedCount = requiredDocs.filter(
-    (doc) => applicationData.documents?.[doc.key] || existingDocs?.[doc.key]
-  ).length;
+  // const uploadedCount = requiredDocs.filter(
+  //   (doc) => applicationData.documents?.[doc.key] || existingDocs?.[doc.key]
+  // ).length;
 
-  const allUploaded =
-    uploadedCount === requiredDocs.length;
+  // const allUploaded =
+  //   uploadedCount === requiredDocs.length;
   
-  const progress = (uploadedRequiredDocs.length/requiredDocs.length)*100;
+  // const progress = (uploadedRequiredDocs.length/requiredDocs.length)*100;
+
+  const uploadedCount = uploadedRequiredDocs.length;
+
+const allUploaded =
+    uploadedCount === requiredDocs.length;
+
+const progress =
+    requiredDocs.length > 0
+        ? (uploadedCount / requiredDocs.length) * 100
+        : 0;
 
   const handleNext = () => {
 
@@ -158,7 +578,7 @@ export default function DocumentUpload() {
     }
 
     toast.success("document uploaded successfully");
-    navigate(`/sign/edit/${id}`);
+    navigate(`/sign2/edit/${id}`);
   };
 
   return (
@@ -247,7 +667,7 @@ export default function DocumentUpload() {
                                 )}
                               </div>
                               {
-                                applicationData.documents[doc.key] ? 
+                                applicationData?.documents?.[doc.key] ? 
                                   (
                                     <div className="flex items-center gap-2 text-green-600 mt-2">
                                       <CheckCircle size={16} />
@@ -256,7 +676,7 @@ export default function DocumentUpload() {
                                       </span>
                                     </div>
                                   ):
-                                  existingDocs?.[doc.key] ?
+                                  existingDocs?
                                   (
                                     <div className="flex items-center gap-2 text-green-600">
                                       <CheckCircle size={16} />
@@ -278,6 +698,7 @@ export default function DocumentUpload() {
                               }
                             </div>
 
+                            {/* right side */}
                             <div className="flex items-center gap-3">
                                 <label className="cursor-pointer">
                                   <input

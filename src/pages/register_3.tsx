@@ -48,10 +48,8 @@ export default function Register_3() {
         nic: formData.nic,
         phone: formData.mobile,
         email: formData.email,
-        designation: formData.designation,
-
+        designation_id: formData.designation_id,
         office_id: formData.office_id,
-
         username: formData.username,
         password: formData.password,
         password_confirmation: formData.confirmPassword,

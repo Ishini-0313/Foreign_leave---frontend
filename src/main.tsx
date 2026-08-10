@@ -8,6 +8,7 @@ import { ApplicationProvider } from './context/ApplicationContext.tsx'
 import { AmendmentProvider } from './context/AmendmentContext.tsx'
 import { Toaster } from 'react-hot-toast'
 import { LeaveCategoryProvider } from './context/LeaveCategoryContext.tsx'
+import '@fontsource-variable/noto-sans-sinhala/wght.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

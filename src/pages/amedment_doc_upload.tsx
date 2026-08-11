@@ -55,12 +55,6 @@ export default function AmedmentDocumentUpload() {
       file: null
     },
     {
-      key: "foreign_leave_approval_letter",
-      label: "විදේශ නිවාඩු අනුමත ලිපිය",
-      isRequired: true,
-      file: null
-    },
-    {
       key: "flight_details",
       label: "ගුවන් ගමන් විස්තරය",
       isRequired: true,

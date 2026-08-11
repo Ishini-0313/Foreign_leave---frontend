@@ -184,12 +184,6 @@ export default function DocumentUpload() {
         file: null
       },
       {
-        key: "southern_absorption",
-        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
-        isRequired: true,
-        file: null
-      },
-      {
         key: "duty_cover_letter",
         label: "රාජකාරි ආවරණ ලිපිය",
         isRequired: true,
@@ -213,18 +207,18 @@ export default function DocumentUpload() {
         isRequired: true,
         file: null
       },
-      {
-        key: "disciplinary_clearance",
-        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "agreement",
-        label: "ගිවිසුම",
-        isRequired: false,
-        file: null
-      },
+      // {
+      //   key: "disciplinary_clearance",
+      //   label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+      //   isRequired: true,
+      //   file: null
+      // },
+      // {
+      //   key: "agreement",
+      //   label: "ගිවිසුම",
+      //   isRequired: false,
+      //   file: null
+      // },
     ],
 
     leave_with_warm_cloths_offer: [
@@ -240,12 +234,12 @@ export default function DocumentUpload() {
         isRequired: true,
         file: null
       },
-      {
-        key: "southern_absorption",
-        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
-        isRequired: true,
-        file: null
-      },
+      // {
+      //   key: "southern_absorption",
+      //   label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+      //   isRequired: true,
+      //   file: null
+      // },
       {
         key: "duty_cover_letter",
         label: "රාජකාරි ආවරණ ලිපිය",
@@ -270,30 +264,30 @@ export default function DocumentUpload() {
         isRequired: true,
         file: null
       },
-      {
-        key: "disciplinary_clearance",
-        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "agreement",
-        label: "ගිවිසුම",
-        isRequired: false,
-        file: null
-      },
+      // {
+      //   key: "disciplinary_clearance",
+      //   label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+      //   isRequired: true,
+      //   file: null
+      // },
+      // {
+      //   key: "agreement",
+      //   label: "ගිවිසුම",
+      //   isRequired: false,
+      //   file: null
+      // },
       {
         key: "letter_stating_that_allowances_will_not_be_paid",
         label: "දීමනා නොගෙවන බවට ලිපිය",
         isRequired: true,
         file: null
       },
-      {
-        key: "recommendation_of_secratary_ministry",
-        label: "අමාත්‍යාංශය ලේකම්වරයගේ නිර්දේශය",
-        isRequired: true,
-        file: null
-      },
+      // {
+      //   key: "recommendation_of_secratary_ministry",
+      //   label: "අමාත්‍යාංශය ලේකම්වරයගේ නිර්දේශය",
+      //   isRequired: true,
+      //   file: null
+      // },
     ],
 
     leave_with_additional_offer: [
@@ -309,12 +303,12 @@ export default function DocumentUpload() {
         isRequired: true,
         file: null
       },
-      {
-        key: "southern_absorption",
-        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
-        isRequired: true,
-        file: null
-      },
+      // {
+      //   key: "southern_absorption",
+      //   label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+      //   isRequired: true,
+      //   file: null
+      // },
       {
         key: "duty_cover_letter",
         label: "රාජකාරි ආවරණ ලිපිය",
@@ -339,30 +333,30 @@ export default function DocumentUpload() {
         isRequired: true,
         file: null
       },
-      {
-        key: "disciplinary_clearance",
-        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "agreement",
-        label: "ගිවිසුම",
-        isRequired: false,
-        file: null
-      },
+      // {
+      //   key: "disciplinary_clearance",
+      //   label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+      //   isRequired: true,
+      //   file: null
+      // },
+      // {
+      //   key: "agreement",
+      //   label: "ගිවිසුම",
+      //   isRequired: false,
+      //   file: null
+      // },
       {
         key: "letter_stating_that_allowances_will_not_be_paid",
         label: "දීමනා නොගෙවන බවට ලිපිය",
         isRequired: true,
         file: null
       },
-      {
-        key: "recommendation_of_secratary_ministry",
-        label: "අමාත්‍යාංශය ලේකම්වරයගේ නිර්දේශය",
-        isRequired: true,
-        file: null
-      },
+      // {
+      //   key: "recommendation_of_secratary_ministry",
+      //   label: "අමාත්‍යාංශය ලේකම්වරයගේ නිර්දේශය",
+      //   isRequired: true,
+      //   file: null
+      // },
     ],
     
     leave_with_warm_cloths_and_additional_offer: [
@@ -378,12 +372,12 @@ export default function DocumentUpload() {
         isRequired: true,
         file: null
       },
-      {
-        key: "southern_absorption",
-        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
-        isRequired: true,
-        file: null
-      },
+      // {
+      //   key: "southern_absorption",
+      //   label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+      //   isRequired: true,
+      //   file: null
+      // },
       {
         key: "duty_cover_letter",
         label: "රාජකාරි ආවරණ ලිපිය",
@@ -408,30 +402,30 @@ export default function DocumentUpload() {
         isRequired: true,
         file: null
       },
-      {
-        key: "disciplinary_clearance",
-        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "agreement",
-        label: "ගිවිසුම",
-        isRequired: false,
-        file: null
-      },
+      // {
+      //   key: "disciplinary_clearance",
+      //   label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+      //   isRequired: true,
+      //   file: null
+      // },
+      // {
+      //   key: "agreement",
+      //   label: "ගිවිසුම",
+      //   isRequired: false,
+      //   file: null
+      // },
       {
         key: "letter_stating_that_allowances_will_not_be_paid",
         label: "දීමනා නොගෙවන බවට ලිපිය",
         isRequired: true,
         file: null
       },
-      {
-        key: "recommendation_of_secratary_ministry",
-        label: "අමාත්‍යාංශය ලේකම්වරයගේ නිර්දේශය",
-        isRequired: true,
-        file: null
-      },
+      // {
+      //   key: "recommendation_of_secratary_ministry",
+      //   label: "අමාත්‍යාංශය ලේකම්වරයගේ නිර්දේශය",
+      //   isRequired: true,
+      //   file: null
+      // },
     ],
   };
 

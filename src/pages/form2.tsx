@@ -49,7 +49,7 @@ export default function Form2() {
   },[]);
 
   const handleNext = ()=>{
-    navigate(`/documents/edit/${id}`);
+    navigate(`/new-doc/edit/${id}`);
   };
 
 
@@ -146,14 +146,14 @@ export default function Form2() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     1. දෙපාර්තමේන්තුව
                   </label>
                   <select 
                     name="institute_id"
                     value={applicationData.institute_id}
                     onChange={(e)=> setApplicationData({...applicationData, institute_id:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   >
                     <option value="">-- Select Department / Institute --</option>
                     {institutes.map((institute: any)=>(
@@ -163,19 +163,19 @@ export default function Form2() {
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     2. නම හා නිලනාමය
                   </label>
                   <input
                       type="text"
                       value={applicationData.name_and_designation}
                       onChange={(e)=> setApplicationData({...applicationData, name_and_designation:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     3. සේවය, පංතිය හෝ ශ්‍රේණිය
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -183,7 +183,7 @@ export default function Form2() {
                         name="service_id"
                         value={applicationData.service_id}
                         onChange={(e)=> setApplicationData({...applicationData, service_id:e.target.value})}
-                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     >
                         <option value="">-- Select Service --</option>
                         {services.map((service:any)=>(
@@ -196,7 +196,7 @@ export default function Form2() {
                         name="grade_id"
                         value={applicationData.class_or_grade}
                         onChange={(e)=> setApplicationData({...applicationData, class_or_grade:e.target.value})}
-                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     >
                         <option value="">-- Select Grade --</option>
                         {grades.map((grade:any)=>(
@@ -210,31 +210,31 @@ export default function Form2() {
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     4. මුලින්ම පත් වූ දිනය
                   </label>
                   <input
                       type="date"
                       value={applicationData.first_appoinment_date}
                       onChange={(e)=> setApplicationData({...applicationData, first_appoinment_date:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5. මීට පෙරද නිවාඩු ගත්තේ නම් පසු ගිය වර ශ්‍රී ලංකාවට ආපසු පැමිණි දිනය
                   </label>
                   <input
                       type="date"
                       value={applicationData.last_return_date}
                       onChange={(e)=> setApplicationData({...applicationData, last_return_date:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     6. දැන් ඉල්ලා සිටින නිවාඩු කාලය (නිවාඩු පටන් ගන්නා දිනය හා අවසන් වන දිනය සදහන් කරන්න)
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -242,7 +242,7 @@ export default function Form2() {
                       type="date"
                       value={applicationData.leave_start_date}
                       onChange={(e)=> setApplicationData({...applicationData, leave_start_date:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                     <input
                       type="date"
@@ -254,74 +254,74 @@ export default function Form2() {
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     7. නිවාඩු ඉල්ලීමට හේතු
                   </label>
                   <input
                       type="text"
                       value={applicationData.reason_for_leave}
                       onChange={(e)=> setApplicationData({...applicationData, reason_for_leave:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     8. (අ) ගමන් කරන්නේ කලින් මුදල් ගෙවූ ටිකට්ටුවකින්ද
                   </label>
                   <input
                       type="text"
                       value={applicationData.is_travel_on_a_pre_paid_ticket}
                       onChange={(e)=> setApplicationData({...applicationData, is_travel_on_a_pre_paid_ticket:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     (ආ) එය එවන පුද්ගලයා හා ඉල්ලුම්කරු අතර ඇති සම්බන්ධය
                   </label>
                   <input
                       type="text"
                       value={applicationData.relationship_of_the_person_sending_it}
                       onChange={(e)=> setApplicationData({...applicationData, relationship_of_the_person_sending_it:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     9. (අ) පිටරට තමාගේ නඩත්තු වියදම් දරන්නේ කෙසේද?
                   </label>
                   <input
                       type="text"
                       value={applicationData.cost_maintanence_abroad}
                       onChange={(e)=> setApplicationData({...applicationData, cost_maintanence_abroad:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     (ආ) එම වියදම් දරන පුද්ගලයා හා ඉල්ලුම්කරු අතර ඇති සම්බන්ධය
                   </label>
                   <input
                       type="text"
                       value={applicationData.relationship_of_person_meeting_expenditure}
                       onChange={(e)=> setApplicationData({...applicationData, relationship_of_person_meeting_expenditure:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     10. නිවාඩු කාලයේදී ඉල්ලුම්කරුගේ ලිපිනය
                   </label>
                   <input
                       type="text"
                       value={applicationData.address_during_leave}
                       onChange={(e)=> setApplicationData({...applicationData, address_during_leave:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                 </div>
               </div>

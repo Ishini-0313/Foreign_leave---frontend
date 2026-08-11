@@ -99,9 +99,9 @@ export default function Form_16() {
       </div>
 
       <div className="col-span-6">
-        <p className='mb-2'>{applicationData.name}</p>
-        <p className='mb-2'>{applicationData.position}</p>
-        <p className='mb-2'>{applicationData.service_id}</p>
+        <p className='mb-2'>{applicationData.application.name}</p>
+        <p className='mb-2'>{applicationData.application.position}</p>
+        <p className='mb-2'>{applicationData.application.service_id}</p>
       </div>
     </div>
   </div>
@@ -120,8 +120,8 @@ export default function Form_16() {
       </div>
 
       <div className="col-span-6">
-        <p className='mb-2'>{applicationData.dob}</p>
-        <p className='mb-2'>{applicationData.nic}</p>
+        <p className='mb-2'>{applicationData.application.dob}</p>
+        <p className='mb-2'>{applicationData.application.nic}</p>
       </div>
     </div>
   </div>
@@ -140,8 +140,8 @@ export default function Form_16() {
       </div>
 
       <div className="col-span-6">
-        <p className='mb-2'>{applicationData.ministry.name}</p>
-        <p className='mb-2'>{applicationData.institute.name}</p>
+        <p className='mb-2'>{applicationData.application.ministry.name}</p>
+        <p className='mb-2'>{applicationData.application.institute.name}</p>
       </div>
     </div>
   </div>
@@ -158,7 +158,7 @@ export default function Form_16() {
       </div>
 
       <div className="col-span-6">
-        <p className='mb-2'>{applicationData.arrangement_made_to_cover_duty}</p>
+        <p className='mb-2'>{applicationData.application.arrangement_made_to_cover_duty}</p>
       </div>
     </div>
   </div>
@@ -181,9 +181,9 @@ export default function Form_16() {
       </div>
 
       <div className="col-span-6">
-        <p className='mb-2'>{applicationData.purpose}</p>
-        <p className='mb-2'>{applicationData.nature_of_trip}</p>
-        <p className='mb-2'>{applicationData.awarding_agency}</p>
+        <p className='mb-2'>{applicationData.application.purpose}</p>
+        <p className='mb-2'>{applicationData.application.nature_of_trip}</p>
+        <p className='mb-2'>{applicationData.application.awarding_agency}</p>
       </div>
     </div>
 
@@ -205,11 +205,11 @@ export default function Form_16() {
           </thead>
           <tbody>
             <tr>
-              { applicationData.expenses_mainly_to_be_met == "විදේශ සම්පත් දෙපාර්තමේන්තුව මගින්" ? <td className='text-center border-r border-gray-400'><Check/></td> : <td className='border-r border-gray-400'></td>}
-              { applicationData.expenses_mainly_to_be_met == "ව්‍යාපෘතියකින්" ? <td className='text-center border-r border-gray-400'><Check/></td> : <td className='border-r border-gray-400'></td>}
-              { applicationData.expenses_mainly_to_be_met == "ඍජුව ලැබුණ ප්‍රදානයක්" ? <td className='flex justify-center border-r border-gray-400'><Check/></td> : <td className='border-r border-gray-400'></td>}
-              { applicationData.expenses_mainly_to_be_met == "තමාගේම මුදලක්" ? <td className='text-center border-r border-gray-400'><Check/></td> : <td className='border-r border-gray-400'></td>}
-              { applicationData.expenses_mainly_to_be_met == "ශ්‍රී ලංකා රජයෙන්" ? <td className='text-center border-r border-gray-400'><Check/></td> : <td className='border-r border-gray-400'></td>}
+              { applicationData.application.expenses_mainly_to_be_met == "විදේශ සම්පත් දෙපාර්තමේන්තුව මගින්" ? <td className='text-center border-r border-gray-400'><Check/></td> : <td className='border-r border-gray-400'></td>}
+              { applicationData.application.expenses_mainly_to_be_met == "ව්‍යාපෘතියකින්" ? <td className='text-center border-r border-gray-400'><Check/></td> : <td className='border-r border-gray-400'></td>}
+              { applicationData.application.expenses_mainly_to_be_met == "ඍජුව ලැබුණ ප්‍රදානයක්" ? <td className='flex justify-center border-r border-gray-400'><Check/></td> : <td className='border-r border-gray-400'></td>}
+              { applicationData.application.expenses_mainly_to_be_met == "තමාගේම මුදලක්" ? <td className='text-center border-r border-gray-400'><Check/></td> : <td className='border-r border-gray-400'></td>}
+              { applicationData.application.expenses_mainly_to_be_met == "ශ්‍රී ලංකා රජයෙන්" ? <td className='text-center border-r border-gray-400'><Check/></td> : <td className='border-r border-gray-400'></td>}
             </tr>
           </tbody>
         </table>
@@ -245,7 +245,7 @@ export default function Form_16() {
           </thead>
           <tbody>
             {
-              applicationData.gosl_funds.map((row:any, i:number)=>(
+              applicationData.application.gosl_funds.map((row:any, i:number)=>(
                 <tr key={i} className='border-b border-[#C4C6CF]'>
                   <td className='px-2 py-2 border-r border-gray-400'>{row.air_travel_amount}</td>
                   <td className='px-2 py-2 border-r border-gray-400'>{row.subsistence_amount}</td>
@@ -281,15 +281,15 @@ export default function Form_16() {
       </div>
 
       <div className="col-span-6">
-        <p className='mb-2'>{applicationData.foreign_loan_project_particulars_thereof}</p>
-        <p className='mb-2'>{applicationData.commencement_date_of_trainig}</p>
-        <p className='mb-2'>{applicationData.completion_date_of_trainig}</p>
-        <p className='mb-2'>{applicationData.departure_date} , {applicationData.return_date}</p>
-        <p className='mb-2'>{applicationData.country}</p>
-        <p className='mb-2'>{applicationData.foreign_address}</p>
-        <p className='mb-2'>{applicationData.foreign_phone}</p>
-        <p className='mb-2'>{applicationData.foreign_fax}</p>
-        <p className='mb-2'>{applicationData.foreign_email}</p>
+        <p className='mb-2'>{applicationData.application.foreign_loan_project_particulars_thereof}</p>
+        <p className='mb-2'>{applicationData.application.commencement_date_of_trainig}</p>
+        <p className='mb-2'>{applicationData.application.completion_date_of_trainig}</p>
+        <p className='mb-2'>{applicationData.application.departure_date} , {applicationData.return_date}</p>
+        <p className='mb-2'>{applicationData.application.country}</p>
+        <p className='mb-2'>{applicationData.application.foreign_address}</p>
+        <p className='mb-2'>{applicationData.application.foreign_phone}</p>
+        <p className='mb-2'>{applicationData.application.foreign_fax}</p>
+        <p className='mb-2'>{applicationData.application.foreign_email}</p>
       </div>
     </div>
 
@@ -304,7 +304,7 @@ export default function Form_16() {
 
       <div className="col-span-6">
         {
-          applicationData.has_previous_trip_report_submitted == 1 ? <p className='mb-2'>ඔව්</p> : <p className='mb-2'>නැත</p>
+          applicationData.application.has_previous_trip_report_submitted == 1 ? <p className='mb-2'>ඔව්</p> : <p className='mb-2'>නැත</p>
         }
       </div>
     </div>
@@ -339,7 +339,7 @@ export default function Form_16() {
           </thead>
           <tbody>
             {
-              applicationData.previous_travels.map((row:PreviousTravel, i:number)=>(
+              applicationData.application.previous_travels.map((row:PreviousTravel, i:number)=>(
                 <tr key={i} className='border-b border-[#C4C6CF]'>
                   <td className='px-2 py-2 border-r border-gray-400'>{row.year}</td>
                   <td className='px-2 py-2 border-r border-gray-400'>{row.purpose}</td>

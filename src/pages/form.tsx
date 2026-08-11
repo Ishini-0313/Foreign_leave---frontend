@@ -74,70 +74,70 @@ export default function Form() {
 
   const {applicationData, setApplicationData, setIsEditMode, setApplicationId, setExistingDocs, setExistingSignature} = useApplication();
 
-  const loadApplication = async () => {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-          `http://127.0.0.1:8000/api/applications/${id}`,
-          {
-              headers: {
-                  Authorization: `Bearer ${token}`,
-              },
-          }
-      );
+  // const loadApplication = async () => {
+  //     const token = localStorage.getItem("token");
+  //     const response = await axios.get(
+  //         `http://127.0.0.1:8000/api/applications/${id}`,
+  //         {
+  //             headers: {
+  //                 Authorization: `Bearer ${token}`,
+  //             },
+  //         }
+  //     );
   
-      const app = response.data;
-      const funds = app.gosl_funds?.[0];
-      if(id){
-        setApplicationId(Number(id));
-        setIsEditMode(true);
-      }
+  //     const app = response.data.application;
+  //     const funds = app.gosl_funds?.[0];
+  //     if(id){
+  //       setApplicationId(Number(id));
+  //       setIsEditMode(true);
+  //     }
       
-      setApplicationData({...app, 
-          has_previous_trip_report_submitted:Boolean(app.has_previous_trip_report_submitted),
-          goslFunds: {
-              air_travel: {
-                  selected: !!funds?.air_travel_selected,
-                  amount: funds?.air_travel_amount ?? "",
-              },
-              subsistence: {
-                  selected: !!funds?.subsistence_selected,
-                  amount: funds?.subsistence_amount ?? "",
-              },
-              course_fees: {
-                  selected: !!funds?.course_fees_selected,
-                  amount: funds?.course_fees_amount ?? "",
-              },
-              additional_expenses: {
-                  selected: !!funds?.additional_expenses_selected,
-                  amount: funds?.additional_expenses_amount ?? "",
-              },
-              other_personal_expenses: {
-                  selected: !!funds?.other_personal_expenses_selected,
-                  amount: funds?.other_personal_expenses_amount ?? "",
-              },
-          },
-          previousTravels : app.previous_travels.map((travel:any)=>({
-            year : String(travel.year),
-            purpose : travel.purpose,
-            period : travel.period,
-            country : travel.country,
-          })),
-          address_during_leave:app.foreign_address,
-      });
+  //     setApplicationData({...app, 
+  //         has_previous_trip_report_submitted:Boolean(app.has_previous_trip_report_submitted),
+  //         goslFunds: {
+  //             air_travel: {
+  //                 selected: !!funds?.air_travel_selected,
+  //                 amount: funds?.air_travel_amount ?? "",
+  //             },
+  //             subsistence: {
+  //                 selected: !!funds?.subsistence_selected,
+  //                 amount: funds?.subsistence_amount ?? "",
+  //             },
+  //             course_fees: {
+  //                 selected: !!funds?.course_fees_selected,
+  //                 amount: funds?.course_fees_amount ?? "",
+  //             },
+  //             additional_expenses: {
+  //                 selected: !!funds?.additional_expenses_selected,
+  //                 amount: funds?.additional_expenses_amount ?? "",
+  //             },
+  //             other_personal_expenses: {
+  //                 selected: !!funds?.other_personal_expenses_selected,
+  //                 amount: funds?.other_personal_expenses_amount ?? "",
+  //             },
+  //         },
+  //         previousTravels : app.previous_travels.map((travel:any)=>({
+  //           year : String(travel.year),
+  //           purpose : travel.purpose,
+  //           period : travel.period,
+  //           country : travel.country,
+  //         })),
+  //         address_during_leave:app.foreign_address,
+  //     });
 
-      const docs:any = {};
-      app.documents.forEach((doc:any)=>{
-        docs[doc.document_type] = doc;
-      });
+  //     const docs:any = {};
+  //     app.documents.forEach((doc:any)=>{
+  //       docs[doc.document_type] = doc;
+  //     });
 
-      setExistingDocs(docs);
-      setExistingSignature(app.signature_path ? `http://127.0.0.1:8000/storage/${app.signature_path}`: null)
-  };
+  //     setExistingDocs(docs);
+  //     setExistingSignature(app.signature_path ? `http://127.0.0.1:8000/storage/${app.signature_path}`: null)
+  // };
   
-  useEffect(() => {
-    if(!id) return;
-    loadApplication();
-  }, [id]);
+  // useEffect(() => {
+  //   if(!id) return;
+  //   loadApplication();
+  // }, [id]);
 
 
   const addTravelRow = () => {
@@ -300,29 +300,29 @@ export default function Form() {
             <FormCard>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     1:1 නම
                   </label>
                   <input
                     type="text"
-                    value={applicationData.name}
+                    value={applicationData?.name || ""}
                     onChange={(e)=> setApplicationData({...applicationData, name:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     1:2 තනතුර
                   </label>
                   <input
                     type="text"
-                    value={applicationData.position}
+                    value={applicationData?.position || ""}
                     onChange={(e)=> setApplicationData({...applicationData, position:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     1:3 නිලධාරියා අයත්වන සේවය
                   </label>
                   {/* <select 
@@ -342,7 +342,7 @@ export default function Form() {
                         name="service_id"
                         value={applicationData.service_id}
                         onChange={(e)=> setApplicationData({...applicationData, service_id:e.target.value})}
-                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     >
                         <option value="">-- Select Service --</option>
                         {services.map((service:any)=>(
@@ -360,27 +360,27 @@ export default function Form() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* DOB */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     2:1 උපන් දිනය
                   </label>
                   <input
                     type="date"
                     value={applicationData.dob}
                     onChange={(e)=> setApplicationData({...applicationData, dob:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
 
                 {/* NIC */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     2:2 හැදුනුම්පත් අංකය
                   </label>
                   <input
                     type="text"
                     value={applicationData.nic}
                     onChange={(e)=> setApplicationData({...applicationData, nic:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
               </div>
@@ -390,14 +390,14 @@ export default function Form() {
             <FormCard>
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     3:1 අමාත්‍යාංශය / පළාත් සභාව
                   </label>
                   <select 
                     name="ministry_id"
                     value={applicationData.ministry_id}
                     onChange={(e)=> setApplicationData({...applicationData, ministry_id:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   >
                     <option value="">-- Select Ministry --</option>
                     {ministries.map((ministry: any)=>(
@@ -406,14 +406,14 @@ export default function Form() {
                   </select>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     3:2 දෙපාර්තමේන්තුව / ආයතනය
                   </label>
                   <select 
                     name="institute_id"
                     value={applicationData.institute_id}
                     onChange={(e)=> setApplicationData({...applicationData, institute_id:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   >
                     <option value="">-- Select Department / Institute --</option>
                     {institutes.map((institute: any)=>(
@@ -427,14 +427,14 @@ export default function Form() {
             {/* Section 4: Work arrangement */}
             <FormCard>
               <div className="flex flex-col gap-2">
-                <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                <label className="text-[#44474E] text-sm font-semibold leading-6">
                   4. රාජකාරි ආවරණයට / වැඩ බැලීමට යොදා ඇති වැඩ පිළිවෙළ
                 </label>
                 <input
                     type="text"
                     value={applicationData.arrangement_made_to_cover_duty}
                     onChange={(e)=> setApplicationData({...applicationData, arrangement_made_to_cover_duty:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
               </div>
             </FormCard>
@@ -444,20 +444,20 @@ export default function Form() {
               <div className="flex flex-col gap-6">
                 {/* 5:1 */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:1 ගමනේ අරමුණ / පුහුණු ක්ශේත්‍රය
                   </label>
                   <input
                     type="text"
                     value={applicationData.purpose}
                     onChange={(e)=> setApplicationData({...applicationData, purpose:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
 
                 {/* 5:2 Nature of trip */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:2 ගමනේ ස්වභාවය
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -471,7 +471,7 @@ export default function Form() {
                       />
                       <label htmlFor="">නිල</label>
                     </div>
-                    <div className="flex items-center gap-2 w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors">
+                    <div className="flex items-center gap-2 w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors">
                       <input
                         name="trip_nature"
                         type="radio"
@@ -486,20 +486,20 @@ export default function Form() {
 
                 {/* 5:3 */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:3 පුහුණුව සදහා නම් ප්‍රදානය කරනු ලබන ආයතනය
                   </label>
                   <input
                         type="text"
                         value={applicationData.awarding_agency}
                         onChange={(e)=> setApplicationData({...applicationData, awarding_agency:e.target.value})}
-                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
 
                 {/* 5:4 Expenses */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:4 ප්‍රධාන වශයෙන් වියදම් දරන්නේ කෙසේද?
                   </label>
                   <div className="border border-[#C4C6CF] rounded p-4 space-y-6.75">
@@ -519,7 +519,7 @@ export default function Form() {
                           checked={applicationData.expenses_mainly_to_be_met === opt}
                           onChange={(e)=> setApplicationData({...applicationData, expenses_mainly_to_be_met:e.target.value})}
                         />
-                        <span className="font-['Noto_Sans_Sinhala'] text-xs text-black tracking-[0.6px] uppercase">
+                        <span className="text-base text-black tracking-[0.6px] uppercase">
                           {opt}
                         </span>
                       </label>
@@ -529,7 +529,7 @@ export default function Form() {
 
                 {/* 5:5 Govt funds */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:5 ශ්‍රී ලංකා රජයේ අරමුදලින් ලබාගන්නේ නම් එහි ස්වභාවය හා මුදල
                   </label>
                   <div className="border border-[#C4C6CF] rounded p-4 space-y-6.75">
@@ -537,7 +537,7 @@ export default function Form() {
                       <div key={item.key} className="flex items-center gap-4">
                         <input
                           type="checkbox"
-                          checked={applicationData.goslFunds[item.key].selected}
+                          checked={applicationData?.goslFunds?.[item.key]?.selected ?? false}
                           onChange={(e) =>
                             setApplicationData({
                               ...applicationData,
@@ -553,13 +553,13 @@ export default function Form() {
                           className="w-4 h-4 accent-[#002046]"
                         />
 
-                        <span className="flex-1 text-xs font-['Noto_Sans_Sinhala']">
+                        <span className="flex-1 text-base ">
                           {item.label}
                         </span>
 
                         <input
                           type="number"
-                          value={applicationData.goslFunds[item.key].amount}
+                          value={applicationData?.goslFunds?.[item.key]?.amount ?? ""}
                           onChange={(e) =>
                             setApplicationData({
                               ...applicationData,
@@ -573,7 +573,7 @@ export default function Form() {
                             })
                           }
                           placeholder="Amount (LKR)"
-                          className="w-40 border border-[#C4C6CF] rounded px-3 py-2 text-sm"
+                          className="w-40 border border-[#C4C6CF] rounded px-3 py-2 text-base"
                         />
                       </div>
                     ))}
@@ -582,46 +582,46 @@ export default function Form() {
 
                 {/* 5:6 */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:6 විදේශ ණය / ව්‍යාපෘතිය යටතේ වන අරමුදලක් නම් ඒ පිළිබද විස්තර
                   </label>
                   <input
                     type="text"
                     value={applicationData.foreign_loan_project_particulars_thereof}
                     onChange={(e)=> setApplicationData({...applicationData, foreign_loan_project_particulars_thereof:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
 
                 {/* 5:7 */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:7 පාඨමාලාව / පුහුණුව ආරම්භක දිනය
                   </label>
                   <input
                     type="date"
                     value={applicationData.commencement_date_of_trainig}
                     onChange={(e)=> setApplicationData({...applicationData, commencement_date_of_trainig:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
 
                 {/* 5:8 */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:8 අවසාන දිනය
                   </label>
                   <input
                     type="date"
                     value={applicationData.completion_date_of_trainig}
                     onChange={(e)=> setApplicationData({...applicationData, completion_date_of_trainig:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
 
                 {/* 5:9 Departure/Return dates */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:9 පිටත්වන දිනය සහ ආපසු පැමිණෙන දිනය
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -629,33 +629,33 @@ export default function Form() {
                       type="date"
                       value={applicationData.departure_date}
                       onChange={(e)=> setApplicationData({...applicationData, departure_date:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                     <input
                       type="date"
                       value={applicationData.return_date}
                       onChange={(e)=> setApplicationData({...applicationData, return_date:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* 5:10 Countries */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:10 යන රටවල්
                   </label>
                   <input
                       type="text"
                       value={applicationData.country}
                       onChange={(e)=> setApplicationData({...applicationData, country:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   />
                 </div>
 
                 {/* 5:11 Foreign address */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:11 විදේශ ලිපිනය: දුරකතන, ෆැක්ස් , ඊමේල් අංක සහිතව
                   </label>
                   <div className="flex flex-col gap-3">
@@ -664,35 +664,35 @@ export default function Form() {
                       placeholder="විදේශ ලිපිනය"
                       value={applicationData.foreign_address}
                       onChange={(e)=> setApplicationData({...applicationData, foreign_address:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                     <input
                       type="text"
                       placeholder="දුරකතන අංකය"
                       value={applicationData.foreign_phone}
                       onChange={(e)=> setApplicationData({...applicationData, foreign_phone:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                     <input
                       type="text"
                       placeholder="ෆැක්ස්"
                       value={applicationData.foreign_fax}
                       onChange={(e)=> setApplicationData({...applicationData, foreign_fax:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                     <input
                       type="text"
                       placeholder="විද්‍යුත් ලිපිනය"
                       value={applicationData.foreign_email}
                       onChange={(e)=> setApplicationData({...applicationData, foreign_email:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* 5:12 Report submitted */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
                     5:12 පසුගිය නිල ගමනට අදාළ වාර්තාව ඉදිරිපත් කළේද?
                   </label>
                   <div className="border border-[#C4C6CF] rounded p-4 space-y-6.75">
@@ -709,7 +709,7 @@ export default function Form() {
                             })
                         }
                       />
-                      <span className="font-['Noto_Sans_Sinhala'] text-xs text-black tracking-[0.6px] uppercase">
+                      <span className="text-base text-black tracking-[0.6px] uppercase">
                           ඔව්
                       </span>
                     </label>
@@ -727,7 +727,7 @@ export default function Form() {
                             })
                         }
                       />
-                      <span className="font-['Noto_Sans_Sinhala'] text-xs text-black tracking-[0.6px] uppercase">
+                      <span className="text-base text-black tracking-[0.6px] uppercase">
                           නැත
                       </span>
                     </label>
@@ -741,7 +741,7 @@ export default function Form() {
             {/* Section 6: Previous foreign travel */}
             <FormCard>
               <div className="flex flex-col gap-4">
-                <label className="text-[#44474E] font-['Noto_Sans_Sinhala'] text-xs font-bold tracking-[0.6px] uppercase leading-4">
+                <label className="text-[#44474E] text-sm font-semibold leading-6">
                   6. අයදුම්කරු පවත්නා වර්ෂයේදී සහ පසුගිය වර්ෂ 3 තුළ ගිය විදේශ ගමන් තොරතුරු
                 </label>
 
@@ -750,22 +750,22 @@ export default function Form() {
                   <table className="w-full text-xs">
                     <thead>
                       <tr className="border-b border-[#C4C6CF]">
-                        <th className="text-left px-4 py-3 font-['Noto_Sans_Sinhala'] font-bold text-black tracking-[0.6px] uppercase border-r border-[#C4C6CF]">
+                        <th className="text-left px-4 py-3 text-base font-bold text-black tracking-[0.6px]  border-r border-[#C4C6CF]">
                           වර්ෂය
                         </th>
-                        <th className="text-left px-4 py-3 font-['Noto_Sans_Sinhala'] font-bold text-black tracking-[0.6px] uppercase border-r border-[#C4C6CF]">
+                        <th className="text-left px-4 py-3 text-base font-bold text-black tracking-[0.6px]  border-r border-[#C4C6CF]">
                           ගමනේ අරමුණු
                         </th>
-                        <th className="text-left px-4 py-3 font-['Noto_Sans_Sinhala'] font-bold text-black tracking-[0.6px] uppercase border-r border-[#C4C6CF]">
+                        <th className="text-left px-4 py-3 text-base font-bold text-black tracking-[0.6px]  border-r border-[#C4C6CF]">
                           කාලය
                         </th>
-                        <th className="text-left px-4 py-3 font-['Noto_Sans_Sinhala'] font-bold text-black tracking-[0.6px] uppercase">
+                        <th className="text-left px-4 py-3 text-base font-bold text-black tracking-[0.6px] ">
                           රට
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {applicationData.previousTravels.map((row: PreviousTravel , i: number) => (
+                      {applicationData?.previousTravels?.map((row: PreviousTravel , i: number) => (
                         <tr key={i} className="border-b border-[#C4C6CF]">
                           <td className="px-2 py-2 border-r border-[#C4C6CF]">
                             <input
@@ -777,7 +777,7 @@ export default function Form() {
                                   e.target.value
                                 )
                               }
-                              className="w-full outline-none text-xs px-1"
+                              className="w-full outline-none text-base px-1"
                             />
                           </td>
                           <td className="px-2 py-2 border-r border-[#C4C6CF]">
@@ -789,7 +789,7 @@ export default function Form() {
                                 "purpose",
                                 e.target.value
                               )}
-                              className="w-full outline-none text-xs px-1"
+                              className="w-full outline-none text-base px-1"
                             />
                           </td>
                           <td className="px-2 py-2 border-r border-[#C4C6CF]">
@@ -801,7 +801,7 @@ export default function Form() {
                                 "period",
                                 e.target.value
                               )}
-                              className="w-full outline-none text-xs px-1"
+                              className="w-full outline-none text-base px-1"
                             />
                           </td>
                           <td className="px-2 py-2">
@@ -813,14 +813,14 @@ export default function Form() {
                                 "country",
                                 e.target.value
                               )}
-                              className="w-full outline-none text-xs px-1"
+                              className="w-full outline-none text-base px-1"
                             />
                           </td>
                         </tr>
                       ))}
-                      {applicationData.previousTravels.length === 0 && (
+                      {applicationData?.previousTravels?.length === 0 && (
                         <tr>
-                          <td colSpan={4} className="px-4 py-6 text-center text-[#74777F] text-xs">
+                          <td colSpan={4} className="px-4 py-6 text-center text-[#74777F] text-base">
                             No records. Click "Add +" to add a row.
                           </td>
                         </tr>

@@ -119,7 +119,7 @@ export default function Documents() {
               <ChevronRight />
               <span className="text-[#44474E] text-xs font-semibold leading-4">Leave Request</span>
               <ChevronRight />
-              <span className="text-[#44474E] text-xs font-semibold leading-4">{applicationData?.application_no}</span>
+              <span className="text-[#44474E] text-xs font-semibold leading-4">{applicationData?.application.application_no}</span>
               <ChevronRight />
               <span className="text-[#002046] text-xs font-semibold leading-4">Uploaded Documents</span>
             </nav>
@@ -148,9 +148,9 @@ export default function Documents() {
                             </div>
                         </div>
                         <div className="flex gap-3">
-                        <a href={`http://127.0.0.1:8000/storage/${doc.file_path}`} target="_blank" className="p-2 rounded hover:bg-gray-100">
+                        {/* <a href={`http://127.0.0.1:8000/storage/${doc.file_path}`} target="_blank" className="p-2 rounded hover:bg-gray-100">
                             <Eye size={18}/>
-                        </a>
+                        </a> */}
                         <a href={`http://127.0.0.1:8000/storage/${doc.file_path}`} download className="p-2 rounded hover:bg-gray-100">
                             <Download size={18}/>
                         </a>

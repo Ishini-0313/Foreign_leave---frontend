@@ -111,7 +111,7 @@ export default function Form_126() {
       </div>
 
       <div className="col-span-8 p-3 text-sm">
-        {applicationData.name_and_designation}
+        {applicationData.application.name_and_designation}
       </div>
     </div>
   </div>
@@ -129,7 +129,7 @@ export default function Form_126() {
       </div>
 
       <div className="col-span-8 p-3 text-sm">
-        {applicationData.service_id}{" - "}{grade}
+        {applicationData.application.service_id}{" - "}{grade}
       </div>
     </div>
   </div>
@@ -147,7 +147,7 @@ export default function Form_126() {
       </div>
 
       <div className="col-span-8 p-3 text-sm">
-        {applicationData.first_appoinment_date}
+        {applicationData.application.first_appoinment_date}
       </div>
     </div>
   </div>
@@ -165,7 +165,7 @@ export default function Form_126() {
       </div>
 
       <div className="col-span-8 p-3 text-sm">
-        {applicationData.last_return_date}
+        {applicationData.application.last_return_date}
       </div>
     </div>
   </div>
@@ -185,7 +185,7 @@ export default function Form_126() {
       <div className="col-span-8 p-3">
         <div>
           <span className="ml-2 text-sm">
-            {applicationData.leave_start_date}{"  සිට  "}{applicationData.leave_end_date}{"  දක්වා  "}
+            {applicationData.application.leave_start_date}{"  සිට  "}{applicationData.leave_end_date}{"  දක්වා  "}
           </span>
 
         </div>
@@ -213,7 +213,7 @@ export default function Form_126() {
       </div>
 
       <div className="col-span-8 p-3 text-sm">
-        {applicationData.reason_for_leave}
+        {applicationData.application.reason_for_leave}
       </div>
     </div>
   </div>
@@ -231,7 +231,7 @@ export default function Form_126() {
       </div>
 
       <div className="col-span-8 p-3 text-sm">
-        {applicationData.is_travel_on_a_pre_paid_ticket
+        {applicationData.application.is_travel_on_a_pre_paid_ticket
           ? "ඔව්"
           : "නැත"}
       </div>
@@ -251,7 +251,7 @@ export default function Form_126() {
       </div>
 
       <div className="col-span-8 p-3 text-sm">
-        {applicationData.relationship_of_the_person_sending_it}
+        {applicationData.application.relationship_of_the_person_sending_it}
       </div>
     </div>
   </div>
@@ -269,7 +269,7 @@ export default function Form_126() {
       </div>
 
       <div className="col-span-8 p-3 text-sm">
-        {applicationData.cost_maintanence_abroad}
+        {applicationData.application.cost_maintanence_abroad}
       </div>
     </div>
   </div>
@@ -287,7 +287,7 @@ export default function Form_126() {
       </div>
 
       <div className="col-span-8 p-3 whitespace-pre-line text-sm">
-        {applicationData.relationship_of_person_meeting_expenditure}
+        {applicationData.application.relationship_of_person_meeting_expenditure}
       </div>
     </div>
   </div>
@@ -305,7 +305,7 @@ export default function Form_126() {
       </div>
 
       <div className="col-span-8 p-3 whitespace-pre-line text-sm">
-        {applicationData.foreign_address}
+        {applicationData.application.foreign_address}
       </div>
     </div>
   </div>
@@ -314,7 +314,7 @@ export default function Form_126() {
   <div className="flex justify-between items-end mt-16">
     <div>
         <div className="w-40 pt-2 text-sm">
-            {new Date(applicationData.created_at).toLocaleDateString()}
+            {new Date(applicationData.application.created_at).toLocaleDateString()}
         </div>
         <div className="border-t w-64 pt-2 mt-2 text-sm">
             Date
@@ -322,11 +322,11 @@ export default function Form_126() {
     </div>
 
     <div className="text-center">
-      {applicationData.signature_path && (
+      {applicationData.application.signature_path && (
         <img
-          src={`http://127.0.0.1:8000/storage/${applicationData.signature_path}`}
+          src={`http://127.0.0.1:8000/storage/${applicationData.application.signature_path}`}
           alt="signature"
-          className="h-20 object-contain mx-auto"
+          className="h-20 object-contain mx-auto bg-amber-200"
         />
       )}
 
@@ -337,10 +337,10 @@ export default function Form_126() {
   </div>
 
   {/* office use only */}
-  <div className="border-t border-b  mt-8 bg-amber-100">
+  <div className="border-t border-b  mt-8 ">
     <div className="grid grid-cols-12 ">
       {/* fields */}
-      <div className="col-span-6 p-3 text-sm bg-amber-200">
+      <div className="col-span-6 p-3 text-sm ">
 
         <p>කාර්යාලයීය ප්‍රයෝජනය සදහා පමණි</p>
         <p>For Office use only</p>
@@ -363,13 +363,13 @@ export default function Form_126() {
 
       {/* table */}
       <div className="col-span-6 p-3 text-sm ">
-        <div className=' bg-amber-200'>
+        <div className=' '>
           <div className='grid grid-cols-2 gap-6'>
-            <div className='w-full text-center bg-green-200'>
+            <div className='w-full text-center '>
               <p>මාස</p>
               <p>Months</p>
             </div>
-            <div className='w-full text-center bg-gray-100'>
+            <div className='w-full text-center '>
               <p>දින</p>
               <p>Days</p>
             </div>
@@ -380,7 +380,7 @@ export default function Form_126() {
   </div>
 
 
-  <div className="border-t border-b bg-amber-100">
+  <div className="border-t border-b ">
     <div className="grid grid-cols-12 ">
       {/* fields */}
       <div className="col-span-6 p-3 text-sm ">
@@ -399,19 +399,19 @@ export default function Form_126() {
 
       {/* table */}
       <div className="col-span-6 p-3 text-sm ">
-        <div className=' bg-amber-200'>
+        <div className=' '>
           <div className='grid grid-cols-2 gap-6'>
             {/* <div className='w-full text-center bg-green-200'>
-              <p className='p-4'>{applicationData.available_leave_info.vacation_months}</p>
-              <p className='p-4'>{applicationData.available_leave_info.commuted_halfpay_months}</p>
-              <p className='p-4'>{applicationData.available_leave_info.halfpay_months}</p>
-              <p className='p-4'>{applicationData.available_leave_info.nopay_months}</p>
+              <p className='p-4'>{applicationData.application.available_leave_info.vacation_months}</p>
+              <p className='p-4'>{applicationData.application.available_leave_info.commuted_halfpay_months}</p>
+              <p className='p-4'>{applicationData.application.available_leave_info.halfpay_months}</p>
+              <p className='p-4'>{applicationData.application.available_leave_info.nopay_months}</p>
             </div>
             <div className='w-full text-center bg-gray-100'>
-              <p className='p-4'>{applicationData.available_leave_info.vacation_days}</p>
-              <p className='p-4'>{applicationData.available_leave_info.commuted_halfpay_days}</p>
-              <p className='p-4'>{applicationData.available_leave_info.halfpay_days}</p>
-              <p className='p-4'>{applicationData.available_leave_info.nopay_days}</p>
+              <p className='p-4'>{applicationData.application.available_leave_info.vacation_days}</p>
+              <p className='p-4'>{applicationData.application.available_leave_info.commuted_halfpay_days}</p>
+              <p className='p-4'>{applicationData.application.available_leave_info.halfpay_days}</p>
+              <p className='p-4'>{applicationData.application.available_leave_info.nopay_days}</p>
             </div> */}
           </div>
         </div>

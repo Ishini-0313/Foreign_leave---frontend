@@ -31,6 +31,16 @@ import AmendmentTracking from './pages/amendment_tracking.tsx';
 import Amendments from './pages/amendments.tsx';
 import ForgotPassword from './pages/forgotPassword.tsx';
 import ResetPassword from './pages/resetPassword.tsx';
+import Options from './pages/options.tsx';
+import MyApplicationReview from './pages/myApplicationReview.tsx';
+import AmendmentReview from './pages/amendment_review.tsx';
+import UploadedAmendmentDocuments from './pages/uploaded_amd_documents.tsx';
+import AmendmentFromReview from './pages/amendmentFromReview.tsx';
+import OfficialLeaveCategory from './pages/official_leave_category.tsx';
+import OfficeDocs from './pages/office_docs.tsx';
+import SignPage2 from './pages/signpage2.tsx';
+import NewDocumentUpload from './pages/new_document_upload.tsx';
+import Test from './pages/test.tsx';
 
 
 
@@ -42,18 +52,31 @@ function App() {
       <Route path="/register" element={<Register/>}></Route>
       <Route path="/register_2" element={<Register_2/>}></Route>
       <Route path="/register_3" element={<Register_3/>}></Route>
+
       <Route path="/dashboard" element={<Dashboard/>}></Route>
+
       <Route path="/ministries" element={<MinistryManagement/>}></Route>
       <Route path="/departments/:id" element={<DeptManagement/>}></Route>
       <Route path="/district_offices/:id" element={<District_offices_mng/>}></Route>
       <Route path="/offices/:id" element={<Offices_mng/>}></Route>
-      <Route path="/form" element={<Form/>}></Route>
-      <Route path="/form2" element={<Form2/>}></Route>
-      <Route path="/documents" element={<DocumentUpload/>}></Route>
-      <Route path="/sign" element={<SignPage/>}></Route>
-      <Route path="/form-126" element={<Form_126/>}></Route>
+
+      {/* new application */}
       <Route path="/new-application" element={<Leave_category/>}></Route>
       <Route path='/personal-leave-category' element={<Personal_leave_category/>}></Route>
+      <Route path='/official-leave-category'element={<OfficialLeaveCategory/>}></Route>
+      <Route path='/options' element={<Options/>}></Route>
+      <Route path="/form/edit/:id" element={<Form/>}></Route>
+      <Route path='/form2/edit/:id' element={<Form2/>}></Route>
+      <Route path='/documents/edit/:id' element={<DocumentUpload/>}></Route>
+      <Route path='/new-doc/edit/:id' element={<NewDocumentUpload/>}></Route>
+      <Route path='/sign/edit/:id' element={<SignPage/>}></Route>
+      <Route path='/sign2/edit/:id' element={<SignPage2/>}></Route>
+
+
+      <Route path="/form-126" element={<Form_126/>}></Route>
+      
+      
+      
       <Route path='/application/:id' element={<ApplicationReview/>}></Route>
       <Route path='/application/:id/form-126' element={<Form_126/>}></Route>
       <Route path='/application/:id/form-16' element={<Form_16/>}></Route>
@@ -68,12 +91,19 @@ function App() {
       <Route path='/application/:id/amendment_documents' element={<AmedmentDocumentUpload/>}></Route>
       <Route path='/application/:application_id/amendments' element= {<Amendments/>}></Route>
       <Route path='/amendment/:id/tracking' element={<AmendmentTracking/>}></Route>
-      <Route path='/form/edit/:id' element={<Form/>}></Route>
-      <Route path='/form2/edit/:id' element={<Form2/>}></Route>
-      <Route path='/documents/edit/:id' element={<DocumentUpload/>}></Route>
-      <Route path='/sign/edit/:id' element={<SignPage/>}></Route>
+      
       <Route path='/forgot-password' element={<ForgotPassword/>}></Route>
       <Route path='/reset-password' element={<ResetPassword/>}></Route>
+      
+      <Route path='/options/:id' element={<Options/>}></Route>
+      <Route path='/my-application/:id' element={<MyApplicationReview/>}></Route>
+      <Route path='/amendmnet-review/:id' element={<AmendmentReview/>}></Route>
+      <Route path='/amendment/:id/documents' element={<UploadedAmendmentDocuments/>}></Route>
+      <Route path='/amendment/:id/form' element={<AmendmentFromReview/>}></Route>
+      <Route path='/amendment/:id/tracking' element={<AmendmentTracking/>}></Route>
+      <Route path='/application/:id/office-documents' element={<OfficeDocs/>}></Route>
+
+      <Route path='/test' element={<Test/>}></Route>
     </Routes>
   )
 }

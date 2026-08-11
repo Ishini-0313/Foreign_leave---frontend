@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
-import { BookCheck, Eye, Settings2, SquarePen} from "lucide-react";
+import { Eye, Settings2, SquarePen} from "lucide-react";
 import Footer from "../components/footer";
+import { useLeaveCategory } from '../context/LeaveCategoryContext';
 
 export default function MyApplications() {
+  const {setLeaveCategory,setNatureOfTrip} = useLeaveCategory();
   const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -14,6 +16,8 @@ export default function MyApplications() {
   const navigate = useNavigate();
 
   useEffect(()=>{
+    setNatureOfTrip(null);
+    setLeaveCategory(null);
     const storedUser = localStorage.getItem("user");
     if(!storedUser){
       navigate("/");
@@ -126,9 +130,6 @@ export default function MyApplications() {
                         View
                       </th>
                       <th className="px-4 py-[23.5px] text-right text-[#44474E] font-bold text-xs uppercase tracking-wide">
-                        Amendment
-                      </th>
-                      <th className="px-4 py-[23.5px] text-right text-[#44474E] font-bold text-xs uppercase tracking-wide">
                         Edit Application
                       </th>
                       <th className="px-4 py-[23.5px] text-right text-[#44474E] font-bold text-xs uppercase tracking-wide">
@@ -161,39 +162,42 @@ export default function MyApplications() {
                             </span>
                           </td>
                           <td className="px-4 py-5.5">
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FEF3C7]">
-                              <span className="w-[5.33px] h-1.5 rounded-full bg-[#D97706] shrink-0" />
-                              <span className="text-[#92400E] font-bold text-xs leading-4">
-                                {app.status}
+                            {app.status === "Pending" && (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-yellow-100">
+                                <span className="w-[5.33px] h-1.5 rounded-full bg-yellow-500 shrink-0" />
+                                  <span className="text-yellow-700 font-bold text-xs leading-4">
+                                    {app.status}
+                                  </span>
                               </span>
-                            </span>
+                            )}
+                            {app.status === "Approved" && (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-green-100">
+                                <span className="w-[5.33px] h-1.5 rounded-full bg-green-500 shrink-0" />
+                                  <span className="text-green-700 font-bold text-xs leading-4">
+                                    {app.status}
+                                  </span>
+                              </span>
+                            )}
+                            {app.status === "Returned" && (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-100">
+                                <span className="w-[5.33px] h-1.5 rounded-full bg-red-500 shrink-0" />
+                                  <span className="text-red-700 font-bold text-xs leading-4">
+                                    {app.status}
+                                  </span>
+                              </span>
+                            )}
                           </td>
                           <td className="px-4 py-6 text-right">
                             <button className="px-4 py-2 rounded-sm   font-bold text-xs leading-4 hover:bg-green-100 transition-colors"
-                              onClick={()=> navigate(`/application/${app.id}/tracking`)}>
+                              onClick={()=> navigate(`/my-application/${app.id}`)}>
                               <Eye className="text-gray-600 hover:text-green-600"/>
                             </button>
-                          </td>
-                          <td className="px-4 py-6 text-right">
-                              {
-                                app.amendments ? (
-                                  <button className="px-4 py-2 rounded-sm   font-bold text-xs leading-4 hover:bg-yellow-100 transition-colors "
-                                      onClick={() =>navigate(`/application/${app.id}/amendments`)}
-                                  >
-                                    <BookCheck className="text-gray-600 hover:text-yellow-600" />
-                                  </button>
-                                )
-                                :
-                                (
-                                  <span className="text-gray-500">-</span>
-                                )
-                              }
                           </td>
                           <td className="px-4 py-6 text-right">
                             {
                               app.is_editable ? (
                                 <button className="px-4 py-2 rounded-sm   font-bold text-xs leading-4 hover:bg-red-100 transition-colors"
-                                  onClick={()=> navigate(`/form/edit/${app.id}`)}>
+                                  onClick={()=> navigate(`/options/${app.id}`)}>
                                   <SquarePen className="text-gray-600 hover:text-red-500"/>
                                 </button>
                               ) : (

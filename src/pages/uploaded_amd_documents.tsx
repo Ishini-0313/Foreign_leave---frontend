@@ -148,9 +148,9 @@ export default function UploadedAmendmentDocuments() {
                             </div>
                         </div>
                         <div className="flex gap-3">
-                        <a href={`http://127.0.0.1:8000/storage/${doc.file_path}`} target="_blank" className="p-2 rounded hover:bg-gray-100">
+                        {/* <a href={`http://127.0.0.1:8000/storage/${doc.file_path}`} target="_blank" className="p-2 rounded hover:bg-gray-100">
                             <Eye size={18}/>
-                        </a>
+                        </a> */}
                         <a href={`http://127.0.0.1:8000/storage/${doc.file_path}`} download className="p-2 rounded hover:bg-gray-100">
                             <Download size={18}/>
                         </a>

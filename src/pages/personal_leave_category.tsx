@@ -35,7 +35,7 @@ export default function Personal_leave_category() {
         },
         {
             id: "spouse",
-            name: "කාලත්‍රය සදහා",
+            name: "කලත්‍රය සදහා",
         },
     ];
     
@@ -165,7 +165,7 @@ export default function Personal_leave_category() {
                                     {/* Bottom section */}
                                     <div className="flex items-center justify-between mt-6">
                                         <span className="text-sm text-[#697386] font-medium">Apply Leave</span>
-                                        <span className={`w-9 h-9 rounded-full bg-white ${color.text}flex items-center justify-center shadow-sm group-hover:translate-x-1 transition-transform duration-300`}>→</span>
+                                        <span className={`w-9 h-9 rounded-full bg-white ${color.text} flex items-center justify-center shadow-sm group-hover:translate-x-1 transition-transform duration-300`}>→</span>
                                     </div>
 
                                 </button>

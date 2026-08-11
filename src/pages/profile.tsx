@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
+import { Landmark, Mail, Phone, User, UserKey, UserStar} from "lucide-react";
 
 export default function Profile() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -319,7 +320,7 @@ export default function Profile() {
                                     <div className="group  rounded-2xl  bg-linear-to-br  from-[#F7F9FF] to-[#FCFDFF]  border border-[#E7EBF3]  p-5 hover:border-[#B8C9E0] transition-all">
                                         <div className="flex items-center gap-3 mb-3">
                                             <div className="w-9 h-9 rounded-xl bg-[#E7EFFB] text-[#4F74A8] flex items-center justify-center text-sm font-bold">
-                                                න
+                                                <User size={15}/>
                                             </div>
                                             <label className="text-xs font-semibold text-[#737D8D]">
                                                 නම
@@ -335,7 +336,7 @@ export default function Profile() {
                                     <div className="group  rounded-2xl  bg-linear-to-br  from-[#F8F7FF] to-[#FEFDFF]  border border-[#DFEEE8]  p-5 hover:border-[#C8BDE5] transition-all">
                                         <div className="flex items-center gap-3 mb-3">
                                             <div className="w-9 h-9 rounded-xl bg-[#EEE9FA] text-[#7659A9] flex items-center justify-center text-sm font-bold">
-                                                න
+                                                <Mail size={15}/>
                                             </div>
                                             <label className="text-xs font-semibold text-[#737D8D]">
                                                 පුද්ගලික විද්‍යුත් තැපෑල
@@ -350,7 +351,7 @@ export default function Profile() {
                                     <div className="group  rounded-2xl  bg-linear-to-br  from-[#F4FBF8] to-[#FCFFFD]  border border-[#E9E5F4]  p-5 hover:border-[#B2D9C9] transition-all">
                                         <div className="flex items-center gap-3 mb-3">
                                             <div className="w-9 h-9 rounded-xl bg-[#E1F3EA] text-[#27825D] flex items-center justify-center text-sm font-bold">
-                                                න
+                                                <Phone size={15}/>
                                             </div>
                                             <label className="text-xs font-semibold text-[#737D8D]">
                                                 ජංගම දුරකතන අංකය
@@ -365,7 +366,7 @@ export default function Profile() {
                                     <div className="group  rounded-2xl  bg-linear-to-br  from-[#FFF8F1] to-[#FFFCF8]  border border-[#F2E6D8]  p-5 hover:border-[#E8CDAE] transition-all">
                                         <div className="flex items-center gap-3 mb-3">
                                             <div className="w-9 h-9 rounded-xl bg-[#FCEBD7] text-[#B86F2E] flex items-center justify-center text-sm font-bold">
-                                                න
+                                                <UserStar size={15}/>
                                             </div>
                                             <label className="text-xs font-semibold text-[#737D8D]">
                                                 තනතුර
@@ -380,7 +381,7 @@ export default function Profile() {
                                     <div className="md:col-span-2 group  rounded-2xl  bg-linear-to-br  from-[#F5F8FC] to-[#FBFCFE]  border border-[#E3E8EF]  p-5 hover:border-[#BAC8D9] transition-all">
                                         <div className="flex items-center gap-3 mb-3">
                                             <div className="w-9 h-9 rounded-xl bg-[#E8EEF6] text-[#496B94] flex items-center justify-center text-sm font-bold">
-                                                න
+                                                <Landmark size={15}/>
                                             </div>
                                             <label className="text-xs font-semibold text-[#737D8D]">
                                                 ආයතනය

@@ -50,33 +50,9 @@ export default function OfficeDocs() {
   
   const [documents, setDocuments]  = useState<DocumentItem[]>([
     {
-      key: "invitation_letter",
-      label: "අදාළ නිලධාරියා නමට එවන ලද කැඳවීම් ලිපිය",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "service_confirmation",
-      label: "සේවය ස්ථීර කිරීමේ ලිපිය",
-      isRequired: true,
-      file: null
-    },
-    {
       key: "southern_absorption",
       label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "duty_cover_letter",
-      label: "රාජකාරි ආවරණ ලිපිය",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "flight_details",
-      label: "ගුවන් ගමන් විස්තරය",
-      isRequired: true,
+      isRequired: false,
       file: null
     },
     {

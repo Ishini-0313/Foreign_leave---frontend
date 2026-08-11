@@ -78,7 +78,7 @@ export default function Register_2() {
             src="./public/images.png" alt="Sri Lanka Emblem" className="w-14 h-10"
           />
           <span className="text-xl font-bold text-[#002046] leading-7">
-            Southern Provincial Government
+            Southern Provincial Council
           </span>
           {/* <button
             className="w-8 h-8 rounded-full border-2 border-[#002046] flex items-center justify-center text-[#002046] font-bold text-sm hover:bg-[#002046] hover:text-white transition-colors"

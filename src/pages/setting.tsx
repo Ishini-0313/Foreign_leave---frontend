@@ -5,6 +5,7 @@ import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import Footer from "../components/footer";
 import toast from "react-hot-toast";
+import { Mail, User, UserStar } from "lucide-react";
 
 export default function Setting() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -192,9 +193,7 @@ export default function Setting() {
 
 
                     {/* Name */}
-
                     <div>
-
                         <label className="
                             block
                             text-sm
@@ -223,7 +222,7 @@ export default function Setting() {
                                 text-xs
                                 font-bold
                             ">
-                                න
+                                <User size={15}/>
                             </div>
 
                             <input
@@ -261,12 +260,8 @@ export default function Setting() {
 
 
                     {/* Email */}
-
                     <div>
-
-                        <label className="
-                            block
-                            text-sm
+                        <label className="block text-sm
                             font-semibold
                             text-[#344054]
                             mb-2
@@ -284,39 +279,19 @@ export default function Setting() {
                                 w-8
                                 h-8
                                 rounded-lg
-                                bg-[#F0EBFA]
-                                text-[#7659A9]
+                                bg-[#EEF3FC]
+                                text-[#5378B8]
                                 flex
                                 items-center
                                 justify-center
+                                text-xs
+                                font-bold
                             ">
-
-                                <svg
-                                    className="w-4 h-4"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                >
-                                    <rect
-                                        x="4"
-                                        y="6"
-                                        width="16"
-                                        height="12"
-                                        rx="1"
-                                        stroke="currentColor"
-                                        strokeWidth="1.8"
-                                    />
-
-                                    <path
-                                        d="M4 7L12 13L20 7"
-                                        stroke="currentColor"
-                                        strokeWidth="1.8"
-                                    />
-                                </svg>
-
+                                <Mail size={15}/>
                             </div>
 
                             <input
-                                type="email"
+                                type="text"
                                 value={profile.email}
                                 onChange={(e) =>
                                     setProfile({
@@ -348,11 +323,8 @@ export default function Setting() {
 
                     </div>
 
-
                     {/* Phone */}
-
                     <div>
-
                         <label className="
                             block
                             text-sm
@@ -438,7 +410,7 @@ export default function Setting() {
                         </label>
                         <div className="relative">
                             <div className="absolute  left-3  top-1/2 -translate-y-1/2 w-8 h-8  rounded-lg  bg-[#FFF0DF] text-[#B86F2E]  flex items-center justify-center text-xs font-bold">
-                                ත
+                                <UserStar size={15}/>
                             </div>
                             {/* <input
                                 type="number"

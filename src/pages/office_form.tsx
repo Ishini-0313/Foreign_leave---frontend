@@ -46,6 +46,7 @@ export default function OfficeForm() {
         }
       );
       toast.success("Saved successfully !");
+      navigate(`/application/${id}`);
     }catch(error:any){
       console.error(error);
 

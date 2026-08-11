@@ -20,7 +20,7 @@ export default function ApplicationReview() {
   const {id} = useParams();
   const navigate = useNavigate();
   const [applicationData, setApplicationData]= useState<any>(null);
-  const [role, setRole] = useState("");
+  const [isFinalStep, setIsFinalStep] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -49,33 +49,55 @@ export default function ApplicationReview() {
         )
         .then((res) => {
             setApplicationData(res.data);
+            setIsFinalStep(res.data.is_final_step);
         })
         .catch((err) => {
             console.log(err);
         });
 
     }, []);
-
-  useEffect(()=>{
-    if (!user?.role_id) return;
-    axios.get(
-          `http://127.0.0.1:8000/api/role-by-id`,
-          {
-              params: {
-                  id: user?.role_id
-              }
-          }
-      )
-      .then((res) => {
-        console.log("Role Response:", res.data);
-        setRole(res.data.role_name);
-      })
-      .catch((err) => {
-          console.log(err);
-      });
-
-  },[user]);
   
+  const handleApprove = async () => {
+    try{
+        const token = localStorage.getItem("token");
+
+        const response = await axios.post(
+            `http://127.0.0.1:8000/api/applications/${id}/approve`,
+            {
+                remarks
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        toast.success(response.data.message);
+
+        navigate("/dashboard");
+
+    } catch (error: any) {
+        console.error(error);
+
+        if (error.response?.status === 422) {
+
+            const errors = error.response.data.errors;
+
+            Object.values(errors).forEach((messages: any) => {
+                toast.error(messages[0]);
+            });
+
+            return;
+        }
+
+        toast.error(
+            error.response?.data?.error ||
+            error.response?.data?.message ||
+            "Something went wrong."
+        );
+    }
+  };
 
   const handleForward = async () => {
     try{
@@ -173,7 +195,7 @@ export default function ApplicationReview() {
               <ChevronRight />
               <span className="text-[#44474E] text-xs font-semibold leading-4">Leave Request</span>
               <ChevronRight />
-              <span className="text-[#002046] font-['Noto_Sans_Sinhala'] text-xs font-bold leading-4">{applicationData?.application_no}</span>
+              <span className="text-[#002046] font-['Noto_Sans_Sinhala'] text-xs font-bold leading-4">{applicationData?.application.application_no}</span>
             </nav>
           </div>
 
@@ -187,9 +209,18 @@ export default function ApplicationReview() {
                 <button onClick={handleReturn}  className="bg-[#8b090d] text-white px-6 py-2 rounded">
                   Return
                 </button>
-                <button onClick={handleForward}  className="bg-[#002046] text-white px-6 py-2 rounded">
-                  Forward
-                </button>
+                {
+                  isFinalStep ? (
+                    <button onClick={handleApprove}  className="bg-green-800 text-white px-6 py-2 rounded">
+                      Approve
+                    </button>
+                  ) : (
+                    <button onClick={handleForward}  className="bg-[#002046] text-white px-6 py-2 rounded">
+                      Forward
+                    </button>
+                  )
+                }
+                
             </div>
           </div>
         </div>

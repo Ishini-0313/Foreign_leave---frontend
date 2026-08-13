@@ -75,6 +75,10 @@ export default function Dashboard() {
     }
   }, [activeFilter]);
 
+  const pendingCount = applications.filter((app)=>app.status === "Pending").length;
+  const approvedCount = applications.filter((app)=>app.status === "Approved").length;
+  const returnedCount = applications.filter((app)=>app.status === "Returned").length;
+  const rejectedCount = applications.filter((app)=>app.status === "Rejected").length;
 
   return (
     <div className="flex h-screen bg-[#FAF9FD] font-[Inter,sans-serif] overflow-hidden relative">
@@ -145,7 +149,7 @@ export default function Dashboard() {
                   <span className="text-[#44474E] font-bold text-xs tracking-[-0.6px] uppercase">IN QUEUE</span>
                 </div>
                 <p className="text-[#44474E] font-medium text-sm leading-5 tracking-[0.14px] mt-4">Pending Reviews</p>
-                <p className="text-[#002046] font-bold text-5xl leading-14 tracking-[-0.96px] mt-1">42</p>
+                <p className="text-[#002046] font-bold text-5xl leading-14 tracking-[-0.96px] mt-1">{pendingCount}</p>
                 <div className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-xl bg-[rgba(0,32,70,0.05)] pointer-events-none" />
               </div>
 
@@ -160,7 +164,7 @@ export default function Dashboard() {
                   <span className="text-[#15803D] font-bold text-xs tracking-[-0.6px] uppercase">ACTIONED</span>
                 </div>
                 <p className="text-[#44474E] font-medium text-sm leading-5 tracking-[0.14px] mt-4">Approved</p>
-                <p className="text-[#1A1B1E] font-bold text-5xl leading-14 tracking-[-0.96px] mt-1">15</p>
+                <p className="text-[#1A1B1E] font-bold text-5xl leading-14 tracking-[-0.96px] mt-1">{approvedCount}</p>
                 <div className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-xl bg-[#F0FDF4] pointer-events-none" />
               </div>
 
@@ -175,7 +179,7 @@ export default function Dashboard() {
                   <span className="text-[#B45309] font-bold text-xs tracking-[-0.6px] uppercase">REQUIRES EDITS</span>
                 </div>
                 <p className="text-[#44474E] font-medium text-sm leading-5 tracking-[0.14px] mt-4">Returned</p>
-                <p className="text-[#1A1B1E] font-bold text-5xl leading-14 tracking-[-0.96px] mt-1">08</p>
+                <p className="text-[#1A1B1E] font-bold text-5xl leading-14 tracking-[-0.96px] mt-1">{returnedCount}</p>
                 <div className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-xl bg-[#FFFBEB] pointer-events-none" />
               </div>
 
@@ -190,7 +194,7 @@ export default function Dashboard() {
                   <span className="text-[#B91C1C] font-bold text-xs tracking-[-0.6px] uppercase">DECLINED</span>
                 </div>
                 <p className="text-[#44474E] font-medium text-sm leading-5 tracking-[0.14px] mt-4">Rejected</p>
-                <p className="text-[#1A1B1E] font-bold text-5xl leading-14 tracking-[-0.96px] mt-1">03</p>
+                <p className="text-[#1A1B1E] font-bold text-5xl leading-14 tracking-[-0.96px] mt-1">{rejectedCount}</p>
                 <div className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-xl bg-[#FEF2F2] pointer-events-none" />
               </div>
             </div>

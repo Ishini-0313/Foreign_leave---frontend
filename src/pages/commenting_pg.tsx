@@ -23,6 +23,8 @@ export default function ApplicationReview() {
   const [isFinalStep, setIsFinalStep] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [recommendation, setRecommendation] = useState<"recommended" | "not_recommended" | "">("");
+  const [signature, setSignature] = useState<File | null>(null);
 
   useEffect(()=>{
     const storedUser = localStorage.getItem("user");
@@ -56,6 +58,17 @@ export default function ApplicationReview() {
         });
 
     }, []);
+
+  const currentRole = applicationData?.application.current_step.role.role_name;
+
+  const isSubjectOfficer = currentRole === "Subject Officer";
+  const isCheckOfficer = currentRole === "Check Officer";
+  const isChiefSecretary = currentRole === "Chief Secretary";
+
+  const isRecommendationOfficer =!isSubjectOfficer &&!isCheckOfficer &&!isChiefSecretary;
+
+  const isReturnDisable = isRecommendationOfficer && recommendation==="recommended";
+  const isForwardDisable = isRecommendationOfficer && recommendation==="not_recommended";
   
   const handleApprove = async () => {
     try{
@@ -101,12 +114,35 @@ export default function ApplicationReview() {
 
   const handleForward = async () => {
     try{
-        const token=localStorage.getItem("token");
-        const response = await axios.post(
-            `http://127.0.0.1:8000/api/applications/${id}/forward`,{remarks},
+      if(isRecommendationOfficer){
+        if (!recommendation) {
+          toast.error("Please select Recommended or Not Recommended.");
+          return;
+        }
+
+        if (!signature) {
+          toast.error("Please upload your signature.");
+          return;
+        }
+      }
+
+      const token=localStorage.getItem("token");
+
+      const formData = new FormData();
+
+      formData.append("remarks", remarks);
+
+      if (isRecommendationOfficer) {
+        formData.append("recommendation", recommendation);
+        formData.append("signature", signature as File);
+      }
+
+      const response = await axios.post(
+            `http://127.0.0.1:8000/api/applications/${id}/forward`,formData,
             {
                 headers:{
-                    Authorization:`Bearer ${token}`
+                    Authorization:`Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
                 }
             }
         );
@@ -135,12 +171,30 @@ export default function ApplicationReview() {
 
   const handleReturn = async()=>{
     try{
+      if(isRecommendationOfficer){
+        if (!recommendation) {
+          toast.error("Please select Recommended or Not Recommended.");
+          return;
+        }
+
+        if (!signature) {
+          toast.error("Please upload your signature.");
+          return;
+        }
+      }
       const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("remarks", remarks);
+      if (isRecommendationOfficer) {
+        formData.append("recommendation", recommendation);
+        formData.append("signature", signature as File);
+      }
       const response = await axios.post(
-        `http://127.0.0.1:8000/api/applications/${id}/return`,{remarks},
+        `http://127.0.0.1:8000/api/applications/${id}/return`,formData,
         {
             headers:{
-                Authorization:`Bearer ${token}`
+                Authorization:`Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
             }
         }
       );
@@ -205,8 +259,83 @@ export default function ApplicationReview() {
             <h2 className="text-xl font-semibold mb-4">Add Your Comment</h2>
             {/* <label className="block text-sm font-medium mb-2">Comments</label> */}
             <textarea rows={5} value={remarks} onChange={(e)=>setRemarks(e.target.value)} className="w-full border rounded-lg p-3" placeholder="Write your review remarks..."/>
+            {isRecommendationOfficer && (
+              <div className="mt-6 border-t pt-6">
+                <h3 className="text-lg font-semibold text-[#002046] mb-4">Recommendation</h3>
+
+                <div className="flex gap-8">
+                  {/* Recommended */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="recommendation"
+                      value="recommended"
+                      checked={recommendation === "recommended"}
+                      onChange={() =>
+                        setRecommendation("recommended")
+                      }
+                      className="w-4 h-4"
+                    />
+                    <span>Recommended</span>
+                  </label>
+
+                  {/* Not Recommended */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="recommendation"
+                      value="not_recommended"
+                      checked={recommendation === "not_recommended"}
+                      onChange={() =>
+                        setRecommendation("not_recommended")
+                      }
+                      className="w-4 h-4"
+                    />
+                    <span>Not Recommended</span>
+                  </label>
+                </div>
+
+                {/* Signature */}
+                <div className="mt-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Upload Your Signature</label>
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/jpg"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      setSignature(file);
+                    }}
+                    className="block w-full border rounded-lg p-3"
+                  />
+
+                  {signature && (
+                    <div className="mt-4">
+                      <p className="text-sm text-green-600 mb-2">Selected: {signature.name}</p>
+
+                      {/* Signature Image Preview */}
+                      <div className="border rounded-lg p-4 bg-gray-50 w-fit">
+                        <p className="text-sm font-medium text-gray-700 mb-2">Signature Preview</p>
+                        <img
+                          src={URL.createObjectURL(signature)}
+                          alt="Signature Preview"
+                          className="max-w-100 max-h-50 object-contain border rounded bg-white"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="flex justify-end mt-5 gap-2">
-                <button onClick={handleReturn}  className="bg-[#8b090d] text-white px-6 py-2 rounded">
+                <button 
+                  onClick={handleReturn} 
+                  disabled = {isReturnDisable} 
+                  className={`px-6 py-2 rounded text-white
+                    ${
+                      isReturnDisable ?  "bg-gray-400 cursor-not-allowed" : "bg-[#8b090d] hover:bg-[#6f070a]"
+                    }`
+                  }
+                >
                   Return
                 </button>
                 {
@@ -215,7 +344,14 @@ export default function ApplicationReview() {
                       Approve
                     </button>
                   ) : (
-                    <button onClick={handleForward}  className="bg-[#002046] text-white px-6 py-2 rounded">
+                    <button 
+                      onClick={handleForward}
+                      disabled = {isForwardDisable}
+                      className={` text-white px-6 py-2 rounded
+                        ${
+                          isForwardDisable ? "bg-gray-400 cursor-not-allowed": "bg-[#002046] hover:bg-[#00152f]"
+                        }`}
+                    >
                       Forward
                     </button>
                   )
@@ -224,7 +360,6 @@ export default function ApplicationReview() {
             </div>
           </div>
         </div>
-
         {/* Footer */}
         <Footer/>
         </main>

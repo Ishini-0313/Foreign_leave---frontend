@@ -168,7 +168,14 @@ export default function MyApplicationReview() {
           <div className="flex flex-col gap-8  p-8">
 
             <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
-              onClick={()=>navigate(`/application/${id}/form-16`)}>
+              onClick={()=>{
+                if(applicationData?.application.status === "Approved"){
+                    navigate(`/application/${id}/completed-form-16`)
+                }else{
+                    navigate(`/application/${id}/form-16`);
+                }
+                }
+               }>
                 <div className="flex gap-2 items-center" 
                     >
                     <FileUser/>
@@ -178,7 +185,13 @@ export default function MyApplicationReview() {
             </div>
             
             <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
-                onClick={()=>navigate(`/application/${id}/form-126`)}>
+                onClick={()=>{
+                    if(applicationData?.application.status === "Approved"){
+                        navigate(`/application/${id}/completed-form-126`)
+                    }else{
+                        navigate(`/application/${id}/form-126`);
+                    }
+                }}>
                 <div className="flex gap-2 items-center">
                     <FileUser/>
                     <p>Form 126</p>

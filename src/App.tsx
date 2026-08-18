@@ -40,7 +40,10 @@ import OfficialLeaveCategory from './pages/official_leave_category.tsx';
 import OfficeDocs from './pages/office_docs.tsx';
 import SignPage2 from './pages/signpage2.tsx';
 import NewDocumentUpload from './pages/new_document_upload.tsx';
-import Test from './pages/test.tsx';
+import CompletedForm16 from './pages/CompletedForm16.tsx';
+import CompletedForm126 from './pages/CompletedForm126.tsx';
+import OfficerAssignment from './pages/OfficerAssignment.tsx';
+
 
 
 
@@ -102,8 +105,10 @@ function App() {
       <Route path='/amendment/:id/form' element={<AmendmentFromReview/>}></Route>
       <Route path='/amendment/:id/tracking' element={<AmendmentTracking/>}></Route>
       <Route path='/application/:id/office-documents' element={<OfficeDocs/>}></Route>
+      <Route path='/application/:id/completed-form-16' element={<CompletedForm16/>}></Route>
+      <Route path='/application/:id/completed-form-126' element={<CompletedForm126/>}></Route>
 
-      <Route path='/test' element={<Test/>}></Route>
+      <Route path='/admin/officer-assignments' element={<OfficerAssignment/>}></Route>
     </Routes>
   )
 }

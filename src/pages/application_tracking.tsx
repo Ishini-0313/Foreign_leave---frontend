@@ -688,6 +688,13 @@ export default function ApplicationTracking() {
                               </span>
                             )}
 
+                            {item.action === "Recommended & Forwarded" && (
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                                Recommended & Forwarded
+                              </span>
+                            )}
+
                             {item.action === "Not Recommended" && (
                               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 text-red-700 text-xs font-bold">
                                 <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
@@ -702,6 +709,13 @@ export default function ApplicationTracking() {
                               </span>
                             )}
 
+                            {item.action === "Not Recommended & Returned" && (
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 text-red-700 text-xs font-bold">
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+                                Not Recommended & Returned
+                              </span>
+                            )}
+
                             {item.action === "Approved" && (
                               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-bold">
                                 <span className="w-1.5 h-1.5 rounded-full bg-green-600"></span>
@@ -710,15 +724,15 @@ export default function ApplicationTracking() {
                             )}
 
                             {item.action === "Resubmited" && (
-                              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
-                                <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 text-purple-700 text-xs font-bold">
+                                <span className="w-1.5 h-1.5 rounded-full bg-purple-600"></span>
                                 Resubmitted
                               </span>
                             )}
 
                             {item.action === "Submited" && (
-                              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
-                                <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 text-purple-700 text-xs font-bold">
+                                <span className="w-1.5 h-1.5 rounded-full bg-purple-600"></span>
                                 Submitted
                               </span>
                             )}

@@ -24,6 +24,7 @@ export default function ApplicationReview() {
   const [remarks, setRemarks] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [recommendation, setRecommendation] = useState<"recommended" | "not_recommended" | "">("");
+  const [approval, setApproval] = useState<"approved" | "not_approved" | "">("");
   const [signature, setSignature] = useState<File | null>(null);
 
   useEffect(()=>{
@@ -67,18 +68,37 @@ export default function ApplicationReview() {
 
   const isRecommendationOfficer =!isSubjectOfficer &&!isCheckOfficer &&!isChiefSecretary;
 
-  const isReturnDisable = isRecommendationOfficer && recommendation==="recommended";
+  const isReturnDisable = isRecommendationOfficer && recommendation==="recommended" || isChiefSecretary && approval==="approved";
   const isForwardDisable = isRecommendationOfficer && recommendation==="not_recommended";
+  const isCompleteDisable = isChiefSecretary && approval === "not_approved";
   
   const handleApprove = async () => {
     try{
+        if(isChiefSecretary){
+          if (!approval) {
+            toast.error("Please select Approved or Not Approved.");
+            return;
+          }
+
+          if (!signature) {
+            toast.error("Please upload your signature.");
+            return;
+          }
+        }
         const token = localStorage.getItem("token");
+
+        const formData = new FormData();
+
+        formData.append("remarks", remarks);
+
+        if (isChiefSecretary) {
+          formData.append("approval", approval);
+          formData.append("signature", signature as File);
+        }
 
         const response = await axios.post(
             `http://127.0.0.1:8000/api/applications/${id}/approve`,
-            {
-                remarks
-            },
+            formData,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -93,22 +113,22 @@ export default function ApplicationReview() {
     } catch (error: any) {
         console.error(error);
 
-        if (error.response?.status === 422) {
+      // validate errors
+      if(error.response?.status === 422){
+        const errors = error.response.data.errors;
+        Object.values(errors).forEach((messages:any)=>{
+          toast.error(messages[0]);
+        });
+        return;
+      }
 
-            const errors = error.response.data.errors;
-
-            Object.values(errors).forEach((messages: any) => {
-                toast.error(messages[0]);
-            });
-
-            return;
-        }
-
-        toast.error(
-            error.response?.data?.error ||
-            error.response?.data?.message ||
-            "Something went wrong."
-        );
+      // backend returned an error message
+      toast.error(
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Something went wrong."
+      );
+        
     }
   };
 
@@ -326,6 +346,73 @@ export default function ApplicationReview() {
                 </div>
               </div>
             )}
+            {isChiefSecretary && (
+              <div className="mt-6 border-t pt-6">
+                <h3 className="text-lg font-semibold text-[#002046] mb-4">Approval</h3>
+                <div className="flex gap-8">
+                  {/* Approved */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="approval"
+                      value="approved"
+                      checked={approval === "approved"}
+                      onChange={() =>
+                        setApproval("approved")
+                      }
+                      className="w-4 h-4"
+                    />
+                    <span>Approved</span>
+                  </label>
+
+                  {/* Not Approved */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="approval"
+                      value="not_approved"
+                      checked={approval === "not_approved"}
+                      onChange={() =>
+                        setApproval("not_approved")
+                      }
+                      className="w-4 h-4"
+                    />
+                    <span>Not Approved</span>
+                  </label>
+                </div>
+
+                {/* Signature */}
+                <div className="mt-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Upload Your Signature</label>
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/jpg"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      setSignature(file);
+                    }}
+                    className="block w-full border rounded-lg p-3"
+                  />
+
+                  {signature && (
+                    <div className="mt-4">
+                      <p className="text-sm text-green-600 mb-2">Selected: {signature.name}</p>
+
+                      {/* Signature Image Preview */}
+                      <div className="border rounded-lg p-4 bg-gray-50 w-fit">
+                        <p className="text-sm font-medium text-gray-700 mb-2">Signature Preview</p>
+                        <img
+                          src={URL.createObjectURL(signature)}
+                          alt="Signature Preview"
+                          className="max-w-100 max-h-50 object-contain border rounded bg-white"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             <div className="flex justify-end mt-5 gap-2">
                 <button 
                   onClick={handleReturn} 
@@ -340,8 +427,12 @@ export default function ApplicationReview() {
                 </button>
                 {
                   isFinalStep ? (
-                    <button onClick={handleApprove}  className="bg-green-800 text-white px-6 py-2 rounded">
-                      Approve
+                    <button 
+                      onClick={handleApprove} 
+                      disabled = {isCompleteDisable} 
+                      className={` text-white px-6 py-2 rounded
+                        ${isCompleteDisable ? "bg-gray-400 cursor-not-allowed" : "bg-green-800 hover:bg-green-900"}`}>
+                      Complete
                     </button>
                   ) : (
                     <button 

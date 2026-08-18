@@ -342,11 +342,11 @@ export default function Form_126() {
       {/* fields */}
       <div className="col-span-6 p-3 text-sm ">
 
-        <p>කාර්යාලයීය ප්‍රයෝජනය සදහා පමණි</p>
+        {/* <p>කාර්යාලයීය ප්‍රයෝජනය සදහා පමණි</p>
         <p>For Office use only</p>
 
         <p className='mt-1'>ඉතිරි නිවාඩු පිළිබද විස්තර</p>
-        <p>Particulars of available leave</p>
+        <p>Particulars of available leave</p> */}
 
         {/* <p className='mt-2'>විවේක නිවාඩු</p>
         <p>Vacation Leave</p>
@@ -362,7 +362,7 @@ export default function Form_126() {
       </div>
 
       {/* table */}
-      <div className="col-span-6 p-3 text-sm ">
+      {/* <div className="col-span-6 p-3 text-sm ">
         <div className=' '>
           <div className='grid grid-cols-2 gap-6'>
             <div className='w-full text-center '>
@@ -375,7 +375,7 @@ export default function Form_126() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   </div>
 
@@ -383,7 +383,7 @@ export default function Form_126() {
   <div className="border-t border-b ">
     <div className="grid grid-cols-12 ">
       {/* fields */}
-      <div className="col-span-6 p-3 text-sm ">
+      {/* <div className="col-span-6 p-3 text-sm ">
         <p className='mt-2'>විවේක නිවාඩු</p>
         <p>Vacation Leave</p>
         
@@ -395,7 +395,7 @@ export default function Form_126() {
 
         <p className='mt-2'>වැටුප් රහිත නිවාඩු</p>
         <p>No-pay leave</p>
-      </div>
+      </div> */}
 
       {/* table */}
       <div className="col-span-6 p-3 text-sm ">

@@ -32,7 +32,7 @@ export default function CompletedForm126() {
                 setPdfUrl(url);
             } catch (err) {
                 console.error(err);
-                setError("Unable to load the completed Form 16.");
+                setError("Unable to load the completed Form 126");
             } finally {
                 setLoading(false);
             }
@@ -100,7 +100,7 @@ export default function CompletedForm126() {
                         />
                         <div>
                             <h2 className="text-lg font-semibold text-[#002046]">
-                                Completed Form 16
+                                Completed Form 126
                             </h2>
                             <p className="text-sm text-gray-500">
                                 Approved application
@@ -126,7 +126,7 @@ export default function CompletedForm126() {
                 {loading && (
                     <div className="flex items-center justify-center h-full">
                         <p className="text-gray-500">
-                            Loading completed Form 16...
+                            Loading completed Form 126...
                         </p>
                     </div>
                 )}

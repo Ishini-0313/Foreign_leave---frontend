@@ -92,7 +92,7 @@ export default function Leave_category() {
                   relative
                   overflow-hidden
                   rounded-[28px]
-                  bg-gradient-to-br
+                  bg-linear-to-br
                   from-[#EEF4FF]
                   via-white
                   to-[#F8F3FF]
@@ -128,7 +128,7 @@ export default function Leave_category() {
                       w-20
                       h-20
                       rounded-2xl
-                      bg-gradient-to-br
+                      bg-linear-to-br
                       from-[#1B365D]
                       to-[#315A91]
                       flex
@@ -184,7 +184,7 @@ export default function Leave_category() {
 
 
                   {/* Description */}
-                  <p className="
+                  {/* <p className="
                     text-[#5C6470]
                     text-base
                     leading-7
@@ -194,7 +194,7 @@ export default function Leave_category() {
                     Applications for private travel, holidays, religious pilgrimages,
                     or visiting family abroad. Requires personal funding and
                     supporting documents.
-                  </p>
+                  </p> */}
 
 
                   {/* Divider */}
@@ -250,7 +250,7 @@ export default function Leave_category() {
                   relative
                   overflow-hidden
                   rounded-[28px]
-                  bg-gradient-to-br
+                  bg-linear-to-br
                   from-[#ECFBF5]
                   via-white
                   to-[#F2FBFF]
@@ -309,7 +309,7 @@ export default function Leave_category() {
                       w-20
                       h-20
                       rounded-2xl
-                      bg-gradient-to-br
+                      bg-linear-to-br
                       from-[#087F5B]
                       to-[#13A673]
                       flex
@@ -340,11 +340,11 @@ export default function Leave_category() {
                   <h3 className="stext-[#002046] font-bold text-2xl sm:text-[26px] leading-tight mb-4">රාජකාරී විදේශීය නිවාඩු</h3>
 
                   {/* Description */}
-                  <p className="text-[#5C6470] text-base leading-7 max-w-md mb-8">
+                  {/* <p className="text-[#5C6470] text-base leading-7 max-w-md mb-8">
                     For government delegations, international conferences, or
                     state-sponsored training programs. Requires official invitation
                     and supporting documents.
-                  </p>
+                  </p> */}
 
                   {/* Divider */}
                   <div className="h-px bg-[#DDEDE7] mb-6"></div>

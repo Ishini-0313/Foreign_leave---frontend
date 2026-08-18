@@ -344,7 +344,7 @@ export default function Options() {
             font-bold
             leading-tight
           ">
-            Apply for Official Foreign Leave
+            Apply for {natureOfTrip ==  "official" ? "Official" : "Personal"} Foreign Leave
           </h2>
 
 

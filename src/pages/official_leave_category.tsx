@@ -9,7 +9,6 @@ import { useLeaveCategory } from '../context/LeaveCategoryContext';
 
 type PersonalLeaveCategory =
     | "leave_without_offers"
-    | "leave_with_warm_cloths_offer"
     | "leave_with_additional_offer"
     | "leave_with_warm_cloths_and_additional_offer";
 
@@ -19,10 +18,6 @@ export default function OfficialLeaveCategory() {
         {
             id: "leave_without_offers",
             name: "රාජකාරී විදේශ නිවාඩු (දීමනා නොමැතිව)",
-        },
-        {
-            id: "leave_with_warm_cloths_offer",
-            name: "රාජකාරී විදේශ නිවාඩු (උණුසුම් ඇදුම් දීමනාව සහිත)",
         },
         {
             id: "leave_with_additional_offer",
@@ -99,7 +94,7 @@ export default function OfficialLeaveCategory() {
                         </div>
         
                         {/* Selection Cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
                             {categories.map((category, index) => {
             
                                 const cardColors = [

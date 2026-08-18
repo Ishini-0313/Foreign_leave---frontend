@@ -36,9 +36,11 @@ export default function Login() {
       const user = response.data.user;
       
       if (user.role?.role_name === "Applicant") {
-          navigate("/new-application");
-      } else {
-          navigate("/dashboard");
+        navigate("/new-application");
+      } else if(user.role?.role_name === "System Admin"){
+        navigate("/admin/officer-assignments");
+      }else {
+        navigate("/dashboard");
       }
       
     }catch(error:any){

@@ -3,6 +3,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import {UserCog,ShieldCheck,UserCheck,Users,Save,RefreshCw,Building2,} from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/navbar";
+import Topbar from "../components/topbar";
 
 interface Office {
     id: number;
@@ -44,6 +46,7 @@ interface ApiResponse {
 }
 
 export default function OfficerAssignment() {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [offices, setOffices] = useState<Office[]>([]);
     const [users, setUsers] = useState<User[]>([]);
     const [selectedOffice, setSelectedOffice] = useState<string>("");
@@ -70,6 +73,7 @@ export default function OfficerAssignment() {
         },
     };
 
+    // load user
     useEffect(()=>{
         const storedUser = localStorage.getItem("user");
 
@@ -115,15 +119,10 @@ export default function OfficerAssignment() {
         }
     };
 
-    /*
-    |--------------------------------------------------------------------------
-    | When office changes
-    |--------------------------------------------------------------------------
-    */
-
+    
+    //When office changes
     const handleOfficeChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const officeId = e.target.value;
-
         setSelectedOffice(officeId);
 
         // Clear current selections
@@ -134,7 +133,6 @@ export default function OfficerAssignment() {
         setRecommendedOfficer3("");
         setCheifSec("");
         setAdminUser("");
-
         setUsers([]);
 
         if (!officeId) {
@@ -144,23 +142,14 @@ export default function OfficerAssignment() {
         await loadOfficeData(officeId);
     };
 
-    /*
-    |--------------------------------------------------------------------------
-    | Load users + existing assignment
-    |--------------------------------------------------------------------------
-    */
-
+    
+    //Load users + existing assignment
     const loadOfficeData = async (officeId: string) => {
         try {
             setLoadingUsers(true);
             setLoadingAssignment(true);
 
-            /*
-            |--------------------------------------------------------------------------
-            | Load users
-            |--------------------------------------------------------------------------
-            */
-
+            //Load users
             const usersResponse = await axios.get(
                 `http://127.0.0.1:8000/api/offices/${officeId}/users`,
                 axiosConfig
@@ -172,12 +161,8 @@ export default function OfficerAssignment() {
                 setUsers([]);
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | Load current assignment
-            |--------------------------------------------------------------------------
-            */
-
+            
+            //Load current assignment
             const assignmentResponse =
                 await axios.get<ApiResponse>(
                     `http://127.0.0.1:8000/api/offices/${officeId}/assignment`,
@@ -212,12 +197,8 @@ export default function OfficerAssignment() {
         }
     };
 
-    /*
-    |--------------------------------------------------------------------------
-    | Validate three officer roles
-    |--------------------------------------------------------------------------
-    */
 
+    //Validate three officer roles
     const validateOfficerRoles = (): boolean => {
         if (!subjectOfficer) {
             toast.error("Please select a Subject Officer.");
@@ -245,31 +226,21 @@ export default function OfficerAssignment() {
             );
             return false;
         }
-
         return true;
     };
 
-    /*
-    |--------------------------------------------------------------------------
-    | Validate Admin
-    |--------------------------------------------------------------------------
-    */
-
+   
+    //Validate Admin
     const validateAdmin = (): boolean => {
         if (!adminUser) {
             toast.error("Please select an Admin.");
             return false;
         }
-
         return true;
     };
 
-    /*
-    |--------------------------------------------------------------------------
-    | Submit assignment
-    |--------------------------------------------------------------------------
-    */
-
+    
+    //Submit assignment
     const handleSubmit = async ( e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedOffice) {
@@ -294,10 +265,10 @@ export default function OfficerAssignment() {
                     subject_officer_id: Number(subjectOfficer),
                     check_officer_id: Number(checkOfficer),
                     recommended_officer_id: Number(recommendedOfficer),
-                    recommended_officer2_id: Number(recommendedOfficer2),
-                    recommended_officer3_id: Number(recommendedOfficer3),
-                    chief_sec_id: Number(cheifSec),
-                    admin_user_id: Number(adminUser),
+                    recommended_officer2_id: recommendedOfficer2 ? Number(recommendedOfficer2) : "",
+                    recommended_officer3_id: recommendedOfficer3 ? Number(recommendedOfficer3) : "",
+                    chief_sec_id: cheifSec ? Number(cheifSec) : "",
+                    admin_user_id: adminUser ? Number(adminUser) : "",
                 },
                 axiosConfig
             );
@@ -306,12 +277,8 @@ export default function OfficerAssignment() {
                 response.data.message || "Office roles assigned successfully."
             );
 
-            /*
-            |--------------------------------------------------------------------------
-            | Reload assignment
-            |--------------------------------------------------------------------------
-            */
-
+            
+            //Reload assignment
             await loadOfficeData(
                 selectedOffice
             );
@@ -365,11 +332,9 @@ export default function OfficerAssignment() {
                 return;
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | Authorization error
-            |--------------------------------------------------------------------------
-            */
+            
+            //Authorization error
+            
 
             if (
                 error.response?.status === 403
@@ -402,12 +367,8 @@ export default function OfficerAssignment() {
         }
     };
 
-    /*
-    |--------------------------------------------------------------------------
-    | Reset form
-    |--------------------------------------------------------------------------
-    */
-
+    
+    //Reset form
     const handleReset = async () => {
 
         if (!selectedOffice) {
@@ -427,17 +388,12 @@ export default function OfficerAssignment() {
         );
     };
 
-    /*
-    |--------------------------------------------------------------------------
-    | Get selected office
-    |--------------------------------------------------------------------------
-    */
-
+    
+    //Get selected office
     const selectedOfficeData =
         offices.find(
             (office) =>
-                String(office.id) ===
-                selectedOffice
+                String(office.id) === selectedOffice
         );
 
     /*
@@ -475,381 +431,259 @@ export default function OfficerAssignment() {
     */
 
     return (
-        <div className="min-h-screen bg-[#F7F8FA] p-6">
-            <div className="max-w-6xl mx-auto">
-                {/* Header */}
-                <div className="mb-8">
-                    <div className="flex items-center gap-3">
-                        <div className="bg-[#002046] p-3 rounded-lg">
-                            <UserCog className="text-white" size={28}/>
-                        </div>
+        <div className="flex h-screen bg-[#FAF9FD] font-[Inter,sans-serif] overflow-hidden relative">
+            <Navbar
+                user={user}
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+            />
 
-                        <div>
-                            <h1 className="text-2xl font-bold text-[#002046]">Officer Assignment</h1>
-                            <p className="text-gray-500 mt-1">
-                                Assign Subject, Check, Recommended
-                                Officers and Office Admin
-                            </p>
-                        </div>
-                    </div>
-                </div>
+            <div className="flex flex-col flex-1 min-w-0 h-full overflow-hidden">
+                <Topbar
+                    user={user}
+                    sidebarOpen={sidebarOpen}
+                    setSidebarOpen={setSidebarOpen}
+                />
 
-                {/* Main card */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <form onSubmit={handleSubmit}>
-                        {/* Office selection */}
-                        <div className="p-6 border-b border-gray-200">
-                            <div className="flex items-center gap-2 mb-4">
-                                <Building2 size={20} className="text-[#002046]"/>
-                                <h2 className="text-lg font-semibold text-[#002046]">Select Office</h2>
-                            </div>
-                            <select
-                                value={selectedOffice}
-                                onChange={handleOfficeChange}
-                                className="w-full border border-gray-300 rounded-lg px-4  py-3 outline-none focus:ring-2 focus:ring-[#002046] bg-white"
-                            >
-                                <option value=""> -- Select Office --</option>
-                                {offices.map(
-                                    (office) => (
-                                        <option key={office.id} value={office.id}>
-                                            {office.name}
-                                        </option>
-                                    )
-                                )}
-                            </select>
-
-                            {offices.length === 0 && (
-                                <p className="text-sm text-red-500 mt-3">
-                                    You currently have no offices
-                                    available for assignment.
-                                </p>
-                            )}
-                        </div>
-
-
-                        {/* Selected office information */}
-
-                        {selectedOfficeData && (
-                            <div className="mx-6 mt-6 p-4 rounded-lg bg-blue-50 border border-blue-100">
-                                <div className="flex flex-wrap gap-x-8 gap-y-2">
-                                    <div>
-                                        <span className="text-xs text-gray-500">
-                                            Office
-                                        </span>
-                                        <p className="font-semibold text-[#002046]">
-                                            {
-                                                selectedOfficeData.name
-                                            }
-                                        </p>
+                <main className="flex flex-col flex-1 bg-linear-to-br  overflow-y-auto">
+                    <div className="min-h-screen bg-[#F7F8FA] p-6">
+                        <div className="max-w-6xl mx-auto">
+                            {/* Header */}
+                            <div className="mb-8">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-[#002046] p-3 rounded-lg">
+                                        <UserCog className="text-white" size={28}/>
                                     </div>
 
                                     <div>
-                                        <span className="text-xs text-gray-500">
-                                            Type
-                                        </span>
-                                        <p className="font-semibold text-[#002046]">
-                                            {
-                                                selectedOfficeData.type
-                                            }
+                                        <h1 className="text-2xl font-bold text-[#002046]">Officer Assignment</h1>
+                                        <p className="text-gray-500 mt-1">
+                                            Assign Subject, Check, Recommended Officers and Office Admin
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                        )}
 
-
-                        {/* Users */}
-                        {selectedOffice && (
-                            <div className="p-6">
-                                {loadingUsers || loadingAssignment ? (
-                                    <div className="flex justify-center py-12">
-                                        <RefreshCw className="animate-spin text-[#002046]" size={28}/>
-                                    </div>
-                                ) : (
-                                    <>
-                                        {/* Officer section */}
-                                        <div className="mb-8">
-                                            <div className="flex items-center gap-2 mb-5">
-                                                <Users size={20}  className="text-[#002046]"/>
-                                                <h2 className="text-lg font-semibold text-[#002046]">Officer Roles</h2>
-                                            </div>
-
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                                                {
-                                                    user.role.role_name == "System Admin" && (
-                                                        <>
-                                                            {/* Cheif Sec */}
-                                                            <UserSelect
-                                                                label="Cheif Secretary"
-                                                                icon={<UserCog size={18}/>}
-                                                                value={cheifSec}
-                                                                users={users}
-                                                                onChange={setCheifSec}
-                                                                exclude={[subjectOfficer,checkOfficer]}
-                                                            />
-
-                                                            {/* Recommended III*/}
-                                                            <UserSelect
-                                                                label="Recommended Officer III"
-                                                                icon={<UserCog size={18}/>}
-                                                                value={recommendedOfficer3}
-                                                                users={users}
-                                                                onChange={setRecommendedOfficer3}
-                                                                exclude={[subjectOfficer,checkOfficer]}
-                                                            />
-
-                                                            {/* Recommended  II*/}
-                                                            <UserSelect
-                                                                label="Recommended Officer II"
-                                                                icon={<UserCog size={18}/>}
-                                                                value={recommendedOfficer2}
-                                                                users={users}
-                                                                onChange={setRecommendedOfficer2}
-                                                                exclude={[subjectOfficer,checkOfficer]}
-                                                            />
-                                                        </>
-                                                    )
-                                                }
-
-                                                {/* Recommended */}
-                                                <UserSelect
-                                                    label="Recommended Officer"
-                                                    icon={<UserCog size={18}/>}
-                                                    value={recommendedOfficer}
-                                                    users={users}
-                                                    onChange={setRecommendedOfficer}
-                                                    exclude={[subjectOfficer,checkOfficer]}
-                                                />
-
-                                                {/* Check */}
-                                                <UserSelect
-                                                    label="Check Officer"
-                                                    icon={<ShieldCheck size={18}/>}
-                                                    value={checkOfficer}
-                                                    users={users}
-                                                    onChange={setCheckOfficer}
-                                                    exclude={[subjectOfficer,recommendedOfficer]}
-                                                />
-                                                
-                                                {/* Subject */}
-                                                <UserSelect
-                                                    label="Subject Officer"
-                                                    icon={<UserCheck size={18}/>}
-                                                    value={subjectOfficer}
-                                                    users={users}
-                                                    onChange={setSubjectOfficer}
-                                                    exclude={[checkOfficer,recommendedOfficer]}
-                                                />
-                                            </div>
-
-
-                                            <p className="text-xs text-gray-500 mt-3">
-                                                Subject Officer, Check
-                                                Officer and Recommended
-                                                Officer must be three
-                                                different users.
-                                            </p>
+                            {/* Main card */}
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+                                <form onSubmit={handleSubmit}>
+                                    {/* Office selection */}
+                                    <div className="p-6 border-b border-gray-200">
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <Building2 size={20} className="text-[#002046]"/>
+                                            <h2 className="text-lg font-semibold text-[#002046]">Select Office</h2>
                                         </div>
+                                        <select
+                                            value={selectedOffice}
+                                            onChange={handleOfficeChange}
+                                            className="w-full border border-gray-300 rounded-lg px-4  py-3 outline-none focus:ring-2 focus:ring-[#002046] bg-white"
+                                        >
+                                            <option value=""> -- Select Office --</option>
+                                            {offices.map(
+                                                (office) => (
+                                                    <option key={office.id} value={office.id}>
+                                                        {office.name}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
 
-
-                                        {/* Admin section */}
-
-                                        <div className="border-t border-gray-200 pt-8">
-
-                                            <div className="flex items-center gap-2 mb-5">
-
-                                                <UserCog
-                                                    size={20}
-                                                    className="text-[#002046]"
-                                                />
-
-                                                <h2 className="text-lg font-semibold text-[#002046]">
-
-                                                    Office Administrator
-
-                                                </h2>
-
-                                            </div>
-
-
-                                            <div className="max-w-md">
-
-                                                <UserSelect
-
-                                                    label="Office Admin"
-
-                                                    icon={
-                                                        <UserCog
-                                                            size={18}
-                                                        />
-                                                    }
-
-                                                    value={
-                                                        adminUser
-                                                    }
-
-                                                    users={
-                                                        users
-                                                    }
-
-                                                    onChange={
-                                                        setAdminUser
-                                                    }
-
-                                                    /*
-                                                    Admin CAN be one
-                                                    of the three officers.
-                                                    Therefore no exclude.
-                                                    */
-
-                                                    exclude={[]}
-
-                                                />
-
-                                            </div>
-
-                                            <p className="text-xs text-gray-500 mt-3">
-
-                                                The Office Admin may also
-                                                be the Subject, Check or
-                                                Recommended Officer.
-
+                                        {offices.length === 0 && (
+                                            <p className="text-sm text-red-500 mt-3">
+                                                You currently have no offices available for assignment.
                                             </p>
-
-                                        </div>
-
-
-                                        {/* No users */}
-
-                                        {users.length === 0 && (
-
-                                            <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-
-                                                <p className="text-sm text-yellow-800">
-
-                                                    No active users were
-                                                    found for this office.
-
-                                                </p>
-
-                                            </div>
-
                                         )}
+                                    </div>
 
 
-                                        {/* Buttons */}
+                                    {/* Selected office information */}
+                                    {selectedOfficeData && (
+                                        <div className="mx-6 mt-6 p-4 rounded-lg bg-blue-50 border border-blue-100">
+                                            <div className="flex flex-wrap gap-x-8 gap-y-2">
+                                                <div>
+                                                    <span className="text-xs text-gray-500">
+                                                        Office
+                                                    </span>
+                                                    <p className="font-semibold text-[#002046]">
+                                                        {selectedOfficeData.name}
+                                                    </p>
+                                                </div>
 
-                                        <div className="flex justify-end gap-3 mt-10 pt-6 border-t border-gray-200">
-
-                                            <button
-
-                                                type="button"
-
-                                                onClick={
-                                                    handleReset
-                                                }
-
-                                                disabled={
-                                                    saving ||
-                                                    !selectedOffice
-                                                }
-
-                                                className="
-                                                    flex
-                                                    items-center
-                                                    gap-2
-                                                    px-5
-                                                    py-2.5
-                                                    border
-                                                    border-gray-300
-                                                    rounded-lg
-                                                    text-gray-700
-                                                    hover:bg-gray-50
-                                                    disabled:opacity-50
-                                                    disabled:cursor-not-allowed
-                                                "
-
-                                            >
-
-                                                <RefreshCw
-                                                    size={18}
-                                                />
-
-                                                Reset
-
-                                            </button>
-
-
-                                            <button
-
-                                                type="submit"
-
-                                                disabled={
-                                                    saving ||
-                                                    users.length === 0
-                                                }
-
-                                                className="
-                                                    flex
-                                                    items-center
-                                                    gap-2
-                                                    px-6
-                                                    py-2.5
-                                                    bg-[#002046]
-                                                    text-white
-                                                    rounded-lg
-                                                    hover:bg-[#00315f]
-                                                    disabled:opacity-50
-                                                    disabled:cursor-not-allowed
-                                                "
-
-                                            >
-
-                                                {saving ? (
-
-                                                    <>
-                                                        <RefreshCw
-                                                            size={18}
-                                                            className="animate-spin"
-                                                        />
-
-                                                        Saving...
-
-                                                    </>
-
-                                                ) : (
-
-                                                    <>
-                                                        <Save
-                                                            size={18}
-                                                        />
-
-                                                        Assign Roles
-
-                                                    </>
-
-                                                )}
-
-                                            </button>
-
+                                                <div>
+                                                    <span className="text-xs text-gray-500">
+                                                        Type
+                                                    </span>
+                                                    <p className="font-semibold text-[#002046]">
+                                                        {selectedOfficeData.type}
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
+                                    )}
 
-                                    </>
 
-                                )}
+                                    {/* Users */}
+                                    {selectedOffice && (
+                                        <div className="p-6">
+                                            {loadingUsers || loadingAssignment ? (
+                                                <div className="flex justify-center py-12">
+                                                    <RefreshCw className="animate-spin text-[#002046]" size={28}/>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    {/* Officer section */}
+                                                    <div className="mb-8">
+                                                        <div className="flex items-center gap-2 mb-5">
+                                                            <Users size={20}  className="text-[#002046]"/>
+                                                            <h2 className="text-lg font-semibold text-[#002046]">Officer Roles</h2>
+                                                        </div>
 
+                                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                                            {
+                                                                user?.role.role_name == "System Admin" && (
+                                                                    <>
+                                                                        {/* Cheif Sec */}
+                                                                        <UserSelect
+                                                                            label="Cheif Secretary"
+                                                                            icon={<UserCog size={18}/>}
+                                                                            value={cheifSec}
+                                                                            users={users}
+                                                                            onChange={setCheifSec}
+                                                                            exclude={[subjectOfficer,checkOfficer]}
+                                                                        />
+
+                                                                        {/* Recommended III*/}
+                                                                        <UserSelect
+                                                                            label="Recommended Officer III"
+                                                                            icon={<UserCog size={18}/>}
+                                                                            value={recommendedOfficer3}
+                                                                            users={users}
+                                                                            onChange={setRecommendedOfficer3}
+                                                                            exclude={[subjectOfficer,checkOfficer]}
+                                                                        />
+
+                                                                        {/* Recommended  II*/}
+                                                                        <UserSelect
+                                                                            label="Recommended Officer II"
+                                                                            icon={<UserCog size={18}/>}
+                                                                            value={recommendedOfficer2}
+                                                                            users={users}
+                                                                            onChange={setRecommendedOfficer2}
+                                                                            exclude={[subjectOfficer,checkOfficer]}
+                                                                        />
+                                                                    </>
+                                                                )
+                                                            }
+
+                                                            {/* Recommended */}
+                                                            <UserSelect
+                                                                label="Recommended Officer"
+                                                                icon={<UserCog size={18}/>}
+                                                                value={recommendedOfficer}
+                                                                users={users}
+                                                                onChange={setRecommendedOfficer}
+                                                                exclude={[subjectOfficer,checkOfficer]}
+                                                            />
+
+                                                            {/* Check */}
+                                                            <UserSelect
+                                                                label="Check Officer"
+                                                                icon={<ShieldCheck size={18}/>}
+                                                                value={checkOfficer}
+                                                                users={users}
+                                                                onChange={setCheckOfficer}
+                                                                exclude={[subjectOfficer,recommendedOfficer]}
+                                                            />
+                                                            
+                                                            {/* Subject */}
+                                                            <UserSelect
+                                                                label="Subject Officer"
+                                                                icon={<UserCheck size={18}/>}
+                                                                value={subjectOfficer}
+                                                                users={users}
+                                                                onChange={setSubjectOfficer}
+                                                                exclude={[checkOfficer,recommendedOfficer]}
+                                                            />
+                                                        </div>
+                                                        <p className="text-xs text-gray-500 mt-3">
+                                                            Subject Officer, Check Officer and Recommended Officer must be three different users.
+                                                        </p>
+                                                    </div>
+
+
+                                                    {/* Admin section */}
+                                                    <div className="border-t border-gray-200 pt-8">
+                                                        <div className="flex items-center gap-2 mb-5">
+                                                            <UserCog size={20} className="text-[#002046]"/>
+                                                            <h2 className="text-lg font-semibold text-[#002046]">
+                                                                Office Administrator
+                                                            </h2>
+                                                        </div>
+                                                        <div className="max-w-md">
+                                                            <UserSelect
+                                                                label="Office Admin"
+                                                                icon={<UserCog size={18}/>}
+                                                                value={adminUser}
+                                                                users={users}
+                                                                onChange={setAdminUser}
+                                                                exclude={[]}
+                                                            />
+                                                        </div>
+                                                        <p className="text-xs text-gray-500 mt-3">
+                                                            The Office Admin may also  be the Subject, Check or Recommended Officer.
+                                                        </p>
+                                                    </div>
+
+
+                                                    {/* No users */}
+                                                    {users.length === 0 && (
+                                                        <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                                            <p className="text-sm text-yellow-800">
+                                                                No active users were found for this office.
+                                                            </p>
+                                                        </div>
+                                                    )}
+
+
+                                                    {/* Buttons */}
+                                                    <div className="flex justify-end gap-3 mt-10 pt-6 border-t border-gray-200">
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleReset}
+                                                            disabled={saving || !selectedOffice}
+                                                            className="flex items-center gap-2 px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                            <RefreshCw size={18}/>
+                                                            Reset
+                                                        </button>
+
+                                                        <button
+                                                            type="submit"
+                                                            disabled={saving || users.length === 0}
+                                                            className="flex items-center gap-2  px-6 py-2.5 bg-[#002046] text-white rounded-lg hover:bg-[#00315f] disabled:opacity-50 disabled:cursor-not-allowed">
+                                                            {saving ? (
+                                                                <>
+                                                                    <RefreshCw size={18} className="animate-spin"/>
+                                                                    Saving...
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <Save size={18}/>
+                                                                    Assign Roles
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    )}
+                                </form>
                             </div>
-
-                        )}
-
-                    </form>
-
-                </div>
-
+                        </div>
+                    </div>
+                </main>
             </div>
-
         </div>
-
     );
 }
 

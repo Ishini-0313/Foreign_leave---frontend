@@ -452,7 +452,7 @@ export default function ApplicationTracking() {
 
                               <div
                                 className={`
-                                  w-0.5 flex-1 min-h-[70px]
+                                  w-0.5 flex-1 min-h-17.5
                                   ${
                                     completed
                                       ? "bg-green-400"

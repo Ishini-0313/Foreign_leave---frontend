@@ -49,7 +49,7 @@ export default function Form2() {
   },[]);
 
   const handleNext = ()=>{
-    navigate(`/new-doc/edit/${id}`);
+    navigate(`/options`);
   };
 
 

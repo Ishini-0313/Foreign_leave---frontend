@@ -254,7 +254,7 @@ export default function Profile() {
                                                     text-xs
                                                     font-medium
                                                 ">
-                                                    {profile.designation.name}
+                                                    {profile?.designation?.name}
                                                 </span>
                                             )}
 
@@ -373,7 +373,7 @@ export default function Profile() {
                                             </label>
                                         </div>
                                         <p className="text-[#1D2B3A] font-semibold text-base wrap-break-word">
-                                            {loading ? "Loading..." : profile?.designation.name || "-"}
+                                             {loading ? "Loading..." : profile?.designation.name || "-"} 
                                         </p>
                                     </div>
 

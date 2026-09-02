@@ -35,7 +35,7 @@ export default function Personal_leave_category() {
         },
         {
             id: "spouse",
-            name: "කලත්‍රය සදහා",
+            name: "කලත්‍රය සමග",
         },
     ];
     

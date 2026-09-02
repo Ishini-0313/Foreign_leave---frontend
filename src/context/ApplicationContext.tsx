@@ -128,7 +128,19 @@ export const ApplicationProvider = ({children}: any) => {
             agreement: null,
         } as Documents,
         
-        signature: ""
+        signature: "",
+
+        leave_nature: "" ,
+
+        has_letter_of_invitation_for_training : "",
+
+        has_approval_letter: "",
+
+        has_government_also_been_invited_for_training: "",
+
+        has_government_nominated_to_participate_in_it : "",
+
+        institution_designated_in_that_manner : "",
     });
 
     return (

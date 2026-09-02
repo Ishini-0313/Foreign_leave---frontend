@@ -1,8 +1,9 @@
-import {LayoutDashboard,FileText,FilePlusCorner,LogOut,Settings,Building2} from "lucide-react";
+import {LayoutDashboard,FileText,FilePlusCorner,LogOut,Settings,Building2, FileSpreadsheet} from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import ConfirmDialog from "./confirmDialog";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import path from "path";
 
 interface NavbarProps {
     user: any;
@@ -113,11 +114,21 @@ export default function Navbar({user,sidebarOpen,setSidebarOpen}: NavbarProps) {
     ];
 
     //Admin(office) navigation
-    const officeManagementItem = {
-        label: "Office Management",
-        icon: Building2,
-        path: "/admin/officer-assignments"
-    };
+    const officeManagementItem = 
+        {
+            label: "Office Management",
+            icon: Building2,
+            path: "/admin/officer-assignments"
+        };
+        
+    
+
+    const annualReport = 
+        {
+            label: "Annual Reports",
+            icon: FileSpreadsheet,
+            path: "/annual-reports"
+        };
 
 
     
@@ -140,7 +151,8 @@ export default function Navbar({user,sidebarOpen,setSidebarOpen}: NavbarProps) {
     if (isOfficeAdmin) {
         items = [
             ...items,
-            officeManagementItem
+            officeManagementItem,
+            annualReport
         ];
     }
 

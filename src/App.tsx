@@ -43,6 +43,8 @@ import NewDocumentUpload from './pages/new_document_upload.tsx';
 import CompletedForm16 from './pages/CompletedForm16.tsx';
 import CompletedForm126 from './pages/CompletedForm126.tsx';
 import OfficerAssignment from './pages/OfficerAssignment.tsx';
+import AdditionalOffer from './pages/additional_offer.tsx';
+import AnnualReport from './pages/AnnualReport.tsx';
 
 
 
@@ -74,12 +76,7 @@ function App() {
       <Route path='/new-doc/edit/:id' element={<NewDocumentUpload/>}></Route>
       <Route path='/sign/edit/:id' element={<SignPage/>}></Route>
       <Route path='/sign2/edit/:id' element={<SignPage2/>}></Route>
-
-
       <Route path="/form-126" element={<Form_126/>}></Route>
-      
-      
-      
       <Route path='/application/:id' element={<ApplicationReview/>}></Route>
       <Route path='/application/:id/form-126' element={<Form_126/>}></Route>
       <Route path='/application/:id/form-16' element={<Form_16/>}></Route>
@@ -94,10 +91,8 @@ function App() {
       <Route path='/application/:id/amendment_documents' element={<AmedmentDocumentUpload/>}></Route>
       <Route path='/application/:application_id/amendments' element= {<Amendments/>}></Route>
       <Route path='/amendment/:id/tracking' element={<AmendmentTracking/>}></Route>
-      
       <Route path='/forgot-password' element={<ForgotPassword/>}></Route>
       <Route path='/reset-password' element={<ResetPassword/>}></Route>
-      
       <Route path='/options/:id' element={<Options/>}></Route>
       <Route path='/my-application/:id' element={<MyApplicationReview/>}></Route>
       <Route path='/amendmnet-review/:id' element={<AmendmentReview/>}></Route>
@@ -109,6 +104,10 @@ function App() {
       <Route path='/application/:id/completed-form-126' element={<CompletedForm126/>}></Route>
 
       <Route path='/admin/officer-assignments' element={<OfficerAssignment/>}></Route>
+
+      <Route path='/additional-offer/edit/:id' element={<AdditionalOffer/>}></Route>
+
+      <Route path='/annual-reports' element={<AnnualReport/>}></Route>
     </Routes>
   )
 }

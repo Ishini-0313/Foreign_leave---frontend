@@ -68,6 +68,7 @@ export default function Form() {
   const [services, setServices] = useState([]);
   const [ministries, setMinistries] = useState([]);
   const [institutes, setInstitutes] = useState([]);
+  const [designations , setDesignations] = useState([]);
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const signaturePadRef = useRef<SignaturePad | null>(null);
@@ -250,8 +251,21 @@ export default function Form() {
     fetchSubOffices();
   }, [applicationData.ministry_id]);
 
+  //fetch desinations
+  useEffect(()=>{
+      const fetchDesignation = async()=>{
+        try{
+          const response = await axios.get('http://127.0.0.1:8000/api/designations');
+          setDesignations(response.data);
+        }catch(error){
+          console.error(error);
+        }
+      };
+      fetchDesignation();
+  }, []);
+
   const handleNext = ()=>{
-    navigate(`/form2/edit/${id}`);
+    navigate(`/options`);
   };
 
   return (
@@ -314,30 +328,24 @@ export default function Form() {
                   <label className="text-[#44474E] text-sm font-semibold leading-6">
                     1:2 තනතුර
                   </label>
-                  <input
-                    type="text"
-                    value={applicationData?.position || ""}
-                    onChange={(e)=> setApplicationData({...applicationData, position:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
-                  />
+                  <select 
+                        name="designation"
+                        value={applicationData.position}
+                        onChange={(e)=> setApplicationData({...applicationData, position:e.target.value})}
+                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    >
+                        <option value="">-- Select Service --</option>
+                        {designations.map((designation:any)=>(
+                          <option key={designation.id} value={designation.name}>
+                            {designation.name}
+                          </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
                   <label className="text-[#44474E] text-sm font-semibold leading-6">
                     1:3 නිලධාරියා අයත්වන සේවය
                   </label>
-                  {/* <select 
-                    name="service_id"
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
-                    value={applicationData.service_id}
-                    onChange={(e)=> setApplicationData({...applicationData, service_id:e.target.value})}
-                  >
-                    <option value="">-- Select Service --</option>
-                    {services.map((service:any)=>(
-                        <option key={service.id} value={service.id}>
-                          {service.name}
-                        </option>
-                    ))}
-                  </select> */}
                   <select 
                         name="service_id"
                         value={applicationData.service_id}

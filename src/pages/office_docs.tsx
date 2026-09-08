@@ -7,6 +7,7 @@ import Topbar from "../components/topbar";
 import toast from "react-hot-toast";
 import Footer from "../components/footer";
 import { useLeaveCategory } from "../context/LeaveCategoryContext";
+import axios from "axios";
 
 function ChevronRight() {
   return (
@@ -16,17 +17,16 @@ function ChevronRight() {
   );
 }
 
-
 export default function OfficeDocs() {
   const {id} = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const { applicationData, setApplicationData, isEditMode, existingDocs} = useApplication();
-  const {personalLeaveCategory, officialLeaveCategory} = useLeaveCategory();
+ const {leaveCategory} = useLeaveCategory();
+ const [loading, setLoading] = useState(false);
 
   // load logged user
   useEffect(()=>{
-      console.log("officialLeaveCategory : "+ officialLeaveCategory);
       console.log("documents :"+ isEditMode );
       const storedUser = localStorage.getItem("user");
       console.log("Stored User:", storedUser);
@@ -37,7 +37,6 @@ export default function OfficeDocs() {
       setUser(JSON.parse(storedUser));
   },[]);
 
-  
   interface DocumentItem {
     key: string;
     label: string;
@@ -45,34 +44,266 @@ export default function OfficeDocs() {
     file: File | null;
   }
 
-  
+  const documentsByCategory= {
+    short_trip: [
+      {
+        key: "service_confirmation",
+        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "outstanding_loan_balance_due_to_government",
+        label: "රජයට අය වියයුතු ණය ශේෂය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "duty_cover_letter",
+        label: "රාජකාරි ආවරණ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: true,
+        file: null
+      },
+    ],
 
-  
-  const [documents, setDocuments]  = useState<DocumentItem[]>([
-    {
-      key: "southern_absorption",
-      label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
-      isRequired: false,
-      file: null
-    },
-    {
-      key: "disciplinary_clearance",
-      label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
-      isRequired: true,
-      file: null
-    },
-    {
-      key: "agreement",
-      label: "ගිවිසුම",
-      isRequired: false,
-      file: null
-    },
-  ]);
+    study: [
+      {
+        key: "service_confirmation",
+        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "outstanding_loan_balance_due_to_government",
+        label: "රජයට අය වියයුතු ණය ශේෂය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "duty_cover_letter",
+        label: "රාජකාරි ආවරණ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: true,
+        file: null
+      },
+    ],
 
-  
+    employment: [
+      {
+        key: "service_confirmation",
+        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "outstanding_loan_balance_due_to_government",
+        label: "රජයට අය වියයුතු ණය ශේෂය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "duty_cover_letter",
+        label: "රාජකාරි ආවරණ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: true,
+        file: null
+      },
+    ],
+
+    study_and_employment: [
+      {
+        key: "service_confirmation",
+        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "outstanding_loan_balance_due_to_government",
+        label: "රජයට අය වියයුතු ණය ශේෂය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "duty_cover_letter",
+        label: "රාජකාරි ආවරණ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: true,
+        file: null
+      },
+    ],
+
+    spouse: [
+      {
+        key: "service_confirmation",
+        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "outstanding_loan_balance_due_to_government",
+        label: "රජයට අය වියයුතු ණය ශේෂය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "duty_cover_letter",
+        label: "රාජකාරි ආවරණ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: true,
+        file: null
+      },
+    ],
+
+    leave_without_offers: [
+      {
+        key: "southern_absorption",
+        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: false,
+        file: null
+      },
+    ],
+
+    leave_with_warm_cloths_offer: [
+      {
+        key: "southern_absorption",
+        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: false,
+        file: null
+      },
+    ],
+
+    leave_with_additional_offer: [
+      {
+        key: "southern_absorption",
+        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: false,
+        file: null
+      },
+    ],
+    
+    leave_with_warm_cloths_and_additional_offer: [
+      {
+        key: "southern_absorption",
+        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: false,
+        file: null
+      },
+    ],
+  };
+
+  const documents: DocumentItem[] =  leaveCategory && documentsByCategory[leaveCategory]
+    ? documentsByCategory[leaveCategory].map((doc)=>({
+      ...doc,
+      file:null,
+    }))
+    : [];
+
   const navigate = useNavigate();
  
-
   const handleFileChange = (
     documentKey: string,
     file: File | null
@@ -115,21 +346,99 @@ export default function OfficeDocs() {
   
   const progress = (uploadedRequiredDocs.length/requiredDocs.length)*100;
 
-  const handleNext = () => {
-
+  const saveDocs = async () => {
+    // CHECK REQUIRED DOCUMENTS
     const missingRequiredDocs = documents.filter(
-      (doc) => doc.isRequired && !applicationData.documents?.[doc.key] && !existingDocs?.[doc.key]
+        (doc) =>
+            doc.isRequired &&
+            !applicationData.documents?.[doc.key] &&
+            !existingDocs?.[doc.key]
     );
 
-    if(missingRequiredDocs.length > 0){
-      toast.error(`Please upload ${missingRequiredDocs.length} required document(s).`);
-      return;
+    if (missingRequiredDocs.length > 0) {
+
+        toast.error(
+            `Please upload ${missingRequiredDocs.length} required document(s).`
+        );
+
+        return;
     }
 
-    toast.success("document uploaded successfully");
-    navigate(`/sign/edit/${id}`);
-  };
+    // CHECK WHETHER THERE ARE NEW FILES
+    const newFiles = Object.entries(
+        applicationData.documents || {}
+    ).filter(
+        ([, file]) => file instanceof File
+    );
 
+
+    // If there are no new files, there is nothing to upload
+    if (newFiles.length === 0) {
+
+        toast.success("Documents are already saved.");
+
+        navigate(`/application/${id}`);
+
+        return;
+    }
+
+
+    setLoading(true);
+
+
+    try {
+
+        const formData = new FormData();
+
+        // ADD FILES
+        newFiles.forEach(
+            ([documentType, file]) => {
+
+                formData.append(
+                    `documents[${documentType}]`,
+                    file as File
+                );
+
+            }
+        );
+
+        // SEND TO LARAVEL
+        const token = localStorage.getItem("token");
+
+        const response = await axios.post(
+            `http://127.0.0.1:8000/api/applications/${id}/office-documents`,
+            formData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        );
+
+        toast.success(response.data.message || "Documents saved successfully.");
+
+        // Navigate back to application review
+        navigate(`/application/${id}`);
+    } catch (error: any) {
+        console.error(
+            "Document upload error:",
+            error
+        );
+
+        if (error.response?.data?.message) {
+            toast.error(
+                error.response.data.message
+            );
+        } else {
+            toast.error(
+                "Failed to save documents."
+            );
+        }
+    } finally {
+        setLoading(false);
+    }
+};
   return (
     <div className="flex h-screen bg-[#FAF9FD] font-[Inter,sans-serif] overflow-hidden relative">
       {/* Mobile sidebar overlay */}
@@ -288,12 +597,12 @@ export default function OfficeDocs() {
 
                 {/*  Buttons */}
                 <div className="flex justify-end mt-8 gap-4">
-                    <button className="px-6 py-3 border rounded-lg" onClick={()=>navigate(`/form2/edit/${id}`)}>
+                    <button className="px-6 py-3 border rounded-lg" onClick={()=>navigate(`/application/${id}`)}>
                         Back
                     </button>
 
                     <button
-                        onClick={handleNext}
+                        onClick={saveDocs}
                         disabled={!allUploaded}
                         className={`flex items-center gap-2 px-8 py-3 rounded-lg text-white font-semibold transition
                         ${
@@ -302,7 +611,7 @@ export default function OfficeDocs() {
                             : "bg-gray-400 cursor-not-allowed"
                         }`}
                     >
-                        Next
+                        Save Documents
                         <ChevronsRight size={18} />
                     </button>
                 </div>

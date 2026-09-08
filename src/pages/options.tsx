@@ -18,6 +18,7 @@ export default function Options() {
     const [role, setRole] = useState("");
     const [signatureFile, setSignatureFile] = useState<File | null>(null);
     const [signaturePreview, setSignaturePreview] = useState<string>("");
+    const [loading, setLoading] = useState(false);
 
     const signatureCompleted =
      Boolean(applicationData?.signature_path) || Boolean(signatureFile);
@@ -35,7 +36,6 @@ export default function Options() {
         applicationData.institute_id &&
         applicationData.arrangement_made_to_cover_duty &&
         applicationData.purpose &&
-        applicationData.nature_of_trip &&
         applicationData.awarding_agency &&
         applicationData.expenses_mainly_to_be_met &&
         applicationData.foreign_loan_project_particulars_thereof &&
@@ -409,6 +409,7 @@ export default function Options() {
 
     const submitApplication = async()=>{
       try{
+        setLoading(true);
         const formData = new FormData();
 
         formData.append("name", applicationData.name);
@@ -526,6 +527,8 @@ export default function Options() {
           error.response?.data?.message ||
           "Something went wrong."
         );
+      }finally{
+        setLoading(false);
       }
     };
 
@@ -1078,8 +1081,9 @@ export default function Options() {
                       : `bg-[#E5E7EB] text-[#9CA3AF] cursor-not-allowed`
                     }`}
                   onClick={submitApplication}
+                  disabled = {loading}
                 >
-                  Re-submit Application
+                  {loading ? "Resubmitting Application..." :"Resubmit Application"}
                 </button>
               ):(
                 <button
@@ -1089,8 +1093,9 @@ export default function Options() {
                       : `bg-[#E5E7EB] text-[#9CA3AF] cursor-not-allowed`
                     }`}
                   onClick={submitApplication}
+                  disabled = {loading}
                 >
-                  Submit Application
+                  {loading ? "Submitting Application..." :"Submit Application"}
                 </button>
               )
             }

@@ -572,7 +572,7 @@ const progress =
     }
 
     toast.success("document uploaded successfully");
-    navigate(`/sign2/edit/${id}`);
+    navigate(`/options`);
   };
 
   return (

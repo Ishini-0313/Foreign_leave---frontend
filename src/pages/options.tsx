@@ -164,13 +164,46 @@ export default function Options() {
       leaveCategory === "leave_with_additional_offer" ||
       leaveCategory === "leave_with_warm_cloths_and_additional_offer";
 
-    // const isAdditionalOfferCompleted = () => {
-    //   if (!requiresAdditionalOffer) return true;
+    const isAdditionalOfferCompleted = () => {
+      if (!requiresAdditionalOffer) return true;
 
-    //   return Boolean(
-    //     applicationData?.additional_offer_completed
-    //   );
-    // };
+      return Boolean(
+        applicationData.name &&
+        applicationData.institute_id &&
+        applicationData.position &&
+        applicationData.purpose &&
+        applicationData.leave_nature &&
+        applicationData.country &&
+        applicationData.has_letter_of_invitation_for_training &&
+        applicationData.has_approval_letter &&
+        applicationData.has_government_also_been_invited_for_training &&
+        applicationData.has_government_nominated_to_participate_in_it &&
+        applicationData.departure_date &&
+        applicationData.departure_time &&
+        applicationData.return_date &&
+        applicationData.return_time
+      );
+    };
+
+    //
+
+    const requiresWarmClothsOffer = 
+      leaveCategory === "leave_with_warm_cloths_and_additional_offer";
+
+    const isWarmClothsOfferCompleted = () => {
+      if (!requiresWarmClothsOffer) return true;
+
+      return Boolean(
+        applicationData.name &&
+        applicationData.institute_id &&
+        applicationData.position &&
+        applicationData.purpose &&
+        applicationData.country &&
+        applicationData.has_letter_of_invitation_for_training &&
+        applicationData.has_approval_letter && 
+        applicationData.have_received_warm_clothing_allowance_within_five_years
+      );
+    };
 
     const checklist = [
       {
@@ -185,16 +218,26 @@ export default function Options() {
         completed: isForm126Completed(),
         required: true,
       },
-      // ...(requiresAdditionalOffer
-      //   ? [
-      //       {
-      //         key: "additionalOffer",
-      //         title: "Additional Offer",
-      //         completed: isAdditionalOfferCompleted(),
-      //         required: true,
-      //       },
-      //     ]
-      //   : []),
+      ...(requiresAdditionalOffer
+        ? [
+            {
+              key: "additionalOffer",
+              title: "Additional Offer",
+              completed: isAdditionalOfferCompleted(),
+              required: true,
+            },
+          ]
+        : []),
+      ...(requiresWarmClothsOffer
+        ? [
+            {
+              key: "warmClothOffer",
+              title: "Warm Cloth Offer",
+              completed: isWarmClothsOfferCompleted(),
+              required: true,
+            }
+          ]
+        : []),
       {
         key: "documents",
         title: "Supporting Documents",
@@ -464,6 +507,12 @@ export default function Options() {
         formData.append("has_government_nominated_to_participate_in_it", applicationData.has_government_nominated_to_participate_in_it);
         formData.append("institution_designated_in_that_manner", applicationData.institution_designated_in_that_manner);
 
+        formData.append("departure_time", applicationData.departure_time);
+        formData.append("return_time", applicationData.return_time);
+        formData.append("provides_other_allowances_that_provide_by_awarding_institution", applicationData.provides_other_allowances_that_provide_by_awarding_institution);
+        formData.append("amount_to_be_paid", applicationData.amount_to_be_paid);
+        formData.append("have_received_warm_clothing_allowance_within_five_years", applicationData.have_received_warm_clothing_allowance_within_five_years);
+
         Object.entries(applicationData.documents).forEach(
           ([key, file]) => {
             if(file){
@@ -647,118 +696,288 @@ export default function Options() {
 
 
             <div className="grid grid-cols-1 gap-5">
-              {/* FORM 16 */}
-              <button
-                onClick={() => navigate(`/form/edit/${id}`)}
-                className="group relative overflow-hidden text-left bg-linear-to-br from-[#EEF4FF] via-white to-[#F8FAFF] border border-[#DDE6F5] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(30,60,100,0.06)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(30,60,100,0.12)] hover:border-[#9DB6E5] transition-all duration-300"
-              >
-                {/* Decorative circle */}
-                <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-[#D6E3FA] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+              {
+                (
+                  leaveCategory == "leave_without_offers" || 
+                  leaveCategory == "short_trip" || 
+                  leaveCategory == "study" || 
+                  leaveCategory == "employment" || 
+                  leaveCategory == "study_and_employment" || 
+                  leaveCategory == "spouse") && (
+                  <>
+                    {/* FORM 16 */}
+                    <button
+                      onClick={() => navigate(`/form/edit/${id}`)}
+                      className="group relative overflow-hidden text-left bg-linear-to-br from-[#EEF4FF] via-white to-[#F8FAFF] border border-[#DDE6F5] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(30,60,100,0.06)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(30,60,100,0.12)] hover:border-[#9DB6E5] transition-all duration-300"
+                    >
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-[#D6E3FA] opacity-40 group-hover:scale-125 transition-transform duration-500" />
 
-                <div className="relative z-10 h-full flex flex-col">
-                  {/* Icon */}
-                  <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#315F91] to-[#557EB3] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-                    <FileUser size={27} />
-                  </div>
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#315F91] to-[#557EB3] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <FileUser size={27} />
+                        </div>
 
-                  {/* Number */}
-                  <div className="absolute top-0 right-0">
-                    {isForm16Completed() ? (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
-                        {++number}
-                        <CheckCircle2 size={15} />
-                        Completed
-                      </span>
-                    ) : (
-                      <span className="text-xs font-bold text-[#5579A8] bg-[#E5EEF9] px-2.5 py-1 rounded-full">
-                        {++number}
-                      </span>
-                    )}
-                  </div>
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isForm16Completed() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="text-xs font-bold text-[#5579A8] bg-[#E5EEF9] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
 
-                  {/* Content */}
-                  <div className="mt-6">
-                    <h4 className="text-[#002046] font-bold text-xl">
-                      Fill Form 16
-                    </h4>
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Fill Form 16
+                          </h4>
 
-                    <p className="text-[#697386] text-sm leading-6 mt-2">
-                      Complete the required Form 16 information for your
-                      foreign leave application.
-                    </p>
-                  </div>
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Complete the required Form 16 information for your
+                            foreign leave application.
+                          </p>
+                        </div>
 
-                  {/* Bottom */}
-                  <div className="mt-auto pt-6 flex items-center justify-between">
-                    <span className="text-[#315F91] text-sm font-bold">
-                      {isForm16Completed() ? "Edit Form" : "Start Form"}
-                    </span>
-                    <span className="w-9 h-9 rounded-full bg-[#315F91] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                      →
-                    </span>
-                  </div>
-                </div>
-              </button>
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#315F91] text-sm font-bold">
+                            {isForm16Completed() ? "Edit Form" : "Start Form"}
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#315F91] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
 
+                    {/* FORM 126 */}
+                    <button
+                      onClick={() => navigate(`/form2/edit/${id}`)}
+                      className=" group relative overflow-hidden text-left bg-linear-to-br from-[#F4EEFF] via-white to-[#FBF9FF] border border-[#E7DDF6] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(80,50,120,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(80,50,120,0.11)] hover:border-[#C8B5E5] transition-all duration-300"
+                    >
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-[#E2D5F7] opacity-40 group-hover:scale-125 transition-transform duration-500" />
 
-              {/* FORM 126 */}
-              <button
-                onClick={() => navigate(`/form2/edit/${id}`)}
-                className=" group relative overflow-hidden text-left bg-linear-to-br from-[#F4EEFF] via-white to-[#FBF9FF] border border-[#E7DDF6] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(80,50,120,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(80,50,120,0.11)] hover:border-[#C8B5E5] transition-all duration-300"
-              >
-                {/* Decorative circle */}
-                <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-[#E2D5F7] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#7659A9] to-[#9A7BC9] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <FileUser size={27} />
+                        </div>
 
-                <div className="relative z-10 h-full flex flex-col">
-                  {/* Icon */}
-                  <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#7659A9] to-[#9A7BC9] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-                    <FileUser size={27} />
-                  </div>
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isForm126Completed() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="text-xs font-bold text-[#7659A9] bg-[#F0E8FA] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
 
-                  {/* Number */}
-                  <div className="absolute top-0 right-0">
-                    {isForm126Completed() ? (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
-                        {++number}
-                        <CheckCircle2 size={15} />
-                        Completed
-                      </span>
-                    ) : (
-                      <span className="text-xs font-bold text-[#7659A9] bg-[#F0E8FA] px-2.5 py-1 rounded-full">
-                        {++number}
-                      </span>
-                    )}
-                  </div>
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Fill Form 126
+                          </h4>
 
-                  {/* Content */}
-                  <div className="mt-6">
-                    <h4 className="text-[#002046] font-bold text-xl">
-                      Fill Form 126
-                    </h4>
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Provide the additional details required for processing
+                            your foreign leave request.
+                          </p>
+                        </div>
 
-                    <p className="text-[#697386] text-sm leading-6 mt-2">
-                      Provide the additional details required for processing
-                      your foreign leave request.
-                    </p>
-                  </div>
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#315F91] text-sm font-bold">
+                            {isForm126Completed() ? "Edit Form" : "Start Form"}
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#7659A9] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
 
-                  {/* Bottom */}
-                  <div className="mt-auto pt-6 flex items-center justify-between">
-                    <span className="text-[#315F91] text-sm font-bold">
-                      {isForm126Completed() ? "Edit Form" : "Start Form"}
-                    </span>
-                    <span className="w-9 h-9 rounded-full bg-[#7659A9] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                      →
-                    </span>
-                  </div>
-                </div>
-              </button>
+                    {/* DOCUMENTS */}
+                    <button
+                      onClick={() => navigate(`/new-doc/edit/${id}`)}
+                      className="group relative overflow-hidden text-left bg-linear-to-br from-[#ECFBF5]  via-white to-[#F7FFFC] border border-[#D7EEE4] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(20,100,75,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(20,100,75,0.11)]  hover:border-[#9ED2BC] transition-all duration-300"
+                    >
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40  h-40 rounded-full bg-[#C7EADB] opacity-40 group-hover:scale-125 transition-transform duration-500" />
 
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className=" w-14 h-14 rounded-2xl bg-linear-to-br from-[#087F5B] to-[#13A673] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <FileStack size={27} />
+                        </div>
 
-              {/* offers */}
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isDocumentsCompleted() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className=" text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Supporting Documents
+                          </h4>
+
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Upload the required documents and supporting evidence
+                            for your application.
+                          </p>
+                        </div>
+
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#087F5B] text-sm font-bold">
+                            {isDocumentsCompleted() ? "View / Edit Documents": "Upload Documents"}
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#087F5B] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  </>
+                )
+              }
+
               {
                 leaveCategory == "leave_with_additional_offer" && (
-                  <button
+                  <>
+                    {/* FORM 16 */}
+                    <button
+                      onClick={() => navigate(`/form/edit/${id}`)}
+                      className="group relative overflow-hidden text-left bg-linear-to-br from-[#EEF4FF] via-white to-[#F8FAFF] border border-[#DDE6F5] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(30,60,100,0.06)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(30,60,100,0.12)] hover:border-[#9DB6E5] transition-all duration-300"
+                    >
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-[#D6E3FA] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#315F91] to-[#557EB3] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <FileUser size={27} />
+                        </div>
+
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isForm16Completed() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="text-xs font-bold text-[#5579A8] bg-[#E5EEF9] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Fill Form 16
+                          </h4>
+
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Complete the required Form 16 information for your
+                            foreign leave application.
+                          </p>
+                        </div>
+
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#315F91] text-sm font-bold">
+                            {isForm16Completed() ? "Edit Form" : "Start Form"}
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#315F91] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* FORM 126 */}
+                    <button
+                      onClick={() => navigate(`/form2/edit/${id}`)}
+                      className=" group relative overflow-hidden text-left bg-linear-to-br from-[#F4EEFF] via-white to-[#FBF9FF] border border-[#E7DDF6] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(80,50,120,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(80,50,120,0.11)] hover:border-[#C8B5E5] transition-all duration-300"
+                    >
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-[#E2D5F7] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#7659A9] to-[#9A7BC9] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <FileUser size={27} />
+                        </div>
+
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isForm126Completed() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="text-xs font-bold text-[#7659A9] bg-[#F0E8FA] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Fill Form 126
+                          </h4>
+
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Provide the additional details required for processing
+                            your foreign leave request.
+                          </p>
+                        </div>
+
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#315F91] text-sm font-bold">
+                            {isForm126Completed() ? "Edit Form" : "Start Form"}
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#7659A9] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* additional offer form */}
+                    <button
                     onClick={() => navigate(`/additional-offer/edit/${id}`)}
                     className="group relative overflow-hidden text-left bg-linear-to-br from-[#f3ecdf] via-white to-[#FBF9FF] border border-[#f7e1d7] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(80,50,120,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(80,50,120,0.11)] hover:border-[#f9cdac] transition-all duration-300">
 
@@ -772,9 +991,19 @@ export default function Options() {
                       </div>
 
                       {/* Number */}
-                      <span className="absolute top-0 right-0 text-xs font-bold text-[#e99312] bg-[#faece8] px-2.5 py-1 rounded-full">
-                        {++number}
-                      </span>
+                      <div className="absolute top-0 right-0">
+                        {isAdditionalOfferCompleted() ? (
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                            {++number}
+                            <CheckCircle2 size={15} />
+                            Completed
+                          </span>
+                        ) : (
+                          <span className="text-xs font-bold text-[#7659A9] bg-[#F0E8FA] px-2.5 py-1 rounded-full">
+                            {++number}
+                          </span>
+                        )}
+                      </div>
 
                       {/* Content */}
                       <div className="mt-6">
@@ -798,12 +1027,173 @@ export default function Options() {
                       </div>
                     </div>
                   </button>
+
+                    {/* DOCUMENTS */}
+                    <button
+                      onClick={() => navigate(`/new-doc/edit/${id}`)}
+                      className="group relative overflow-hidden text-left bg-linear-to-br from-[#ECFBF5]  via-white to-[#F7FFFC] border border-[#D7EEE4] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(20,100,75,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(20,100,75,0.11)]  hover:border-[#9ED2BC] transition-all duration-300"
+                    >
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40  h-40 rounded-full bg-[#C7EADB] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className=" w-14 h-14 rounded-2xl bg-linear-to-br from-[#087F5B] to-[#13A673] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <FileStack size={27} />
+                        </div>
+
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isDocumentsCompleted() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className=" text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Supporting Documents
+                          </h4>
+
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Upload the required documents and supporting evidence
+                            for your application.
+                          </p>
+                        </div>
+
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#087F5B] text-sm font-bold">
+                            {isDocumentsCompleted() ? "View / Edit Documents": "Upload Documents"}
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#087F5B] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  </>
                 )
               }
 
               {
                 leaveCategory == "leave_with_warm_cloths_and_additional_offer" && (
                   <>
+                    {/* FORM 16 */}
+                    <button
+                      onClick={() => navigate(`/form/edit/${id}`)}
+                      className="group relative overflow-hidden text-left bg-linear-to-br from-[#EEF4FF] via-white to-[#F8FAFF] border border-[#DDE6F5] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(30,60,100,0.06)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(30,60,100,0.12)] hover:border-[#9DB6E5] transition-all duration-300"
+                    >
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-[#D6E3FA] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#315F91] to-[#557EB3] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <FileUser size={27} />
+                        </div>
+
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isForm16Completed() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="text-xs font-bold text-[#5579A8] bg-[#E5EEF9] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Fill Form 16
+                          </h4>
+
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Complete the required Form 16 information for your
+                            foreign leave application.
+                          </p>
+                        </div>
+
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#315F91] text-sm font-bold">
+                            {isForm16Completed() ? "Edit Form" : "Start Form"}
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#315F91] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* FORM 126 */}
+                    <button
+                      onClick={() => navigate(`/form2/edit/${id}`)}
+                      className=" group relative overflow-hidden text-left bg-linear-to-br from-[#F4EEFF] via-white to-[#FBF9FF] border border-[#E7DDF6] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(80,50,120,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(80,50,120,0.11)] hover:border-[#C8B5E5] transition-all duration-300"
+                    >
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-[#E2D5F7] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#7659A9] to-[#9A7BC9] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <FileUser size={27} />
+                        </div>
+
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isForm126Completed() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="text-xs font-bold text-[#7659A9] bg-[#F0E8FA] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Fill Form 126
+                          </h4>
+
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Provide the additional details required for processing
+                            your foreign leave request.
+                          </p>
+                        </div>
+
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#315F91] text-sm font-bold">
+                            {isForm126Completed() ? "Edit Form" : "Start Form"}
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#7659A9] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* additional form */}
                     <button
                       onClick={() => navigate(`/additional-offer/edit/${id}`)}
                       className="group relative overflow-hidden text-left bg-linear-to-br from-[#f6f0e6] via-white to-[#FBF9FF] border border-[#f7e1d7] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(80,50,120,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(80,50,120,0.11)] hover:border-[#f9cdac] transition-all duration-300">
@@ -818,9 +1208,19 @@ export default function Options() {
                         </div>
 
                         {/* Number */}
-                        <span className="absolute top-0 right-0 text-xs font-bold text-[#e99312] bg-[#faece8] px-2.5 py-1 rounded-full">
-                          {++number}
-                        </span>
+                        <div className="absolute top-0 right-0">
+                          {isWarmClothsOfferCompleted() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="text-xs font-bold text-[#7659A9] bg-[#F0E8FA] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
 
                         {/* Content */}
                         <div className="mt-6">
@@ -845,8 +1245,9 @@ export default function Options() {
                       </div>
                     </button>
 
+                    {/* warm cloths */}
                     <button
-                      onClick={() => navigate(`/additional-offer/edit/${id}`)}
+                      onClick={() => navigate(`/wormcloth_offer/edit/${id}`)}
                       className="group relative overflow-hidden text-left bg-linear-to-br from-[#efd6e9] via-white to-[#fbfafb] border border-[#fbdef4] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(80,50,120,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(80,50,120,0.11)] hover:border-[#fac3ed] transition-all duration-300">
 
                       {/* Decorative circle */}
@@ -885,64 +1286,215 @@ export default function Options() {
                         </div>
                       </div>
                     </button>
+
+                    {/* DOCUMENTS */}
+                    <button
+                      onClick={() => navigate(`/new-doc/edit/${id}`)}
+                      className="group relative overflow-hidden text-left bg-linear-to-br from-[#ECFBF5]  via-white to-[#F7FFFC] border border-[#D7EEE4] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(20,100,75,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(20,100,75,0.11)]  hover:border-[#9ED2BC] transition-all duration-300"
+                    >
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40  h-40 rounded-full bg-[#C7EADB] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className=" w-14 h-14 rounded-2xl bg-linear-to-br from-[#087F5B] to-[#13A673] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <FileStack size={27} />
+                        </div>
+
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isDocumentsCompleted() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className=" text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Supporting Documents
+                          </h4>
+
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Upload the required documents and supporting evidence
+                            for your application.
+                          </p>
+                        </div>
+
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#087F5B] text-sm font-bold">
+                            {isDocumentsCompleted() ? "View / Edit Documents": "Upload Documents"}
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#087F5B] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
                   </>
                 )
               }
               
+              {
+                leaveCategory == "warm_cloths_and_additional_offer_only" && (
+                  <>
+                    {/* additional form */}
+                    <button
+                      onClick={() => navigate(`/additional-offer/edit/${id}`)}
+                      className="group relative overflow-hidden text-left bg-linear-to-br from-[#f6f0e6] via-white to-[#FBF9FF] border border-[#f7e1d7] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(80,50,120,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(80,50,120,0.11)] hover:border-[#f9cdac] transition-all duration-300">
 
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-[#faece8] opacity-40 group-hover:scale-125 transition-transform duration-500" />
 
-              {/* DOCUMENTS */}
-              <button
-                onClick={() => navigate(`/new-doc/edit/${id}`)}
-                className="group relative overflow-hidden text-left bg-linear-to-br from-[#ECFBF5]  via-white to-[#F7FFFC] border border-[#D7EEE4] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(20,100,75,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(20,100,75,0.11)]  hover:border-[#9ED2BC] transition-all duration-300"
-              >
-                {/* Decorative circle */}
-                <div className="absolute -right-12 -top-12 w-40  h-40 rounded-full bg-[#C7EADB] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#de9f61] to-[#e99312] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <BadgeDollarSign size={27} />
+                        </div>
 
-                <div className="relative z-10 h-full flex flex-col">
-                  {/* Icon */}
-                  <div className=" w-14 h-14 rounded-2xl bg-linear-to-br from-[#087F5B] to-[#13A673] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-                    <FileStack size={27} />
-                  </div>
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isWarmClothsOfferCompleted() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="text-xs font-bold text-[#7659A9] bg-[#F0E8FA] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
 
-                  {/* Number */}
-                  <div className="absolute top-0 right-0">
-                    {isDocumentsCompleted() ? (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
-                        {++number}
-                        <CheckCircle2 size={15} />
-                        Completed
-                      </span>
-                    ) : (
-                      <span className=" text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-2.5 py-1 rounded-full">
-                        {++number}
-                      </span>
-                    )}
-                  </div>
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Request Additional Offer
+                          </h4>
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Provide the additional details required for processing
+                            your foreign leave request.
+                          </p>
+                        </div>
 
-                  {/* Content */}
-                  <div className="mt-6">
-                    <h4 className="text-[#002046] font-bold text-xl">
-                      Supporting Documents
-                    </h4>
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#e99312] text-sm font-bold">
+                            Start Form
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#e99312] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
 
-                    <p className="text-[#697386] text-sm leading-6 mt-2">
-                      Upload the required documents and supporting evidence
-                      for your application.
-                    </p>
-                  </div>
+                    {/* warm cloths */}
+                    <button
+                      onClick={() => navigate(`/wormcloth_offer/edit/${id}`)}
+                      className="group relative overflow-hidden text-left bg-linear-to-br from-[#efd6e9] via-white to-[#fbfafb] border border-[#fbdef4] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(80,50,120,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(80,50,120,0.11)] hover:border-[#fac3ed] transition-all duration-300">
 
-                  {/* Bottom */}
-                  <div className="mt-auto pt-6 flex items-center justify-between">
-                    <span className="text-[#087F5B] text-sm font-bold">
-                      {isDocumentsCompleted() ? "View / Edit Documents": "Upload Documents"}
-                    </span>
-                    <span className="w-9 h-9 rounded-full bg-[#087F5B] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                      →
-                    </span>
-                  </div>
-                </div>
-              </button>
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-[#f7c6e6] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#de55c9] to-[#e912c9] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <BadgeDollarSign size={27} />
+                        </div>
+
+                        {/* Number */}
+                        <span className="absolute top-0 right-0 text-xs font-bold text-[#e912c9] bg-[#faece8] px-2.5 py-1 rounded-full">
+                          {++number}
+                        </span>
+
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Request Warm Cloth Offer
+                          </h4>
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Provide the additional details required for processing
+                            your foreign leave request.
+                          </p>
+                        </div>
+
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#e912c9] text-sm font-bold">
+                            Start Form
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#e912c9] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* DOCUMENTS */}
+                    <button
+                      onClick={() => navigate(`/new-doc/edit/${id}`)}
+                      className="group relative overflow-hidden text-left bg-linear-to-br from-[#ECFBF5]  via-white to-[#F7FFFC] border border-[#D7EEE4] rounded-3xl p-6 sm:p-7 min-h-65 shadow-[0_6px_25px_rgba(20,100,75,0.05)] hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(20,100,75,0.11)]  hover:border-[#9ED2BC] transition-all duration-300"
+                    >
+                      {/* Decorative circle */}
+                      <div className="absolute -right-12 -top-12 w-40  h-40 rounded-full bg-[#C7EADB] opacity-40 group-hover:scale-125 transition-transform duration-500" />
+
+                      <div className="relative z-10 h-full flex flex-col">
+                        {/* Icon */}
+                        <div className=" w-14 h-14 rounded-2xl bg-linear-to-br from-[#087F5B] to-[#13A673] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                          <FileStack size={27} />
+                        </div>
+
+                        {/* Number */}
+                        <div className="absolute top-0 right-0">
+                          {isDocumentsCompleted() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className=" text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="mt-6">
+                          <h4 className="text-[#002046] font-bold text-xl">
+                            Supporting Documents
+                          </h4>
+
+                          <p className="text-[#697386] text-sm leading-6 mt-2">
+                            Upload the required documents and supporting evidence
+                            for your application.
+                          </p>
+                        </div>
+
+                        {/* Bottom */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                          <span className="text-[#087F5B] text-sm font-bold">
+                            {isDocumentsCompleted() ? "View / Edit Documents": "Upload Documents"}
+                          </span>
+                          <span className="w-9 h-9 rounded-full bg-[#087F5B] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  </>
+                )
+              }
             </div>
 
 

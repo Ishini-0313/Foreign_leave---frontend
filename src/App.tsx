@@ -45,6 +45,7 @@ import CompletedForm126 from './pages/CompletedForm126.tsx';
 import OfficerAssignment from './pages/OfficerAssignment.tsx';
 import AdditionalOffer from './pages/additional_offer.tsx';
 import AnnualReport from './pages/AnnualReport.tsx';
+import WormClothsOffer from './pages/worm_cloths_offer.tsx';
 
 
 
@@ -106,6 +107,7 @@ function App() {
       <Route path='/admin/officer-assignments' element={<OfficerAssignment/>}></Route>
 
       <Route path='/additional-offer/edit/:id' element={<AdditionalOffer/>}></Route>
+      <Route path='/wormcloth_offer/edit/:id' element={<WormClothsOffer/>}></Route>
 
       <Route path='/annual-reports' element={<AnnualReport/>}></Route>
     </Routes>

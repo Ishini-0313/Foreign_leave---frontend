@@ -74,7 +74,9 @@ export const ApplicationProvider = ({children}: any) => {
         commencement_date_of_trainig: "",
         completion_date_of_trainig: "",
         departure_date: "",
+        departure_time: "",
         return_date: "",
+        return_time: "",
         country: "",
         foreign_address: "",
         foreign_phone: "",
@@ -141,6 +143,12 @@ export const ApplicationProvider = ({children}: any) => {
         has_government_nominated_to_participate_in_it : "",
 
         institution_designated_in_that_manner : "",
+
+        provides_other_allowances_that_provide_by_awarding_institution : "",
+
+        amount_to_be_paid : "",
+
+        have_received_warm_clothing_allowance_within_five_years: "",
     });
 
     return (

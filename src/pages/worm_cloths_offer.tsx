@@ -24,7 +24,7 @@ function ChevronRight() {
 }
 
 
-export default function AdditionalOffer() {
+export default function WormClothsOffer() {
   const {id} = useParams();
   const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -82,7 +82,7 @@ export default function AdditionalOffer() {
   }, []);
 
   const handleNext = ()=>{
-    navigate(`/new-doc/edit/${id}`);
+    navigate(`/options`);
   };
 
 
@@ -114,7 +114,7 @@ export default function AdditionalOffer() {
               <ChevronRight />
               <span className="text-[#44474E] text-xs font-semibold leading-4">New Leave Request</span>
               <ChevronRight />
-              <span className="text-[#002046] font-['Noto_Sans_Sinhala'] text-xs font-bold leading-4">Request Additional Offer</span>
+              <span className="text-[#002046] font-['Noto_Sans_Sinhala'] text-xs font-bold leading-4">උණුසුම් ඇදුම් දීමනාව</span>
             </nav>
 
             <h2 className="text-[#002046] text-2xl sm:text-3xl font-semibold leading-10 tracking-tight mt-1">
@@ -262,8 +262,8 @@ export default function AdditionalOffer() {
                   </label>
                     <input
                         type="text"
-                        value={applicationData.country}
-                        onChange={(e)=> setApplicationData({...applicationData, country:e.target.value})}
+                        value={applicationData.provides_other_allowances_that_provide_by_awarding_institution}
+                        onChange={(e)=> setApplicationData({...applicationData, provides_other_allowances_that_provide_by_awarding_institution:e.target.value})}
                         className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                 </div>
@@ -274,8 +274,8 @@ export default function AdditionalOffer() {
                   </label>
                     <input
                         type="text"
-                        value={applicationData.country}
-                        onChange={(e)=> setApplicationData({...applicationData, country:e.target.value})}
+                        value={applicationData.amount_to_be_paid}
+                        onChange={(e)=> setApplicationData({...applicationData, amount_to_be_paid:e.target.value})}
                         className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
                 </div>
@@ -287,31 +287,31 @@ export default function AdditionalOffer() {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div className="flex items-center gap-2 w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors">
                       <input
-                        name="approval_letter"
+                        name="has_approval_letter"
                         type="radio"
                         value="yes"
-                        checked={applicationData.approval_letter === "yes"}
-                        onChange={(e)=> setApplicationData({...applicationData, approval_letter:e.target.value})}
+                        checked={applicationData.has_approval_letter === "yes"}
+                        onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
                       <label htmlFor="">ඇත</label>
                     </div>
                     <div className="flex items-center gap-2 w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors">
                       <input
-                        name="approval_letter"
+                        name="has_approval_letter"
                         type="radio"
                         value="no"
-                        checked={applicationData.approval_letter === "no"}
-                        onChange={(e)=> setApplicationData({...applicationData, approval_letter:e.target.value})}
+                        checked={applicationData.has_approval_letter === "no"}
+                        onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
                       <label htmlFor="">නැත</label>
                     </div>
                     <div className="flex items-center gap-2 w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors">
                       <input
-                        name="approval_letter"
+                        name="has_approval_letter"
                         type="radio"
                         value="processing"
-                        checked={applicationData.approval_letter === "processing"}
-                        onChange={(e)=> setApplicationData({...applicationData, approval_letter:e.target.value})}
+                        checked={applicationData.has_approval_letter === "processing"}
+                        onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
                       <label htmlFor="">අනුමැතිය සදහා ඉදිරිපත් කර ඇත</label>
                     </div>
@@ -325,21 +325,21 @@ export default function AdditionalOffer() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="flex items-center gap-2 w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors">
                       <input
-                        name="government_also_been_invited_for_training?"
+                        name="have_received_warm_clothing_allowance_within_five_years"
                         type="radio"
                         value="yes"
-                        checked={applicationData.government_also_been_invited_for_training === "yes"}
-                        onChange={(e)=> setApplicationData({...applicationData, government_also_been_invited_for_training:e.target.value})}
+                        checked={applicationData.have_received_warm_clothing_allowance_within_five_years === "yes"}
+                        onChange={(e)=> setApplicationData({...applicationData, have_received_warm_clothing_allowance_within_five_years:e.target.value})}
                       />
                       <label htmlFor="">ඔව්</label>
                     </div>
                     <div className="flex items-center gap-2 w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors">
                       <input
-                        name="government_also_been_invited_for_training"
+                        name="have_received_warm_clothing_allowance_within_five_years"
                         type="radio"
                         value="no"
-                        checked={applicationData.government_also_been_invited_for_training === "no"}
-                        onChange={(e)=> setApplicationData({...applicationData, government_also_been_invited_for_training:e.target.value})}
+                        checked={applicationData.have_received_warm_clothing_allowance_within_five_years === "no"}
+                        onChange={(e)=> setApplicationData({...applicationData, have_received_warm_clothing_allowance_within_five_years:e.target.value})}
                       />
                       <label htmlFor="">නැත</label>
                     </div>
@@ -350,12 +350,7 @@ export default function AdditionalOffer() {
                   <label className="text-[#44474E] text-sm font-semibold leading-6">
                     12. පුහුණුව පැවැත්වෙන දින
                   </label>
-                  <input
-                      type="text"
-                      value={applicationData.cost_maintanence_abroad}
-                      onChange={(e)=> setApplicationData({...applicationData, cost_maintanence_abroad:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
-                    />
+                
                 </div>
               </div>
             </FormCard>

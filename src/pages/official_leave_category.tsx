@@ -7,14 +7,15 @@ import { useLeaveCategory } from '../context/LeaveCategoryContext';
 
 //const categories = ['කෙටි සංචාර සදහා','අධ්‍යයන සදහා','රැකියාව සදහා', 'අධ්‍යයන හා රැකියාව සදහා', 'කාලත්‍රය සදහා' ];
 
-type PersonalLeaveCategory =
+type OfficialLeaveCategory =
     | "leave_without_offers"
     | "leave_with_additional_offer"
-    | "leave_with_warm_cloths_and_additional_offer";
+    | "leave_with_warm_cloths_and_additional_offer"
+    | "warm_cloths_and_additional_offer_only";
 
 export default function OfficialLeaveCategory() {
     const {leaveCategory,setNatureOfTrip,setLeaveCategory, natureOfTrip} = useLeaveCategory();
-    const categories: {id:PersonalLeaveCategory,name:String}[] = [
+    const categories: {id:OfficialLeaveCategory,name:String}[] = [
         {
             id: "leave_without_offers",
             name: "රාජකාරී විදේශ නිවාඩු (දීමනා නොමැතිව)",
@@ -27,12 +28,17 @@ export default function OfficialLeaveCategory() {
             id: "leave_with_warm_cloths_and_additional_offer",
             name: "රාජකාරී විදේශ නිවාඩු (උණුසුම් ඇදුම් සහ අනියම් දීමනා සහිත)",
         },
+        {
+            id: "warm_cloths_and_additional_offer_only",
+            name: "උණුසුම් ඇදුම් සහ අනියම් දීමනාව",
+        },
     ];
     
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [user, setUser] = useState<any>(null);
     const navigate = useNavigate();
 
+    //load user
     useEffect(()=>{
         setLeaveCategory(null);
         console.log("nature of trip: " + natureOfTrip);
@@ -94,7 +100,7 @@ export default function OfficialLeaveCategory() {
                         </div>
         
                         {/* Selection Cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
                             {categories.map((category, index) => {
             
                                 const cardColors = [

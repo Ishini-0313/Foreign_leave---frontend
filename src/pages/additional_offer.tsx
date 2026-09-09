@@ -6,7 +6,6 @@ import { useApplication } from "../context/ApplicationContext";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import Footer from "../components/footer";
-import type Leave_category from "./leave_category";
 
 function FormCard({ children }: { children: React.ReactNode }) {
   return (
@@ -23,7 +22,6 @@ function ChevronRight() {
     </svg>
   );
 }
-
 
 export default function AdditionalOffer() {
   const {id} = useParams();
@@ -83,7 +81,7 @@ export default function AdditionalOffer() {
   }, []);
 
   const handleNext = ()=>{
-    navigate(`/new-doc/edit/${id}`);
+    navigate(`/options`);
   };
 
 
@@ -310,7 +308,7 @@ export default function AdditionalOffer() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="flex items-center gap-2 w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors">
                       <input
-                        name="has_government_also_been_invited_for_training?"
+                        name="has_government_also_been_invited_for_training"
                         type="radio"
                         value="yes"
                         checked={applicationData.has_government_also_been_invited_for_training === "yes"}
@@ -385,12 +383,41 @@ export default function AdditionalOffer() {
                   <label className="text-[#44474E] text-sm font-semibold leading-6">
                     12. ගුවන් ගමන් විස්තරය
                   </label>
-                  <input
-                      type="text"
-                      value={applicationData.cost_maintanence_abroad}
-                      onChange={(e)=> setApplicationData({...applicationData, cost_maintanence_abroad:e.target.value})}
-                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
-                    />
+                  <div className="">
+                    {/* departure */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-2">
+                      පිටවීම (දිනය සහ වේලාව ඇතුලත් කරන්න)
+                      <input
+                        type="date"
+                        value={applicationData.departure_date}
+                        onChange={(e)=> setApplicationData({...applicationData, departure_date:e.target.value})}
+                        className="border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      />
+                      <input
+                        type="time"
+                        value={applicationData.departure_time}
+                        onChange={(e)=> setApplicationData({...applicationData, departure_time:e.target.value})}
+                        className="border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      />
+                    </div>
+
+                    {/* return */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      පැමිණීම (දිනය සහ වේලාව ඇතුලත් කරන්න)
+                      <input
+                        type="date"
+                        value={applicationData.return_date}
+                        onChange={(e)=> setApplicationData({...applicationData, return_date:e.target.value})}
+                        className="border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      />
+                      <input
+                        type="time"
+                        value={applicationData.return_time}
+                        onChange={(e)=> setApplicationData({...applicationData, return_time:e.target.value})}
+                        className="border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </FormCard>

@@ -23,6 +23,7 @@ export default function Documents() {
   const [role, setRole] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // load user
   useEffect(()=>{
     const storedUser = localStorage.getItem("user");
 
@@ -36,6 +37,7 @@ export default function Documents() {
     setUser(JSON.parse(storedUser));
   },[]);
 
+  // load application data
   useEffect(() => {
         axios.get(
             `http://127.0.0.1:8000/api/applications/${id}`,
@@ -55,6 +57,8 @@ export default function Documents() {
 
     }, []);
 
+
+  // load user role
   useEffect(()=>{
     if (!user?.role_id) return;
     axios.get(
@@ -75,6 +79,7 @@ export default function Documents() {
 
   },[user]);
 
+  //load uploaded documents
   useEffect(()=>{
 
         axios.get(

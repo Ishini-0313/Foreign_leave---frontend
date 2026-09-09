@@ -5,6 +5,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import toast from "react-hot-toast";
 import Topbar from "../components/topbar";
+import { useApplication } from "../context/ApplicationContext";
 
 
 function ChevronRight() {
@@ -23,9 +24,11 @@ export default function ApplicationReview() {
   const [isFinalStep, setIsFinalStep] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [recommendation, setRecommendation] = useState<"recommended" | "not_recommended" | "">("");
-  const [approval, setApproval] = useState<"approved" | "not_approved" | "">("");
+  const [recommendation, setRecommendation] = useState<"recommended_with_salary" | "recommended_without_salary" | "not_recommended" | "">("");
+  const [approval, setApproval] = useState<"approved_with_salary" | "approved_without_salary" | "not_approved" | "">("");
   const [signature, setSignature] = useState<File | null>(null);
+
+  const {applicationData: contextApplicationData} = useApplication();
 
   useEffect(()=>{
     const storedUser = localStorage.getItem("user");
@@ -68,7 +71,7 @@ export default function ApplicationReview() {
 
   const isRecommendationOfficer =!isSubjectOfficer &&!isCheckOfficer &&!isChiefSecretary;
 
-  const isReturnDisable = isRecommendationOfficer && recommendation==="recommended" || isChiefSecretary && approval==="approved";
+  const isReturnDisable = isRecommendationOfficer && recommendation!=="not_recommended" || isChiefSecretary && approval !== "not_approved";
   const isForwardDisable = isRecommendationOfficer && recommendation==="not_recommended";
   const isCompleteDisable = isChiefSecretary && approval === "not_approved";
   
@@ -136,7 +139,7 @@ export default function ApplicationReview() {
     try{
       if(isRecommendationOfficer){
         if (!recommendation) {
-          toast.error("Please select Recommended or Not Recommended.");
+          toast.error("Please select Recommendation.");
           return;
         }
 
@@ -289,14 +292,28 @@ export default function ApplicationReview() {
                     <input
                       type="radio"
                       name="recommendation"
-                      value="recommended"
-                      checked={recommendation === "recommended"}
+                      value="recommended_with_salary"
+                      checked={recommendation === "recommended_with_salary"}
                       onChange={() =>
-                        setRecommendation("recommended")
+                        setRecommendation("recommended_with_salary")
                       }
                       className="w-4 h-4"
                     />
-                    <span>Recommended</span>
+                    <span>Recommended with salary</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="recommendation"
+                      value="recommended_without_salary"
+                      checked={recommendation === "recommended_without_salary"}
+                      onChange={() =>
+                        setRecommendation("recommended_without_salary")
+                      }
+                      className="w-4 h-4"
+                    />
+                    <span>Recommended without salary</span>
                   </label>
 
                   {/* Not Recommended */}
@@ -311,7 +328,7 @@ export default function ApplicationReview() {
                       }
                       className="w-4 h-4"
                     />
-                    <span>Not Recommended</span>
+                    <span>Not recommended</span>
                   </label>
                 </div>
 
@@ -355,14 +372,28 @@ export default function ApplicationReview() {
                     <input
                       type="radio"
                       name="approval"
-                      value="approved"
-                      checked={approval === "approved"}
+                      value="approved_with_salary"
+                      checked={approval === "approved_with_salary"}
                       onChange={() =>
-                        setApproval("approved")
+                        setApproval("approved_with_salary")
                       }
                       className="w-4 h-4"
                     />
-                    <span>Approved</span>
+                    <span>Approved with salary</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="approval"
+                      value="approved"
+                      checked={approval === "approved_without_salary"}
+                      onChange={() =>
+                        setApproval("approved_without_salary")
+                      }
+                      className="w-4 h-4"
+                    />
+                    <span>Approved without salary</span>
                   </label>
 
                   {/* Not Approved */}

@@ -237,8 +237,8 @@ export default function WormClothsOffer() {
                       <input
                         name="Letter_of_invitation_for_training"
                         type="radio"
-                        value="yes"
-                        checked={applicationData.Letter_of_invitation_for_training === "yes"}
+                        value="ඇත"
+                        checked={applicationData.Letter_of_invitation_for_training === "ඇත"}
                         onChange={(e)=> setApplicationData({...applicationData, Letter_of_invitation_for_training:e.target.value})}
                       />
                       <label htmlFor="">ඇත</label>
@@ -247,8 +247,8 @@ export default function WormClothsOffer() {
                       <input
                         name="Letter_of_invitation_for_training"
                         type="radio"
-                        value="no"
-                        checked={applicationData.Letter_of_invitation_for_training === "no"}
+                        value="නැත"
+                        checked={applicationData.Letter_of_invitation_for_training === "නැත"}
                         onChange={(e)=> setApplicationData({...applicationData, Letter_of_invitation_for_training:e.target.value})}
                       />
                       <label htmlFor="">නැත</label>
@@ -289,8 +289,8 @@ export default function WormClothsOffer() {
                       <input
                         name="has_approval_letter"
                         type="radio"
-                        value="yes"
-                        checked={applicationData.has_approval_letter === "yes"}
+                        value="ඇත"
+                        checked={applicationData.has_approval_letter === "ඇත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
                       <label htmlFor="">ඇත</label>
@@ -299,8 +299,8 @@ export default function WormClothsOffer() {
                       <input
                         name="has_approval_letter"
                         type="radio"
-                        value="no"
-                        checked={applicationData.has_approval_letter === "no"}
+                        value="නැත"
+                        checked={applicationData.has_approval_letter === "නැත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
                       <label htmlFor="">නැත</label>
@@ -309,8 +309,8 @@ export default function WormClothsOffer() {
                       <input
                         name="has_approval_letter"
                         type="radio"
-                        value="processing"
-                        checked={applicationData.has_approval_letter === "processing"}
+                        value="අනුමැතිය සදහා ඉදිරිපත් කර ඇත"
+                        checked={applicationData.has_approval_letter === "අනුමැතිය සදහා ඉදිරිපත් කර ඇත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
                       <label htmlFor="">අනුමැතිය සදහා ඉදිරිපත් කර ඇත</label>
@@ -327,8 +327,8 @@ export default function WormClothsOffer() {
                       <input
                         name="have_received_warm_clothing_allowance_within_five_years"
                         type="radio"
-                        value="yes"
-                        checked={applicationData.have_received_warm_clothing_allowance_within_five_years === "yes"}
+                        value="ඔව්"
+                        checked={applicationData.have_received_warm_clothing_allowance_within_five_years === "ඔව්"}
                         onChange={(e)=> setApplicationData({...applicationData, have_received_warm_clothing_allowance_within_five_years:e.target.value})}
                       />
                       <label htmlFor="">ඔව්</label>
@@ -337,8 +337,8 @@ export default function WormClothsOffer() {
                       <input
                         name="have_received_warm_clothing_allowance_within_five_years"
                         type="radio"
-                        value="no"
-                        checked={applicationData.have_received_warm_clothing_allowance_within_five_years === "no"}
+                        value="නැත"
+                        checked={applicationData.have_received_warm_clothing_allowance_within_five_years === "නැත"}
                         onChange={(e)=> setApplicationData({...applicationData, have_received_warm_clothing_allowance_within_five_years:e.target.value})}
                       />
                       <label htmlFor="">නැත</label>

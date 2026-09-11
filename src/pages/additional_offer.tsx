@@ -244,8 +244,8 @@ export default function AdditionalOffer() {
                       <input
                         name="has_letter_of_invitation_for_training"
                         type="radio"
-                        value="yes"
-                        checked={applicationData.has_letter_of_invitation_for_training === "yes"}
+                        value="ඇත"
+                        checked={applicationData.has_letter_of_invitation_for_training === "ඇත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_letter_of_invitation_for_training:e.target.value})}
                       />
                       <label htmlFor="">ඇත</label>
@@ -254,8 +254,8 @@ export default function AdditionalOffer() {
                       <input
                         name="has_letter_of_invitation_for_training"
                         type="radio"
-                        value="no"
-                        checked={applicationData.has_letter_of_invitation_for_training === "no"}
+                        value="නැත"
+                        checked={applicationData.has_letter_of_invitation_for_training === "නැත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_letter_of_invitation_for_training:e.target.value})}
                       />
                       <label htmlFor="">නැත</label>
@@ -272,8 +272,8 @@ export default function AdditionalOffer() {
                       <input
                         name="has_approval_letter"
                         type="radio"
-                        value="yes"
-                        checked={applicationData.has_approval_letter === "yes"}
+                        value="ඇත"
+                        checked={applicationData.has_approval_letter === "ඇත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
                       <label htmlFor="">ඇත</label>
@@ -282,8 +282,8 @@ export default function AdditionalOffer() {
                       <input
                         name="has_approval_letter"
                         type="radio"
-                        value="no"
-                        checked={applicationData.has_approval_letter === "no"}
+                        value="නැත"
+                        checked={applicationData.has_approval_letter === "නැත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
                       <label htmlFor="">නැත</label>
@@ -292,8 +292,8 @@ export default function AdditionalOffer() {
                       <input
                         name="has_approval_letter"
                         type="radio"
-                        value="processing"
-                        checked={applicationData.has_approval_letter === "processing"}
+                        value="අනුමැතිය සදහා ඉදිරිපත් කර ඇත"
+                        checked={applicationData.has_approval_letter === "අනුමැතිය සදහා ඉදිරිපත් කර ඇත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
                       <label htmlFor="">අනුමැතිය සදහා ඉදිරිපත් කර ඇත</label>
@@ -310,8 +310,8 @@ export default function AdditionalOffer() {
                       <input
                         name="has_government_also_been_invited_for_training"
                         type="radio"
-                        value="yes"
-                        checked={applicationData.has_government_also_been_invited_for_training === "yes"}
+                        value="ඇත"
+                        checked={applicationData.has_government_also_been_invited_for_training === "ඇත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_government_also_been_invited_for_training:e.target.value})}
                       />
                       <label htmlFor="">ඇත</label>
@@ -320,8 +320,8 @@ export default function AdditionalOffer() {
                       <input
                         name="has_government_also_been_invited_for_training"
                         type="radio"
-                        value="no"
-                        checked={applicationData.has_government_also_been_invited_for_training === "no"}
+                        value="නැත"
+                        checked={applicationData.has_government_also_been_invited_for_training === "නැත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_government_also_been_invited_for_training:e.target.value})}
                       />
                       <label htmlFor="">නැත</label>
@@ -338,8 +338,8 @@ export default function AdditionalOffer() {
                       <input
                         name="has_government_nominated_to_participate_in_it"
                         type="radio"
-                        value="yes"
-                        checked={applicationData.has_government_nominated_to_participate_in_it === "yes"}
+                        value="ඇත"
+                        checked={applicationData.has_government_nominated_to_participate_in_it === "ඇත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_government_nominated_to_participate_in_it:e.target.value})}
                       />
                       <label htmlFor="">ඇත</label>
@@ -348,8 +348,8 @@ export default function AdditionalOffer() {
                       <input
                         name="has_government_nominated_to_participate_in_it"
                         type="radio"
-                        value="no"
-                        checked={applicationData.has_government_nominated_to_participate_in_it === "no"}
+                        value="නැත"
+                        checked={applicationData.has_government_nominated_to_participate_in_it === "නැත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_government_nominated_to_participate_in_it:e.target.value})}
                       />
                       <label htmlFor="">නැත</label>

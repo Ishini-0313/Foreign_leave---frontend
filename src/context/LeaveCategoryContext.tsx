@@ -9,7 +9,6 @@ type LeaveCategory =
     | "study_and_employment"
     | "spouse"
     | "leave_without_offers"
-    | "leave_with_warm_cloths_offer"
     | "leave_with_additional_offer"
     | "leave_with_warm_cloths_and_additional_offer"
     | "warm_cloths_and_additional_offer_only"

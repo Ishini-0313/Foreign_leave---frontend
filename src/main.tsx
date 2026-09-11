@@ -9,6 +9,7 @@ import { AmendmentProvider } from './context/AmendmentContext.tsx'
 import { Toaster } from 'react-hot-toast'
 import { LeaveCategoryProvider } from './context/LeaveCategoryContext.tsx'
 import '@fontsource-variable/noto-sans-sinhala/wght.css'
+import { AuthProvider } from './context/AuthContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -17,7 +18,9 @@ createRoot(document.getElementById('root')!).render(
         <ApplicationProvider>
           <AmendmentProvider>
             <LeaveCategoryProvider>
-              <App />
+              <AuthProvider>
+                <App />
+              </AuthProvider>
             </LeaveCategoryProvider>
             <Toaster 
               position="top-right"

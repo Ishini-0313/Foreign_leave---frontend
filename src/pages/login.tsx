@@ -2,64 +2,81 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
+  const {login} = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
   const navigate = useNavigate();
 
-  const handleLogin = async()=>{
-    try{
-      if(!username.trim()){
-        toast.error("Username is required!");
-        return;
+  const handleLogin = async () => {
+      try {
+          if (!username.trim()) {
+              toast.error("Username is required!");
+              return;
+          }
+
+          if (!password.trim()) {
+              toast.error("Password is required!");
+              return;
+          }
+
+          const response = await axios.post(
+              "http://127.0.0.1:8000/api/login",
+              {
+                  username,
+                  password,
+              }
+          );
+
+          const token = response.data.token;
+          const user = response.data.user;
+
+          // Check that Laravel returned the required data
+          if (!token || !user) {
+              toast.error("Invalid login response from server.");
+              return;
+          }
+
+          // Save user and token in AuthContext
+          await login(token, user);
+
+          toast.success(
+              response.data.message || "Login successful!"
+          );
+
+          // Redirect according to role
+          if (user.role?.role_name === "Applicant") {
+              navigate("/new-application");
+          } else if (
+              user.role?.role_name === "System Admin"
+          ) {
+              navigate("/admin/officer-assignments");
+          } else {
+              navigate("/dashboard");
+          }
+
+      } catch (error: any) {
+          console.error(error);
+
+          if (error.response?.status === 422) {
+              const errors = error.response.data.errors;
+
+              Object.values(errors).forEach((messages: any) => {
+                  toast.error(messages[0]);
+              });
+
+              return;
+          }
+
+          toast.error(
+              error.response?.data?.error ||
+              error.response?.data?.message ||
+              "Something went wrong."
+          );
       }
-      if(!password.trim()){
-        toast.error("Password is required!");
-        return;
-      }
-
-      const response = await axios.post('http://127.0.0.1:8000/api/login',{
-        username,password
-      });
-
-      toast.success(response.data.message);
-
-      localStorage.setItem("token",response.data.token);
-      
-      localStorage.setItem("user",JSON.stringify(response.data.user));
-
-      //console.log(response.data.user);
-
-      const user = response.data.user;
-      
-      if (user.role?.role_name === "Applicant") {
-        navigate("/new-application");
-      } else if(user.role?.role_name === "System Admin"){
-        navigate("/admin/officer-assignments");
-      }else {
-        navigate("/dashboard");
-      }
-      
-    }catch(error:any){
-      console.error(error);
-
-      if(error.response?.status === 422){
-        const errors = error.response.data.errors;
-        Object.values(errors).forEach((messages:any)=>{
-          toast.error(messages[0]);
-        });
-        return;
-      }
-
-      toast.error(
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        "Something went wrong."
-      );
-    }
   };
 
   return (

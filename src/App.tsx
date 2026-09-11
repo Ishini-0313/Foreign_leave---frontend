@@ -46,21 +46,48 @@ import OfficerAssignment from './pages/OfficerAssignment.tsx';
 import AdditionalOffer from './pages/additional_offer.tsx';
 import AnnualReport from './pages/AnnualReport.tsx';
 import WormClothsOffer from './pages/worm_cloths_offer.tsx';
-
-
-
+import AdditionalOfferReview from './pages/additional_offer_form_review.tsx';
+import WarmClothsOfferReview from './pages/warm_cloth_offer_review.tsx';
+import Unauthorized from './components/Unauthorized.tsx';
+import ProtectedRoute from './context/ProtectedRoute.tsx';
 
 
 function App() {
   return (
     <Routes>
+
+      {/* public routes */}
       <Route path="/" element={<Login/>}></Route>
       <Route path="/register" element={<Register/>}></Route>
       <Route path="/register_2" element={<Register_2/>}></Route>
       <Route path="/register_3" element={<Register_3/>}></Route>
 
-      <Route path="/dashboard" element={<Dashboard/>}></Route>
+      {/* officer routes */}
+      <Route 
+        element = {
+          <ProtectedRoute
+            allowedRoles={[
+              "Subject Officer",
+              "Check Officer",
+              "Recommended Officer",
+              "Recommended Officer-II",
+              "Recommended Officer-III",
+              "Chief Secretary",
+            ]}
+          />
+        }
+      >
+        <Route path="/dashboard" element={<Dashboard/>}></Route>
+        <Route path='/application/:id/add-comment' element={<Commenting_pg/>}></Route>
+      </Route>
 
+      
+      <Route path='/admin/officer-assignments' element={<OfficerAssignment/>}></Route>
+      
+
+
+
+      <Route path='/unauthorized' element={<Unauthorized/>}></Route>
       <Route path="/ministries" element={<MinistryManagement/>}></Route>
       <Route path="/departments/:id" element={<DeptManagement/>}></Route>
       <Route path="/district_offices/:id" element={<District_offices_mng/>}></Route>
@@ -81,8 +108,10 @@ function App() {
       <Route path='/application/:id' element={<ApplicationReview/>}></Route>
       <Route path='/application/:id/form-126' element={<Form_126/>}></Route>
       <Route path='/application/:id/form-16' element={<Form_16/>}></Route>
+      <Route path='/application/:id/additional-offer' element={<AdditionalOfferReview/>}></Route>
+      <Route path='/application/:id/warmcloth-offer' element={<WarmClothsOfferReview/>}></Route>
       <Route path='/application/:id/tracking' element={<ApplicationTracking/>}></Route>
-      <Route path='/application/:id/add-comment' element={<Commenting_pg/>}></Route>
+      
       <Route path='/application/:id/documents' element={<Documents/>}></Route>
       <Route path='/profile' element={<Profile/>}></Route>
       <Route path='/setting' element={<Setting/>}></Route>
@@ -104,10 +133,11 @@ function App() {
       <Route path='/application/:id/completed-form-16' element={<CompletedForm16/>}></Route>
       <Route path='/application/:id/completed-form-126' element={<CompletedForm126/>}></Route>
 
-      <Route path='/admin/officer-assignments' element={<OfficerAssignment/>}></Route>
-
+      
       <Route path='/additional-offer/edit/:id' element={<AdditionalOffer/>}></Route>
       <Route path='/wormcloth_offer/edit/:id' element={<WormClothsOffer/>}></Route>
+
+
 
       <Route path='/annual-reports' element={<AnnualReport/>}></Route>
     </Routes>

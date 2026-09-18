@@ -3,30 +3,24 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
-import Footer from "../components/footer";
+import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState("queue");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const {user} = useAuth();
   const [applications, setApplications] = useState<any[]>([]);
   const navigate = useNavigate();
-
-  useEffect(()=>{
-    const storedUser = localStorage.getItem("user");
-    if(!storedUser){
-      navigate("/");
-      return;
-    }
-    setUser(JSON.parse(storedUser));
-    loadMyQueue();
-  }, []);
 
   useEffect(() => {
     console.log("User details", user);
   }, [user]);
+
+  useEffect(()=>{
+    loadMyQueue();
+  },[]);
 
   const loadMyQueue = async ()=>{
     try{
@@ -213,7 +207,7 @@ export default function Dashboard() {
                 </div>
                 <div className="relative w-full md:w-auto">
                   <div className="relative">
-                    <svg
+                    {/* <svg
                       className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
                       width="16"
                       height="16"
@@ -221,14 +215,14 @@ export default function Dashboard() {
                       fill="none"
                     >
                       <path d="M16.6 18L10.3 11.7C9.8 12.1 9.225 12.4167 8.575 12.65C7.925 12.8833 7.23333 13 6.5 13C4.68333 13 3.14583 12.3708 1.8875 11.1125C0.629167 9.85417 0 8.31667 0 6.5C0 4.68333 0.629167 3.14583 1.8875 1.8875C3.14583 0.629167 4.68333 0 6.5 0C8.31667 0 9.85417 0.629167 11.1125 1.8875C12.3708 3.14583 13 4.68333 13 6.5C13 7.23333 12.8833 7.925 12.65 8.575C12.4167 9.225 12.1 9.8 11.7 10.3L18 16.6L16.6 18ZM6.5 11C7.75 11 8.8125 10.5625 9.6875 9.6875C10.5625 8.8125 11 7.75 11 6.5C11 5.25 10.5625 4.1875 9.6875 3.3125C8.8125 2.4375 7.75 2 6.5 2C5.25 2 4.1875 2.4375 3.3125 3.3125C2.4375 4.1875 2 5.25 2 6.5C2 7.75 2.4375 8.8125 3.3125 9.6875C4.1875 10.5625 5.25 11 6.5 11Z" fill="#44474E" />
-                    </svg>
-                    <input
+                    </svg> */}
+                    {/* <input
                       type="text"
                       placeholder="Search applicant or ID..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       className="w-full md:w-64 pl-9 pr-4 py-2.5 rounded-sm border border-[#C4C6CF] bg-[#F4F3F7] text-[#6B7280] text-base placeholder-[#6B7280] focus:outline-none focus:ring-2 focus:ring-[#002046]/30"
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>
@@ -241,11 +235,14 @@ export default function Dashboard() {
                       <th className="px-4 py-[23.5px] text-left text-[#44474E] font-bold text-xs uppercase tracking-wide whitespace-nowrap">
                         Application Number
                       </th>
-                      <th className="px-4 py-[23.5px] text-left text-[#44474E] font-bold text-xs uppercase tracking-wide whitespace-nowrap">
+                      {/* <th className="px-4 py-[23.5px] text-left text-[#44474E] font-bold text-xs uppercase tracking-wide whitespace-nowrap">
                         Applicant Name
-                      </th>
+                      </th> */}
                       <th className="px-4 py-[23.5px] text-left text-[#44474E] font-bold text-xs uppercase tracking-wide">
                         Office
+                      </th>
+                      <th className="px-4 py-[23.5px] text-left text-[#44474E] font-bold text-xs uppercase tracking-wide">
+                        Leave Category
                       </th>
                       <th className="px-4 py-4 text-left text-[#44474E] font-bold text-xs uppercase tracking-wide whitespace-nowrap">
                         Submission Date
@@ -273,14 +270,39 @@ export default function Dashboard() {
                             </span>
                           </td>
                           <td className="px-4 py-7">
-                            <span className="text-[#1A1B1E] font-medium text-base leading-6">
-                              {app.applicant?.full_name}
-                            </span>
-                          </td>
-                          <td className="px-4 py-7">
                             <span className="text-[#44474E] font-normal text-base leading-6">
                               {app.applicant?.office?.name}
                             </span>
+                          </td>
+                          <td className="px-4 py-7">
+                              {app.leave_category == "leave_without_offers" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">විදේශ නිවාඩු දීමනා නොමැතිව</span>
+                              }
+                              {app.leave_category == "leave_with_additional_offer" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">විදේශ නිවාඩු අනියම් දීමනා සහිත</span>
+                              }
+                              {app.leave_category == "leave_with_warm_cloths_and_additional_offer" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">විදේශ නිවාඩු අනියම් දීමනා සහ උණුසුම් දීමනා සහිත</span>
+                              }
+                              {app.leave_category == "warm_cloths_and_additional_offer_only" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">අනියම් දීමනාව සහ උණුසුම් දීමනාව ඉල්ලීම</span>
+                              }
+
+                              {app.leave_category == "short_trip" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">කෙටි සචාර</span>
+                              }
+                              {app.leave_category == "study" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">අධ්‍යනය සඳහා</span>
+                              }
+                              {app.leave_category == "employment" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">රැකියාව සඳහා</span>
+                              }
+                              {app.leave_category == "study_and_employment" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">අධ්‍යනය සහ රැකියාව සඳහා</span>
+                              }
+                              {app.leave_category == "spouse" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">කලත්‍රය සමග</span>
+                              }
                           </td>
                           <td className="px-4 py-7">
                             <span className="text-[#44474E] font-normal text-base leading-6 whitespace-nowrap">
@@ -360,7 +382,7 @@ export default function Dashboard() {
           </div>
 
           {/* Footer */}
-          <Footer/>
+          {/* <Footer/> */}
         </main>
       </div>
     </div>

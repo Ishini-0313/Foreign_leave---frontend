@@ -4,26 +4,28 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import { Landmark, Mail, Phone, User, UserKey, UserStar} from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export default function Profile() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [user, setUser] = useState<any>(null);
+    //const [user, setUser] = useState<any>(null);
+    const {user} = useAuth();
     const [role, setRole] =useState("");
     const [profile, setProfile] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     // get logged user
-    useEffect(()=>{
-        const storedUser = localStorage.getItem("user");
-        if(!storedUser){
-            navigate("/");
-            return;
-        }
-        console.log("stored user" +storedUser);
-        setUser(JSON.parse(storedUser));
+    // useEffect(()=>{
+    //     const storedUser = localStorage.getItem("user");
+    //     if(!storedUser){
+    //         navigate("/");
+    //         return;
+    //     }
+    //     console.log("stored user" +storedUser);
+    //     setUser(JSON.parse(storedUser));
         
-    }, []);
+    // }, []);
 
     useEffect(()=>{
         axios.get("http://127.0.0.1:8000/api/profile",{
@@ -37,25 +39,25 @@ export default function Profile() {
         });
     }, []);
 
-    useEffect(()=>{
-        if (!user?.role_id) return;
-        axios.get(
-            `http://127.0.0.1:8000/api/role-by-id`,
-            {
-                params: {
-                    id: user?.role_id
-                }
-            }
-        )
-        .then((res) => {
-            console.log("Role Response:", res.data);
-            setRole(res.data.role_name);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+    // useEffect(()=>{
+    //     if (!user?.role_id) return;
+    //     axios.get(
+    //         `http://127.0.0.1:8000/api/role-by-id`,
+    //         {
+    //             params: {
+    //                 id: user?.role_id
+    //             }
+    //         }
+    //     )
+    //     .then((res) => {
+    //         console.log("Role Response:", res.data);
+    //         setRole(res.data.role_name);
+    //     })
+    //     .catch((err) => {
+    //         console.log(err);
+    //     });
 
-    },[user]);
+    // },[user]);
 
     return (
         <div className="flex h-screen bg-[#FAF9FD] font-[Inter,sans-serif] overflow-hidden relative">
@@ -141,99 +143,31 @@ export default function Profile() {
                             </div>
                         </div>
 
-                        {/* ================= PROFILE CONTAINER ================= */}
+                        {/*  PROFILE CONTAINER */}
                         <div className="max-w-5xl mx-auto">
-                            {/* ================= PROFILE SUMMARY ================= */}
-                            <div className="
-                                relative
-                                overflow-hidden
-                                rounded-3xl
-                                bg-linear-to-r
-                                from-[#002046]
-                                via-[#163D6B]
-                                to-[#315F91]
-                                p-6
-                                md:p-8
-                                shadow-[0_12px_35px_rgba(0,32,70,0.15)]
-                                mb-6
-                            ">
+                            {/*  PROFILE SUMMARY  */}
+                            <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#002046] via-[#163D6B] to-[#315F91] p-6 md:p-8 shadow-[0_12px_35px_rgba(0,32,70,0.15)] mb-6">
                                 {/* Decorative circles */}
-                                <div className="
-                                    absolute
-                                    -right-16
-                                    -top-20
-                                    w-64
-                                    h-64
-                                    rounded-full
-                                    bg-white/5
-                                "></div>
+                                <div className="absolute -right-16 -top-20 w-64 h-64 rounded-full bg-white/5"></div>
 
-                                <div className="
-                                    absolute
-                                    right-20
-                                    -bottom-24
-                                    w-48
-                                    h-48
-                                    rounded-full
-                                    bg-[#87A0CD]/10
-                                "></div>
+                                <div className="absolute right-20 -bottom-24 w-48 h-48 rounded-full bg-[#87A0CD]/10"></div>
 
-
-                                <div className="
-                                    relative
-                                    z-10
-                                    flex
-                                    flex-col
-                                    sm:flex-row
-                                    items-center
-                                    sm:items-start
-                                    gap-5
-                                ">
+                                <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start  gap-5">
 
                                     {/* Profile Avatar */}
-
-                                    <div className="
-                                        w-20
-                                        h-20
-                                        md:w-24
-                                        md:h-24
-                                        shrink-0
-                                        rounded-3xl
-                                        bg-white
-                                        flex
-                                        items-center
-                                        justify-center
-                                        shadow-lg
-                                        border-4
-                                        border-white/20
-                                    ">
-
-                                        <svg
-                                            className="w-10 h-10 md:w-12 md:h-12"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                        >
+                                    <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-3xl bg-white flex items-center justify-center shadow-lg border-4 border-white/20">
+                                        <svg className="w-10 h-10 md:w-12 md:h-12" viewBox="0 0 24 24"fill="none">
                                             <path
                                                 d="M20 21C20 19.6044 20 18.9067 19.7822 18.3541C19.3025 17.1499 18.3501 16.1975 17.1459 15.7178C16.5933 15.5 15.8956 15.5 14.5 15.5H9.5C8.10444 15.5 7.40672 15.5 6.85407 15.7178C5.6499 16.1975 4.69749 17.1499 4.21783 18.3541C4 18.9067 4 19.6044 4 21"
                                                 stroke="#315F91"
                                                 strokeWidth="1.8"
                                                 strokeLinecap="round"
                                             />
-
-                                            <circle
-                                                cx="12"
-                                                cy="7"
-                                                r="4"
-                                                stroke="#315F91"
-                                                strokeWidth="1.8"
-                                            />
+                                            <circle cx="12" cy="7" r="4" stroke="#315F91" strokeWidth="1.8"/>
                                         </svg>
-
                                     </div>
 
-
                                     {/* User Summary */}
-
                                     <div className="text-center sm:text-left flex-1">
                                         <p className=" text-[#B8C9E0] text-sm mb-1">
                                             Welcome back
@@ -243,33 +177,13 @@ export default function Profile() {
                                         </h2>
                                         <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2 mt-3 ">
                                             {profile?.designation_id && (
-                                                <span className="
-                                                    px-3
-                                                    py-1
-                                                    rounded-full
-                                                    bg-white/10
-                                                    border
-                                                    border-white/10
-                                                    text-[#E3ECF7]
-                                                    text-xs
-                                                    font-medium
-                                                ">
+                                                <span className="px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[#E3ECF7] text-xs font-medium">
                                                     {profile?.designation?.name}
                                                 </span>
                                             )}
 
                                             {role && (
-                                                <span className="
-                                                    px-3
-                                                    py-1
-                                                    rounded-full
-                                                    bg-[#87A0CD]/20
-                                                    border
-                                                    border-[#87A0CD]/20
-                                                    text-[#DCE7F5]
-                                                    text-xs
-                                                    font-medium
-                                                ">
+                                                <span className="px-3 py-1 rounded-full bg-[#87A0CD]/20 border border-[#87A0CD]/20 text-[#DCE7F5] text-xs font-medium">
                                                     {role}
                                                 </span>
                                             )}
@@ -279,7 +193,7 @@ export default function Profile() {
                             </div>
 
 
-                            {/* ================= PERSONAL INFORMATION ================= */}
+                            {/*  PERSONAL INFORMATION  */}
                             <div className=" bg-white rounded-3xl border border-[#E7EAF0] shadow-[0_6px_25px_rgba(0,32,70,0.06)] overflow-hidden">
                                 {/* Section Header */}
                                 <div className="px-6  md:px-8  py-5 border-b border-[#EEF0F4] flex items-center gap-3">
@@ -373,7 +287,7 @@ export default function Profile() {
                                             </label>
                                         </div>
                                         <p className="text-[#1D2B3A] font-semibold text-base wrap-break-word">
-                                             {loading ? "Loading..." : profile?.designation.name || "-"} 
+                                             {loading ? "Loading..." : profile?.designation?.name || "-"} 
                                         </p>
                                     </div>
 
@@ -405,29 +319,9 @@ export default function Profile() {
                                     </div>
 
                                     <button
-                                        className="
-                                            w-full
-                                            sm:w-auto
-                                            flex
-                                            items-center
-                                            justify-center
-                                            gap-2
-                                            bg-[#002046]
-                                            text-white
-                                            hover:bg-[#163D6B]
-                                            px-7
-                                            py-3
-                                            rounded-xl
-                                            font-semibold
-                                            text-sm
-                                            shadow-sm
-                                            hover:shadow-md
-                                            transition-all
-                                            duration-200
-                                        "
+                                        className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#002046] text-white hover:bg-[#163D6B] px-7 py-3 rounded-xl font-semibold text-sm shadow-sm hover:shadow-md transition-all duration-200"
                                         onClick={() => navigate('/setting')}
                                     >
-
                                         <svg
                                             className="w-4 h-4"
                                             viewBox="0 0 24 24"
@@ -456,7 +350,7 @@ export default function Profile() {
                         </div>
                     </div>
 
-                    {/* ================= FOOTER ================= */}
+                    {/*  FOOTER  */}
                     <footer className="border-t border-[#E1E4EA] bg-white mt-2">
                         <div className="
                             max-w-7xl

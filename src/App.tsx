@@ -50,6 +50,7 @@ import AdditionalOfferReview from './pages/additional_offer_form_review.tsx';
 import WarmClothsOfferReview from './pages/warm_cloth_offer_review.tsx';
 import Unauthorized from './components/Unauthorized.tsx';
 import ProtectedRoute from './context/ProtectedRoute.tsx';
+import Home from './pages/home_page.tsx';
 
 
 function App() {
@@ -57,7 +58,9 @@ function App() {
     <Routes>
 
       {/* public routes */}
-      <Route path="/" element={<Login/>}></Route>
+      
+      <Route path="/" element={<Home/>}></Route>
+      <Route path="/login" element={<Login/>}></Route>
       <Route path="/register" element={<Register/>}></Route>
       <Route path="/register_2" element={<Register_2/>}></Route>
       <Route path="/register_3" element={<Register_3/>}></Route>
@@ -73,6 +76,7 @@ function App() {
               "Recommended Officer-II",
               "Recommended Officer-III",
               "Chief Secretary",
+              "Accountant"
             ]}
           />
         }

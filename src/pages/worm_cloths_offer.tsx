@@ -6,6 +6,7 @@ import { useApplication } from "../context/ApplicationContext";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import Footer from "../components/footer";
+import { useAuth } from "../context/AuthContext";
 
 function FormCard({ children }: { children: React.ReactNode }) {
   return (
@@ -26,7 +27,7 @@ function ChevronRight() {
 
 export default function WormClothsOffer() {
   const {id} = useParams();
-  const [user, setUser] = useState<any>(null);
+  const {user} = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const {applicationData, setApplicationData, isEditMode, applicationId} = useApplication();
@@ -34,17 +35,6 @@ export default function WormClothsOffer() {
   const [designations, setDesignations] = useState([]);
 
   const navigate = useNavigate();
-
-  //load user
-  useEffect(()=>{
-    const storedUser = localStorage.getItem("user");
-    console.log("Stored User:", storedUser);
-    if(!storedUser){
-      navigate("/");
-      return;
-    }
-    setUser(JSON.parse(storedUser));
-  },[]);
 
   //fetch institutes
   useEffect(() => {

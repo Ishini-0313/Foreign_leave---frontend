@@ -8,6 +8,7 @@ import type { PreviousTravel } from "../context/ApplicationContext";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import Footer from "../components/footer";
+import { useLeaveCategory } from "../context/LeaveCategoryContext";
 
 function FormCard({ children }: { children: React.ReactNode }) {
   return (
@@ -74,6 +75,7 @@ export default function Form() {
   const signaturePadRef = useRef<SignaturePad | null>(null);
 
   const {applicationData, setApplicationData, setIsEditMode, setApplicationId, setExistingDocs, setExistingSignature} = useApplication();
+  const {leaveCategory, natureOfTrip} = useLeaveCategory();
 
   // const loadApplication = async () => {
   //     const token = localStorage.getItem("token");
@@ -473,9 +475,11 @@ export default function Form() {
                       <input
                         name="trip_nature"
                         type="radio"
+                        className="w-4 h-4 accent-[#002046]"
                         value="official"
-                        checked={applicationData.nature_of_trip === "official"}
-                        onChange={(e)=> setApplicationData({...applicationData, nature_of_trip:e.target.value})}
+                        checked={applicationData.nature_of_trip === "official" || natureOfTrip === "official"}
+                        //onChange={(e)=> setApplicationData({...applicationData, nature_of_trip:e.target.value})}
+                        readOnly
                       />
                       <label htmlFor="">නිල</label>
                     </div>
@@ -483,9 +487,11 @@ export default function Form() {
                       <input
                         name="trip_nature"
                         type="radio"
+                        className="w-4 h-4 accent-[#002046]"
                         value="personal"
-                        checked={applicationData.nature_of_trip === "personal"}
-                        onChange={(e)=> setApplicationData({...applicationData, nature_of_trip:e.target.value})}
+                        checked={applicationData.nature_of_trip === "personal" || natureOfTrip === "personal"} 
+                        //onChange={(e)=> setApplicationData({...applicationData, nature_of_trip:e.target.value})}
+                        readOnly
                       />
                       <label htmlFor="">පුද්ගලික</label>
                     </div>
@@ -708,6 +714,7 @@ export default function Form() {
                       <input
                         type="radio"
                         name="reportSubmitted"
+                        className="w-4 h-4 accent-[#002046]"
                         value="true"
                         checked={applicationData.has_previous_trip_report_submitted === true}
                         onChange={() =>
@@ -726,6 +733,7 @@ export default function Form() {
                       <input
                         type="radio"
                         name="reportSubmitted"
+                        className="w-4 h-4 accent-[#002046]"
                         value="false"
                         checked={applicationData.has_previous_trip_report_submitted === false}
                         onChange={() =>

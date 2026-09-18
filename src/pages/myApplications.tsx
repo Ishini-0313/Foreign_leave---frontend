@@ -114,11 +114,14 @@ export default function MyApplications() {
                       <th className="px-4 py-[23.5px] text-left text-[#44474E] font-bold text-xs uppercase tracking-wide whitespace-nowrap">
                         Application Number
                       </th>
-                      <th className="px-4 py-[23.5px] text-left text-[#44474E] font-bold text-xs uppercase tracking-wide whitespace-nowrap">
+                      {/* <th className="px-4 py-[23.5px] text-left text-[#44474E] font-bold text-xs uppercase tracking-wide whitespace-nowrap">
                         Applicant Name
-                      </th>
+                      </th> */}
                       <th className="px-4 py-[23.5px] text-left text-[#44474E] font-bold text-xs uppercase tracking-wide">
                         Office
+                      </th>
+                      <th className="px-4 py-[23.5px] text-left text-[#44474E] font-bold text-xs uppercase tracking-wide">
+                        Leave Category
                       </th>
                       <th className="px-4 py-4 text-left text-[#44474E] font-bold text-xs uppercase tracking-wide whitespace-nowrap">
                         Submission Date
@@ -146,15 +149,45 @@ export default function MyApplications() {
                               {app.application_no}
                             </span>
                           </td>
-                          <td className="px-4 py-7">
+                          {/* <td className="px-4 py-7">
                             <span className="text-[#1A1B1E] font-medium text-base leading-6">
                               {app.name}
                             </span>
-                          </td>
+                          </td> */}
                           <td className="px-4 py-7">
                             <span className="text-[#44474E] font-normal text-base leading-6">
                               {app.institute?.name}
                             </span>
+                          </td>
+                          <td className="px-4 py-7">
+                              {app.leave_category == "leave_without_offers" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">විදේශ නිවාඩු දීමනා නොමැතිව</span>
+                              }
+                              {app.leave_category == "leave_with_additional_offer" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">විදේශ නිවාඩු අනියම් දීමනා සහිත</span>
+                              }
+                              {app.leave_category == "leave_with_warm_cloths_and_additional_offer" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">විදේශ නිවාඩු අනියම් දීමනා සහ උණුසුම් දීමනා සහිත</span>
+                              }
+                              {app.leave_category == "warm_cloths_and_additional_offer_only" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">අනියම් දීමනාව සහ උණුසුම් දීමනාව ඉල්ලීම</span>
+                              }
+
+                              {app.leave_category == "short_trip" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">කෙටි සචාර</span>
+                              }
+                              {app.leave_category == "study" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">අධ්‍යනය සඳහා</span>
+                              }
+                              {app.leave_category == "employment" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">රැකියාව සඳහා</span>
+                              }
+                              {app.leave_category == "study_and_employment" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">අධ්‍යනය සහ රැකියාව සඳහා</span>
+                              }
+                              {app.leave_category == "spouse" && 
+                                <span className="text-[#44474E] font-normal text-base leading-6">කලත්‍රය සමග</span>
+                              }
                           </td>
                           <td className="px-4 py-7">
                             <span className="text-[#44474E] font-normal text-base leading-6 whitespace-nowrap">

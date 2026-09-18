@@ -8,11 +8,13 @@ import { useAuth } from "../context/AuthContext";
 export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState("queue");
   const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const {user} = useAuth();
   const [applications, setApplications] = useState<any[]>([]);
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 10;
 
   useEffect(() => {
     console.log("User details", user);
@@ -62,12 +64,28 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    setCurrentPage(1);
     if (activeFilter == "queue") {
         loadMyQueue();
     } else {
         loadAll();
     }
   }, [activeFilter]);
+
+  const filteredApplications = applications.filter((app) =>
+    app.application_no?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(
+      filteredApplications.length / itemsPerPage
+  );
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+
+  const currentApplications = filteredApplications.slice(
+      startIndex,
+      startIndex + itemsPerPage
+  );
 
   const pendingCount = applications.filter((app)=>app.status === "Pending").length;
   const approvedCount = applications.filter((app)=>app.status === "Approved").length;
@@ -256,12 +274,7 @@ export default function Dashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {applications
-                      .filter(
-                        (app) =>
-                          app.application_no?.toLowerCase().includes(search.toLowerCase())
-                      )
-                      .map((app, i) => (
+                    {currentApplications.map((app, i) => (
                         <tr key={app.id} className={i > 0 ? "border-t border-[#C4C6CF]" : ""}>
                           <td className="px-4 py-7">
                             <span className="text-[#002046] font-bold text-base whitespace-nowrap">
@@ -347,34 +360,66 @@ export default function Dashboard() {
               </div>
 
               {/* Pagination */}
-              <div className="flex items-center justify-between px-4 py-3 border-t border-[#C4C6CF]">
-                <p className="text-[#44474E] text-sm">Showing 1 to 4 of {applications.length} entries</p>
-                <div className="flex items-center gap-1">
-                  <button className="w-8 h-8 flex items-center justify-center rounded-xs border border-[#C4C6CF] hover:bg-[#F4F3F7] transition-colors">
-                    <svg width="5" height="7" viewBox="0 0 5 7" fill="none">
-                      <path d="M3.5 7L0 3.5L3.5 0L4.31667 0.816667L1.63333 3.5L4.31667 6.18333L3.5 7Z" fill="#44474E" />
-                    </svg>
-                  </button>
-                  {[1, 2, 3].map((page) => (
+              <div className="flex items-center justify-between mt-6 px-4 py-3">
+                {/* Showing entries */}
+                <div className="text-sm text-gray-600">
+                    Showing{" "}
+                    {filteredApplications.length === 0
+                        ? 0
+                        : startIndex + 1}{" "}
+                    to{" "}
+                    {Math.min(
+                        startIndex + itemsPerPage,
+                        filteredApplications.length
+                    )}{" "}
+                    of {filteredApplications.length} entries
+                </div>
+
+                {/* Pagination buttons */}
+                <div className="flex items-center gap-2">
+                    {/* Previous */}
                     <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`w-8 h-8 flex items-center justify-center rounded-xs font-${
-                        currentPage === page ? "bold" : "medium"
-                      } text-sm transition-colors ${
-                        currentPage === page
-                          ? "bg-[#002046] text-white"
-                          : "text-black hover:bg-[#F4F3F7]"
-                      }`}
+                        onClick={() =>setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className={`px-3 py-2 rounded-sm border text-sm ${
+                            currentPage === 1
+                                ? "text-gray-400 bg-gray-100 cursor-not-allowed"
+                                : "text-gray-700 bg-white hover:bg-gray-50"
+                        }`}
                     >
-                      {page}
+                        Previous
                     </button>
-                  ))}
-                  <button className="w-8 h-8 flex items-center justify-center rounded-xs border border-[#C4C6CF] hover:bg-[#F4F3F7] transition-colors">
-                    <svg width="5" height="7" viewBox="0 0 5 7" fill="none">
-                      <path d="M2.68333 3.5L0 0.816667L0.816667 0L4.31667 3.5L0.816667 7L0 6.18333L2.68333 3.5Z" fill="#44474E" />
-                    </svg>
-                  </button>
+
+                    {/* Page numbers */}
+                    {Array.from(
+                        { length: totalPages },
+                        (_, index) => index + 1
+                    ).map((page) => (
+                        <button
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            className={`px-3 py-2 rounded-sm border text-sm ${
+                                currentPage === page
+                                    ? "bg-[#002046] text-white border-[#002046]"
+                                    : "bg-white text-gray-700 hover:bg-gray-50"
+                            }`}
+                        >
+                            {page}
+                        </button>
+                    ))}
+
+                    {/* Next */}
+                    <button
+                        onClick={() => setCurrentPage((prev) =>Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages || totalPages === 0}
+                        className={`px-3 py-2 rounded-sm border text-sm ${
+                            currentPage === totalPages || totalPages === 0
+                                ? "text-gray-400 bg-gray-100 cursor-not-allowed"
+                                : "text-gray-700 bg-white hover:bg-gray-50"
+                        }`}
+                    >
+                        Next
+                    </button>
                 </div>
               </div>
             </div>

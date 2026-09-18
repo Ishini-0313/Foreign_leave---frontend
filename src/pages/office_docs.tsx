@@ -231,27 +231,6 @@ export default function OfficeDocs() {
       },
     ],
 
-    leave_with_warm_cloths_offer: [
-      {
-        key: "southern_absorption",
-        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "disciplinary_clearance",
-        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "agreement",
-        label: "ගිවිසුම",
-        isRequired: false,
-        file: null
-      },
-    ],
-
     leave_with_additional_offer: [
       {
         key: "southern_absorption",
@@ -274,6 +253,27 @@ export default function OfficeDocs() {
     ],
     
     leave_with_warm_cloths_and_additional_offer: [
+      {
+        key: "southern_absorption",
+        label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "disciplinary_clearance",
+        label: "විනය පරීක්ෂණ හා විගණන විමසුම් නොමැති බවට සහතිකය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "agreement",
+        label: "ගිවිසුම",
+        isRequired: false,
+        file: null
+      },
+    ],
+
+    warm_cloths_and_additional_offer_only: [
       {
         key: "southern_absorption",
         label: "දකුණු පළාතට අන්තර්ග්‍රහණය වී තිබීම",
@@ -525,7 +525,7 @@ export default function OfficeDocs() {
                                 )}
                               </div>
                               {
-                                applicationData.documents[doc.key] ? 
+                                applicationData?.documents[doc.key] ? 
                                   (
                                     <div className="flex items-center gap-2 text-green-600 mt-2">
                                       <CheckCircle size={16} />

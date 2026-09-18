@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import Footer from "../components/footer";
 import { Trash2, Upload } from "lucide-react";
 import { useLeaveCategory } from "../context/LeaveCategoryContext";
+import { useAuth } from "../context/AuthContext";
 
 function ChevronRight() {
   return (
@@ -19,23 +20,10 @@ function ChevronRight() {
 
 export default function SignPage2() {
   const {id} = useParams();
-  const [user, setUser] = useState<any>(null);
+  const {user} = useAuth();
   const navigate = useNavigate();
   const { applicationData,setApplicationData, isEditMode, setIsEditMode, applicationId, setApplicationId,existingSignature  } = useApplication();
   const {natureOfTrip,leaveCategory} = useLeaveCategory();
-
-  // load logged user
-  useEffect(()=>{
-    console.log("signpage :"+ isEditMode );
-    const storedUser = localStorage.getItem("user");
-    console.log("Stored User:", storedUser);
-    if(!storedUser){
-      navigate("/");
-      return;
-    }
-    setUser(JSON.parse(storedUser));
-  },[]);
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [signatureFile, setSignatureFile] = useState<File | null>(null);
   const [signaturePreview, setSignaturePreview] = useState<string>("");

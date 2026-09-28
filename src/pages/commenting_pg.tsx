@@ -7,7 +7,7 @@ import Footer from "../components/footer";
 import toast from "react-hot-toast";
 import Topbar from "../components/topbar";
 import { useApplication } from "../context/ApplicationContext";
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ChevronRight() {
   return (
@@ -95,7 +95,7 @@ export default function ApplicationReview() {
     if (!id) return;
 
     axios.get(
-      `http://127.0.0.1:8000/api/applications/${id}`,
+      `${API_URL}/applications/${id}`,
       {
         headers: {
           Authorization:
@@ -289,7 +289,7 @@ export default function ApplicationReview() {
 
       const response = await axios.post(
 
-        `http://127.0.0.1:8000/api/applications/${id}/approve`,
+        `${API_URL}/applications/${id}/approve`,
 
         formData,
 
@@ -426,7 +426,7 @@ export default function ApplicationReview() {
 
       const response = await axios.post(
 
-        `http://127.0.0.1:8000/api/applications/${id}/forward`,
+        `${API_URL}/applications/${id}/forward`,
 
         formData,
 
@@ -567,7 +567,7 @@ export default function ApplicationReview() {
 
       const response = await axios.post(
 
-        `http://127.0.0.1:8000/api/applications/${id}/return`,
+        `${API_URL}/applications/${id}/return`,
 
         formData,
 

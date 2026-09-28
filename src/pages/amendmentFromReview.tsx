@@ -4,6 +4,7 @@ import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import axios from "axios";
 import Footer from "../components/footer";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function FormCard({ children }: { children: React.ReactNode }) {
   return (
@@ -40,7 +41,7 @@ export default function AmendmentFromReview() {
 
   useEffect(() => {
         axios.get(
-            `http://127.0.0.1:8000/api/amendments/${id}`,
+            `${API_URL}/amendments/${id}`,
             {
                 headers: {
                     Authorization:

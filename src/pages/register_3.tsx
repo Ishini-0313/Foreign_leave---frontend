@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "../context/RegisterContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const steps = [
   { number: 1, label: "Personal Info" },
@@ -43,7 +44,7 @@ export default function Register_3() {
         return;
       }
 
-      const response = await axios.post('http://127.0.0.1:8000/api/register', {
+      const response = await axios.post(`${API_URL}/register`, {
         full_name: formData.fullName,
         nic: formData.nic,
         phone: formData.mobile,

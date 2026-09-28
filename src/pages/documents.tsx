@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import Footer from "../components/footer";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ChevronRight() {
   return (
@@ -40,7 +41,7 @@ export default function Documents() {
   // load application data
   useEffect(() => {
         axios.get(
-            `http://127.0.0.1:8000/api/applications/${id}`,
+            `${API_URL}/applications/${id}`,
             {
                 headers: {
                     Authorization:
@@ -62,7 +63,7 @@ export default function Documents() {
   useEffect(()=>{
     if (!user?.role_id) return;
     axios.get(
-          `http://127.0.0.1:8000/api/role-by-id`,
+          `${API_URL}/role-by-id`,
           {
               params: {
                   id: user?.role_id
@@ -83,7 +84,7 @@ export default function Documents() {
   useEffect(()=>{
 
         axios.get(
-        `http://127.0.0.1:8000/api/applications/${id}/documents`,
+        `${API_URL}/applications/${id}/documents`,
         {
             headers:{
                 Authorization:

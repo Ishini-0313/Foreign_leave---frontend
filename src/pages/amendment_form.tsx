@@ -6,6 +6,7 @@ import axios from "axios";
 import { useAmendment } from "../context/AmendmentContext";
 import { ChevronsRight } from "lucide-react";
 import Footer from "../components/footer";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function FormCard({ children }: { children: React.ReactNode }) {
   return (
@@ -43,7 +44,7 @@ export default function AmendmentForm() {
 
   useEffect(() => {
         axios.get(
-            `http://127.0.0.1:8000/api/applications/${id}`,
+            `${API_URL}/applications/${id}`,
             {
                 headers: {
                     Authorization:

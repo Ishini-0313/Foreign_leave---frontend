@@ -2,6 +2,7 @@ import axios from "axios";
 import { Download, FileText, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function CompletedForm16() {
     const { id } = useParams();
@@ -14,7 +15,7 @@ export default function CompletedForm16() {
         const loadPdf = async () => {
             try {
                 const response = await axios.get(
-                    `http://127.0.0.1:8000/api/applications/${id}/completed-form-16`,
+                    `${API_URL}/applications/${id}/completed-form-16`,
                     {
                         headers: {
                             Authorization:
@@ -51,7 +52,7 @@ export default function CompletedForm16() {
     const downloadPdf = async () => {
         try {
             const response = await axios.get(
-                `http://127.0.0.1:8000/api/applications/${id}/completed-form-16/download`,
+                `${API_URL}/applications/${id}/completed-form-16/download`,
                 {
                     headers: {
                         Authorization:

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import Topbar from "../components/topbar";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ChevronRight() {
   return (
@@ -36,7 +37,7 @@ export default function AmendmentReview() {
 
   useEffect(() => {
         axios.get(
-            `http://127.0.0.1:8000/api/amendments/${id}`,
+            `${API_URL}/amendments/${id}`,
             {
                 headers: {
                     Authorization:
@@ -56,7 +57,7 @@ export default function AmendmentReview() {
   useEffect(()=>{
     if (!user?.role_id) return;
     axios.get(
-          `http://127.0.0.1:8000/api/role-by-id`,
+          `${API_URL}/role-by-id`,
           {
               params: {
                   id: user?.role_id

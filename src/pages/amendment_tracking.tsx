@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import Topbar from "../components/topbar";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AmendmentTracking() {
   const [user, setUser] = useState<any>(null);
@@ -26,7 +27,7 @@ export default function AmendmentTracking() {
 
   useEffect(() => {
         axios.get(
-            `http://127.0.0.1:8000/api/amendments/${id}/tracking`,
+            `${API_URL}/amendments/${id}/tracking`,
             {
                 headers: {
                     Authorization:
@@ -47,7 +48,7 @@ export default function AmendmentTracking() {
   useEffect(()=>{
     if (!user?.role_id) return;
     axios.get(
-          `http://127.0.0.1:8000/api/role-by-id`,
+          `${API_URL}/role-by-id`,
           {
               params: {
                   id: user?.role_id

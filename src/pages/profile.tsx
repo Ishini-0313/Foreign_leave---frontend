@@ -5,6 +5,7 @@ import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import { Landmark, Mail, Phone, User, UserKey, UserStar} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Profile() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -28,7 +29,7 @@ export default function Profile() {
     // }, []);
 
     useEffect(()=>{
-        axios.get("http://127.0.0.1:8000/api/profile",{
+        axios.get(`${API_URL}/profile`,{
             headers:{
                 Authorization:`Bearer ${localStorage.getItem("token")}`
             }

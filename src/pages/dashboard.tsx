@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import { useAuth } from "../context/AuthContext";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState("queue");
@@ -14,7 +15,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
 
   useEffect(() => {
     console.log("User details", user);
@@ -28,7 +29,7 @@ export default function Dashboard() {
     try{
       const token = localStorage.getItem("token");
 
-      const response = await axios.get('http://127.0.0.1:8000/api/officer/pending-applications',{
+      const response = await axios.get(`${API_URL}/officer/pending-applications`,{
         headers:{
           Authorization: `Bearer ${token}`,
         }
@@ -49,7 +50,7 @@ export default function Dashboard() {
     try{
       const token = localStorage.getItem("token");
 
-      const response = await axios.get('http://127.0.0.1:8000/api/officer/all-sub-applications',{
+      const response = await axios.get(`${API_URL}/officer/all-sub-applications`,{
         headers:{
           Authorization: `Bearer ${token}`,
         },

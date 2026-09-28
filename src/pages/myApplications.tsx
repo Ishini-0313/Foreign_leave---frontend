@@ -6,6 +6,7 @@ import Topbar from "../components/topbar";
 import { Eye, Settings2, SquarePen} from "lucide-react";
 import Footer from "../components/footer";
 import { useLeaveCategory } from '../context/LeaveCategoryContext';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function MyApplications() {
   const {setLeaveCategory,setNatureOfTrip} = useLeaveCategory();
@@ -35,7 +36,7 @@ export default function MyApplications() {
     try{
       const token = localStorage.getItem("token");
 
-      const response = await axios.get('http://127.0.0.1:8000/api/my-application',{
+      const response = await axios.get(`${API_URL}/my-application`,{
         headers:{
           Authorization: `Bearer ${token}`,
         }

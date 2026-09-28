@@ -5,6 +5,7 @@ import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import { Eye} from "lucide-react";
 import Footer from "../components/footer";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Amendments() {
   const {application_id} = useParams();
@@ -33,7 +34,7 @@ export default function Amendments() {
     try{
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(`http://127.0.0.1:8000/api/amendments/${application_id}`,{
+      const response = await axios.get(`${API_URL}/amendments/${application_id}`,{
         headers:{
           Authorization: `Bearer ${token}`,
         }

@@ -5,6 +5,7 @@ import {UserCog,ShieldCheck,UserCheck,Users,Save,RefreshCw,Building2,} from "luc
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface Office {
     id: number;
@@ -96,7 +97,7 @@ export default function OfficerAssignment() {
         try {
             setLoadingOffices(true);
             const response = await axios.get(
-                "http://127.0.0.1:8000/api/offices/assignable",
+                `${API_URL}/offices/assignable`,
                 axiosConfig
             );
             const data = response.data;
@@ -151,7 +152,7 @@ export default function OfficerAssignment() {
 
             //Load users
             const usersResponse = await axios.get(
-                `http://127.0.0.1:8000/api/offices/${officeId}/users`,
+                `${API_URL}/offices/${officeId}/users`,
                 axiosConfig
             );
 
@@ -165,7 +166,7 @@ export default function OfficerAssignment() {
             //Load current assignment
             const assignmentResponse =
                 await axios.get<ApiResponse>(
-                    `http://127.0.0.1:8000/api/offices/${officeId}/assignment`,
+                    `${API_URL}/offices/${officeId}/assignment`,
                     axiosConfig
                 );
 
@@ -259,7 +260,7 @@ export default function OfficerAssignment() {
         try {
             setSaving(true);
             const response = await axios.post(
-                `http://127.0.0.1:8000/api/offices/${selectedOffice}/assignment`,
+                `${API_URL}/offices/${selectedOffice}/assignment`,
 
                 {
                     subject_officer_id: Number(subjectOfficer),

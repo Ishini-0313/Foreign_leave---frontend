@@ -7,6 +7,7 @@ import { useAmendment } from "../context/AmendmentContext";
 import axios from "axios";
 import Footer from "../components/footer";
 import toast from "react-hot-toast";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ChevronRight() {
   return (
@@ -128,7 +129,7 @@ export default function AmedmentDocumentUpload() {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/amendment",
+        `${API_URL}/amendment`,
         formData,
         {
           headers: {

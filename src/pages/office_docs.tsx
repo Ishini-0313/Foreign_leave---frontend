@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import Footer from "../components/footer";
 import { useLeaveCategory } from "../context/LeaveCategoryContext";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ChevronRight() {
   return (
@@ -406,7 +407,7 @@ export default function OfficeDocs() {
         const token = localStorage.getItem("token");
 
         const response = await axios.post(
-            `http://127.0.0.1:8000/api/applications/${id}/office-documents`,
+            `${API_URL}/applications/${id}/office-documents`,
             formData,
             {
                 headers: {

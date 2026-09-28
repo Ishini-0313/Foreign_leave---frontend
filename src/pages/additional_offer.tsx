@@ -6,6 +6,7 @@ import { useApplication } from "../context/ApplicationContext";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import Footer from "../components/footer";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function FormCard({ children }: { children: React.ReactNode }) {
   return (
@@ -51,7 +52,7 @@ export default function AdditionalOffer() {
     const fetchSubOffices = async () => {
     try {
         const response = await axios.get(
-        "http://127.0.0.1:8000/api/sub-offices",
+        `${API_URL}/sub-offices`,
         {
             params: {
             parent_office_id: applicationData.ministry_id,
@@ -71,7 +72,7 @@ export default function AdditionalOffer() {
   useEffect(()=>{
       const fetchDesignation = async()=>{
         try{
-          const response = await axios.get('http://127.0.0.1:8000/api/designations');
+          const response = await axios.get(`${API_URL}/designations`);
           setDesignations(response.data);
         }catch(error){
           console.error(error);

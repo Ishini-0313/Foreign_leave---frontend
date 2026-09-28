@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useApplication } from '../context/ApplicationContext';
 import { useLeaveCategory } from '../context/LeaveCategoryContext';
 import toast from 'react-hot-toast';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Options() {
     const [user, setUser] = useState<any>(null);
@@ -306,7 +307,7 @@ export default function Options() {
     const loadApplication = async () => {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-          `http://127.0.0.1:8000/api/applications/${id}`,
+          `${API_URL}/applications/${id}`,
           {
               headers: {
                   Authorization: `Bearer ${token}`,
@@ -381,7 +382,7 @@ export default function Options() {
     useEffect(()=>{
       if (!user?.role_id) return;
       axios.get(
-            `http://127.0.0.1:8000/api/role-by-id`,
+            `${API_URL}/role-by-id`,
             {
                 params: {
                     id: user?.role_id
@@ -532,7 +533,7 @@ export default function Options() {
 
         if(isEditMode){
           response = await axios.put(
-            `http://127.0.0.1:8000/api/application/${applicationId}/resubmit`,
+            `${API_URL}/application/${applicationId}/resubmit`,
             formData,
             {
                 headers: {
@@ -545,7 +546,7 @@ export default function Options() {
           setApplicationId(null);
         }else{
           response = await axios.post(
-            "http://127.0.0.1:8000/api/application",
+            `${API_URL}/application`,
             formData,
             {
               headers: {

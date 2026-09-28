@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import type { PreviousTravel } from '../context/ApplicationContext';
 import { Check } from 'lucide-react';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Form_16() {
     const {id} = useParams();
@@ -12,7 +13,7 @@ export default function Form_16() {
 
     useEffect(() => {
         axios.get(
-            `http://127.0.0.1:8000/api/applications/${id}`,
+            `${API_URL}/applications/${id}`,
             {
                 headers: {
                     Authorization:
@@ -33,7 +34,7 @@ export default function Form_16() {
       if (!applicationData?.institute_id) return;
 
         axios
-          .get("http://127.0.0.1:8000/api/office-by-id", {
+          .get(`${API_URL}/office-by-id`, {
             params: {
               id: applicationData.institute_id,
             },
@@ -51,7 +52,7 @@ export default function Form_16() {
       if (!applicationData?.service_id) return;
 
         axios
-          .get("http://127.0.0.1:8000/api/grade-by-id", {
+          .get(`${API_URL}/grade-by-id`, {
             params: {
               id: applicationData.class_or_grade,
             },

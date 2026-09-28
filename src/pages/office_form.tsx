@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
 import toast from "react-hot-toast";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ChevronRight() {
   return (
@@ -38,7 +39,7 @@ export default function OfficeForm() {
 
   const saveLeaveInfo = async()=>{
     try{
-      await axios.post(`http://127.0.0.1:8000/api/application/${id}/office-form`, leaveInfo, 
+      await axios.post(`${API_URL}/application/${id}/office-form`, leaveInfo, 
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -83,7 +84,7 @@ export default function OfficeForm() {
 
   useEffect(() => {
         axios.get(
-            `http://127.0.0.1:8000/api/applications/${id}`,
+            `${API_URL}/applications/${id}`,
             {
                 headers: {
                     Authorization:
@@ -103,7 +104,7 @@ export default function OfficeForm() {
   useEffect(()=>{
     if (!user?.role_id) return;
     axios.get(
-          `http://127.0.0.1:8000/api/role-by-id`,
+          `${API_URL}/role-by-id`,
           {
               params: {
                   id: user?.role_id

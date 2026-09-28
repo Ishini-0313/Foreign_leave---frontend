@@ -6,6 +6,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import Topbar from "../components/topbar";
 import { useAuth } from "../context/AuthContext";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function ApplicationTracking() {
   const {user} = useAuth();
@@ -17,7 +18,7 @@ export default function ApplicationTracking() {
   useEffect(() => {
     axios
       .get(
-        `http://127.0.0.1:8000/api/applications/${id}/tracking`,
+        `${API_URL}/applications/${id}/tracking`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

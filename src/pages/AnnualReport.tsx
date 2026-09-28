@@ -5,6 +5,7 @@ import { FileSpreadsheet, Download } from "lucide-react";
 import Topbar from "../components/topbar";
 import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AnnualReport() {
     const currentYear = new Date().getFullYear();
@@ -30,7 +31,7 @@ export default function AnnualReport() {
             setLoading(true);
             const token = localStorage.getItem("token");
             const response = await axios.get(
-                "http://127.0.0.1:8000/api/reports/annual-foreign-leave",
+                `${API_URL}/reports/annual-foreign-leave`,
                 {
                     params: {
                         year: year

@@ -7,6 +7,7 @@ import Footer from "../components/footer";
 import Topbar from "../components/topbar";
 import { useLeaveCategory } from "../context/LeaveCategoryContext";
 import { useApplication } from "../context/ApplicationContext";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ChevronRight() {
   return (
@@ -41,7 +42,7 @@ export default function ApplicationReview() {
   //load application data
   useEffect(() => {
         axios.get(
-            `http://127.0.0.1:8000/api/applications/${id}`,
+            `${API_URL}/applications/${id}`,
             {
                 headers: {
                     Authorization:
@@ -62,7 +63,7 @@ export default function ApplicationReview() {
   useEffect(()=>{
     if (!user?.role_id) return;
     axios.get(
-          `http://127.0.0.1:8000/api/role-by-id`,
+          `${API_URL}/role-by-id`,
           {
               params: {
                   id: user?.role_id

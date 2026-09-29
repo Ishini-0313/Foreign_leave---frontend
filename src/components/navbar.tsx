@@ -3,7 +3,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import ConfirmDialog from "./confirmDialog";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import path from "path";
 
 interface NavbarProps {
     user: any;
@@ -56,6 +55,40 @@ export default function Navbar({user,sidebarOpen,setSidebarOpen}: NavbarProps) {
             });
     }, [user]);
 
+    const [queueCount, setQueueCount] = useState<number>(0);
+
+    useEffect(() => {
+        const loadQueueCount = async () => {
+            const token = localStorage.getItem("token");
+
+            if (!token || !user) {
+                return;
+            }
+
+            try {
+                const response = await axios.get(
+                    "http://127.0.0.1:8000/api/officer/pending-applications",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const applications = Array.isArray(response.data)
+                    ? response.data
+                    : [];
+
+                setQueueCount(applications.length);
+
+            } catch (error) {
+                console.error("Failed to load queue count:", error);
+                setQueueCount(0);
+            }
+        };
+        loadQueueCount();
+    }, [user]);
+
     //Applicant navigation
     const applicantItems = [
         {
@@ -80,7 +113,8 @@ export default function Navbar({user,sidebarOpen,setSidebarOpen}: NavbarProps) {
         {
             label: "Dashboard",
             icon: LayoutDashboard,
-            path: "/dashboard"
+            path: "/dashboard",
+            badge: queueCount
         },
         {
             label: "My Applications",
@@ -162,25 +196,17 @@ export default function Navbar({user,sidebarOpen,setSidebarOpen}: NavbarProps) {
         navigate("/");
     };
 
-
     return (
-
         <>
-
             {/* Mobile overlay */}
-
             {sidebarOpen && (
-
                 <div
                     className="fixed inset-0 bg-black/40 z-40 lg:hidden"
                     onClick={() => setSidebarOpen(false)}
                 />
-
             )}
 
-
             {/* Sidebar */}
-
             <aside
                 className={`
                     fixed lg:static
@@ -201,58 +227,34 @@ export default function Navbar({user,sidebarOpen,setSidebarOpen}: NavbarProps) {
             >
 
                 {/* Logo */}
-
                 <div className="px-4 pt-8 pb-10">
-
                     <div className="flex items-center gap-3">
-
                         <img
                             src="/Emblem_of_Sri_Lanka.svg"
                             alt="Government Seal"
                             className="w-10 rounded-sm shrink-0"
                         />
-
                         <div>
-
                             <p className="text-white font-bold text-sm leading-[17.5px] tracking-[0.14px]">
-
                                 Southern Provincial Council
-
                             </p>
-
                             <p className="text-[#87A0CD] font-semibold text-[10px] leading-3.75 tracking-[0.5px] uppercase mt-0.5">
-
                                 Government of Sri Lanka
-
                             </p>
-
                         </div>
-
                     </div>
-
                 </div>
 
 
                 {/* Navigation */}
-
                 <nav className="flex flex-col gap-1 px-2 flex-1">
-
                     {items.map((item) => {
-
                         const Icon = item.icon;
-
                         return (
-
                             <NavLink
                                 key={item.label}
                                 to={item.path}
-
-                                onClick={() => {
-
-                                    setSidebarOpen(false);
-
-                                }}
-
+                                onClick={() => {setSidebarOpen(false);}}
                                 className={({ isActive }) =>
                                     `
                                     flex items-center gap-3
@@ -268,74 +270,47 @@ export default function Navbar({user,sidebarOpen,setSidebarOpen}: NavbarProps) {
                                     `
                                 }
                             >
-
                                 <Icon size={20} />
-
-                                <span className="font-medium text-sm leading-5 tracking-[0.14px]">
-
+                                {/* <span className="font-medium text-sm leading-5 tracking-[0.14px]">
                                     {item.label}
+                                </span> */}
+                                <div className="flex items-center justify-between w-full">
+    <span className="font-medium text-sm leading-5 tracking-[0.14px]">
+        {item.label}
+    </span>
 
-                                </span>
-
+    {item.badge > 0 && (
+        <span className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-red-500 text-white text-xs font-bold">
+            {item.badge}
+        </span>
+    )}
+</div>
                             </NavLink>
-
                         );
-
                     })}
 
 
                     {/* Logout */}
-
                     <div className="mt-auto mb-2 border-t border-[#35527d]">
-
                         <button
                             onClick={() => setShowConfirm(true)}
                             className="w-full flex items-center gap-3 px-4 py-3 rounded-sm text-white hover:bg-red-400 transition-colors"
                         >
-
                             <LogOut size={20} />
-
-                            <span className="font-medium text-sm leading-5 tracking-[0.14px]">
-
-                                Logout
-
-                            </span>
-
+                            <span className="font-medium text-sm leading-5 tracking-[0.14px]">Logout</span>
                         </button>
-
                     </div>
-
                 </nav>
-
             </aside>
 
-
             {/* Logout confirmation */}
-
             {showConfirm && (
-
                 <ConfirmDialog
-
                     message="Are you sure you want to logout?"
-
-                    onCancel={() =>
-                        setShowConfirm(false)
-                    }
-
-                    onConfirm={() => {
-
-                        handleLogout();
-
-                        setShowConfirm(false);
-
-                    }}
-
+                    onCancel={() =>setShowConfirm(false)}
+                    onConfirm={() => {handleLogout();setShowConfirm(false);}}
                 />
-
             )}
-
         </>
-
     );
-
 }

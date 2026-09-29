@@ -5,10 +5,6 @@ import Register from './pages/register.tsx';
 import Register_2 from './pages/register_2.tsx';
 import Register_3 from './pages/register_3.tsx';
 import Dashboard from './pages/dashboard.tsx';
-import MinistryManagement from './pages/minstrymng.tsx';
-import DeptManagement from './pages/deptmng.tsx';
-import District_offices_mng from './pages/district_offices_mng.tsx';
-import Offices_mng from './pages/office_mng.tsx';
 import Form from './pages/form.tsx';
 import Form2 from './pages/form2.tsx';
 import DocumentUpload from './pages/document_upload.tsx';
@@ -92,10 +88,6 @@ function App() {
 
 
       <Route path='/unauthorized' element={<Unauthorized/>}></Route>
-      <Route path="/ministries" element={<MinistryManagement/>}></Route>
-      <Route path="/departments/:id" element={<DeptManagement/>}></Route>
-      <Route path="/district_offices/:id" element={<District_offices_mng/>}></Route>
-      <Route path="/offices/:id" element={<Offices_mng/>}></Route>
 
       {/* new application */}
       <Route path="/new-application" element={<Leave_category/>}></Route>

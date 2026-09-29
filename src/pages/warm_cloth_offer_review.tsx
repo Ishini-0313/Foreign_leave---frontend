@@ -6,7 +6,8 @@ import { useApplication } from "../context/ApplicationContext";
 import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import Footer from "../components/footer";
-import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function FormCard({ children }: { children: React.ReactNode }) {
   return (
@@ -27,17 +28,36 @@ function ChevronRight() {
 
 export default function WarmClothsOfferReview() {
   const {id} = useParams();
-  const {user} = useAuth();
+  const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const {applicationData, setApplicationData, isEditMode, applicationId} = useApplication();
 
   const navigate = useNavigate();
 
+  const [offer, setOffer ] = useState({
+    is_country_in_the_northern_hemisphere : "",
+    north_latitude : "",
+    is_country_in_the_southern_hemisphere : "",
+    south_latitude : "",
+    situated_more_than_5000_feet_above_sea_level : "",
+    height: ""
+  });
+
+  //load user
+  useEffect(()=>{
+    const storedUser = localStorage.getItem("user");
+    console.log("Stored User:", storedUser);
+    if(!storedUser){
+      navigate("/");
+      return;
+    }
+    setUser(JSON.parse(storedUser));
+  },[]);
+
   //fetch application data
   useEffect(() => {
         axios.get(
-            `http://127.0.0.1:8000/api/applications/${id}`,
+            `${API_URL}/applications/${id}`,
             {
                 headers: {
                     Authorization:
@@ -47,6 +67,17 @@ export default function WarmClothsOfferReview() {
         )
         .then((res) => {
             setApplicationData(res.data);
+            if(res.data.warm_cloth_offer){
+              setOffer({
+                is_country_in_the_northern_hemisphere : res.data.warm_cloth_offer.is_country_in_the_northern_hemisphere ?? "",
+                north_latitude : res.data.warm_cloth_offer.north_latitude ?? "",
+                is_country_in_the_southern_hemisphere : res.data.warm_cloth_offer.is_country_in_the_southern_hemisphere ?? "",
+                south_latitude : res.data.warm_cloth_offer.south_latitude ?? "",
+                situated_more_than_5000_feet_above_sea_level : res.data.warm_cloth_offer.situated_more_than_5000_feet_above_sea_level ?? "",
+                height: res.data.warm_cloth_offer.height ?? ""
+              });
+              
+            }
         })
         .catch((err) => {
             console.log(err);
@@ -54,9 +85,42 @@ export default function WarmClothsOfferReview() {
 
     }, []);
 
-  const handleNext = ()=>{
-    navigate(`/options`);
-  };
+  const currentApplication = applicationData?.application;
+
+  const canEdit = user && currentApplication && user.id == currentApplication?.current_assigned_user_id && user.office_id == currentApplication.institute_id && user.role.role_name == "Subject Officer";
+
+
+  const handleSave = async () => {
+    try{
+      await axios.post(`${API_URL}/application/${id}/warmcloth-offer`, offer,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+      toast.success("Saved successfully !");
+      navigate(`/application/${id}`);
+    }catch(error:any){
+      console.error(error);
+
+      // validate errors
+      if(error.response?.status === 422){
+        const errors = error.response.data.errors;
+        Object.values(errors).forEach((messages:any)=>{
+          toast.error(messages[0]);
+        });
+        return;
+      }
+
+      // backend returned an error message
+      toast.error(
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Something went wrong."
+      );
+    }
+  }
 
 
   return (
@@ -245,26 +309,133 @@ export default function WarmClothsOfferReview() {
                   </label>
                     <input
                         type="text"
-                        value={applicationData?.application?.commencement_date_of_trainig + " සිට " + applicationData?.application?.completion_date_of_trainig + " ද්ක්වා"}
+                        value={applicationData?.application?.commencement_date_of_trainig + " සිට " + applicationData?.application?.completion_date_of_trainig + " දක්වා"}
                         className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                     />
+                </div>
+
+                <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
+                    13. ආයතන සංග්‍රහයේ XV පරිච්ඡේදයේ 9.8 අනුව පුහුණුව පැවැත්වෙන නගරය සමශීතෝෂණ දේශගුණයක් සහිත රටක් නම්
+                  </label>
+                  <div className="flex items-center gap-6">
+                    13.1 උත්තරාක්ෂාංශ 35ට උතුරින් උත්තරාර්ධ ගෝලයේ රටකි.
+                    <div className="flex items-center gap-1">
+                      <input
+                        name="is_country_in_the_northern_hemisphere"
+                        type="radio"
+                        value="ඔව්"
+                        className="w-4 h-4 accent-[#002046]"
+                        checked={offer.is_country_in_the_northern_hemisphere === "ඔව්"}
+                        onChange={(e)=> setOffer({...offer, is_country_in_the_northern_hemisphere:e.target.value})}
+                      />
+                      <label htmlFor="">ඔව්</label>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <input
+                        name="is_country_in_the_northern_hemisphere"
+                        type="radio"
+                        value="නැත"
+                        className="w-4 h-4 accent-[#002046]"
+                        checked={offer.is_country_in_the_northern_hemisphere === "නැත"}
+                        onChange={(e)=> setOffer({...offer, is_country_in_the_northern_hemisphere:e.target.value})}
+                      />
+                      <label htmlFor="">නැත</label>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="උත්තරාක්ෂාංශ "
+                      value={offer.north_latitude || ""}
+                      onChange={(e)=>setOffer({...offer, north_latitude:e.target.value})}
+                      className="border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    />
+                  </div>
+                  <div className="flex items-center gap-6">
+                    13.2 දක්ෂිණාක්ෂාංශ 30ට දකුණින් දක්ෂිණාර්ධ ගෝලයේ රටකි.
+                    <div className="flex items-center gap-1">
+                      <input
+                        name="is_country_in_the_southern_hemisphere"
+                        type="radio"
+                        value="ඔව්"
+                        className="w-4 h-4 accent-[#002046]"
+                        checked={offer.is_country_in_the_southern_hemisphere === "ඔව්"}
+                        onChange={(e)=> setOffer({...offer, is_country_in_the_southern_hemisphere:e.target.value})}
+                      />
+                      <label htmlFor="">ඔව්</label>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <input
+                        name="is_country_in_the_southern_hemisphere"
+                        type="radio"
+                        value="නැත"
+                        className="w-4 h-4 accent-[#002046]"
+                        checked={offer.is_country_in_the_southern_hemisphere === "නැත"}
+                        onChange={(e)=> setOffer({...offer, is_country_in_the_southern_hemisphere:e.target.value})}
+                      />
+                      <label htmlFor="">නැත</label>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="දක්ෂිණාක්ෂාංශ "
+                      value={offer.south_latitude || ""}
+                      onChange={(e)=>{setOffer({...offer,south_latitude:e.target.value})}}
+                      className="border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    />
+                  </div>
+                  <div className="flex items-center gap-6">
+                    13.3 මුහුදු මට්ටමෙන් අඩි 5,000 ට ඉහළින් පිහිටි ස්ථානයකි.
+                    <div className="flex items-center gap-1">
+                      <input
+                        name="situated_more_than_5000_feet_above_sea_level"
+                        type="radio"
+                        value="ඔව්"
+                        className="w-4 h-4 accent-[#002046]"
+                        checked={offer.situated_more_than_5000_feet_above_sea_level === "ඔව්"}
+                        onChange={(e)=> setOffer({...offer, situated_more_than_5000_feet_above_sea_level:e.target.value})}
+                      />
+                      <label htmlFor="">ඔව්</label>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <input
+                        name="situated_more_than_5000_feet_above_sea_level"
+                        type="radio"
+                        value="නැත"
+                        className="w-4 h-4 accent-[#002046]"
+                        checked={offer.situated_more_than_5000_feet_above_sea_level === "නැත"}
+                        onChange={(e)=> setOffer({...offer, situated_more_than_5000_feet_above_sea_level:e.target.value})}
+                      />
+                      <label htmlFor="">නැත</label>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="උස අඩි"
+                      value={offer.height || ""}
+                      onChange = {(e)=>setOffer({...offer, height:e.target.value})}
+                      className="border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    />
+                  </div>
                 </div>
               </div>
             </FormCard>
 
-            <div className="flex justify-end mt-8 gap-4">
-                <button className="px-6 py-3 border rounded-lg" onClick={()=>navigate(`/form/edit/${id}`)}>
-                    Back
-                </button>
-                <button
-                    onClick={handleNext}
-                    //disabled={!allUploaded}
-                    className={`flex items-center gap-2 px-8 py-3 rounded-lg text-white font-semibold transition bg-[#1B365D] hover:bg-[#001533]`}>
-                    
-                    Next
-                    <ChevronsRight size={18} />
-                </button>
-            </div>
+            {
+              canEdit && (
+                <div className="flex justify-end mt-8 gap-4">
+                  <button className="px-6 py-3 border rounded-lg" onClick={()=>navigate(`/form/edit/${id}`)}>
+                      Back
+                  </button>
+                  <button
+                      onClick={handleSave}
+                      //disabled={!allUploaded}
+                      className={`flex items-center gap-2 px-8 py-3 rounded-lg text-white font-semibold transition bg-[#1B365D] hover:bg-[#001533]`}>
+                      
+                      Save
+                      <ChevronsRight size={18} />
+                  </button>
+                </div>
+              )
+            }
+            
           </div>
 
           {/* Footer */}

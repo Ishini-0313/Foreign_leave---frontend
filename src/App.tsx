@@ -47,6 +47,9 @@ import WarmClothsOfferReview from './pages/warm_cloth_offer_review.tsx';
 import Unauthorized from './components/Unauthorized.tsx';
 import ProtectedRoute from './context/ProtectedRoute.tsx';
 import Home from './pages/home_page.tsx';
+import MyOfferReview from './pages/myOfferReview.tsx';
+import OfferTracking from './pages/offer_tracking.tsx';
+import OfferDocuments from './pages/offer_documents.tsx';
 
 
 function App() {
@@ -106,9 +109,11 @@ function App() {
       <Route path='/application/:id/form-16' element={<Form_16/>}></Route>
       <Route path='/application/:id/additional-offer' element={<AdditionalOfferReview/>}></Route>
       <Route path='/application/:id/warmcloth-offer' element={<WarmClothsOfferReview/>}></Route>
-      <Route path='/application/:id/tracking' element={<ApplicationTracking/>}></Route>
+      <Route path='/application/:application_no/tracking' element={<ApplicationTracking/>}></Route>
+      <Route path='/offer/:application_no/tracking' element={<OfferTracking/>}></Route>
       
-      <Route path='/application/:id/documents' element={<Documents/>}></Route>
+      <Route path='/application/:application_no/documents' element={<Documents/>}></Route>
+      <Route path='/offer/:application_no/documents' element={<OfferDocuments/>}></Route>
       <Route path='/profile' element={<Profile/>}></Route>
       <Route path='/setting' element={<Setting/>}></Route>
       <Route path='/application/:id/office-form' element={<OfficeForm/>}></Route>
@@ -116,18 +121,19 @@ function App() {
       <Route path='/my-applications' element={<MyApplications/>}></Route>
       <Route path='/application/:id/amendment_documents' element={<AmedmentDocumentUpload/>}></Route>
       <Route path='/application/:application_id/amendments' element= {<Amendments/>}></Route>
-      <Route path='/amendment/:id/tracking' element={<AmendmentTracking/>}></Route>
+      {/* <Route path='/amendment/:id/tracking' element={<AmendmentTracking/>}></Route> */}
       <Route path='/forgot-password' element={<ForgotPassword/>}></Route>
       <Route path='/reset-password' element={<ResetPassword/>}></Route>
       <Route path='/options/:id' element={<Options/>}></Route>
-      <Route path='/my-application/:id' element={<MyApplicationReview/>}></Route>
+      <Route path='/my-application/:application_no' element={<MyApplicationReview/>}></Route>
+      <Route path='/my-offer/:application_no' element={<MyOfferReview/>}></Route>
       <Route path='/amendmnet-review/:id' element={<AmendmentReview/>}></Route>
       <Route path='/amendment/:id/documents' element={<UploadedAmendmentDocuments/>}></Route>
-      <Route path='/amendment/:id/form' element={<AmendmentFromReview/>}></Route>
-      <Route path='/amendment/:id/tracking' element={<AmendmentTracking/>}></Route>
-      <Route path='/application/:id/office-documents' element={<OfficeDocs/>}></Route>
-      <Route path='/application/:id/completed-form-16' element={<CompletedForm16/>}></Route>
-      <Route path='/application/:id/completed-form-126' element={<CompletedForm126/>}></Route>
+      <Route path='/amendment/:application_no/form' element={<AmendmentFromReview/>}></Route>
+      <Route path='/amendment/:application_no/tracking' element={<AmendmentTracking/>}></Route>
+      <Route path='/application/:application_no/office-documents' element={<OfficeDocs/>}></Route>
+      <Route path='/application/:application_no/completed-form-16' element={<CompletedForm16/>}></Route>
+      <Route path='/application/:application_no/completed-form-126' element={<CompletedForm126/>}></Route>
 
       
       <Route path='/additional-offer/edit/:id' element={<AdditionalOffer/>}></Route>

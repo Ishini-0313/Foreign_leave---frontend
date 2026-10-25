@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function CompletedForm126() {
-    const { id } = useParams();
+    const { application_no } = useParams();
     const navigate = useNavigate();
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ export default function CompletedForm126() {
         const loadPdf = async () => {
             try {
                 const response = await axios.get(
-                    `${API_URL}/applications/${id}/completed-form-126`,
+                    `${API_URL}/applications/${application_no}/completed-form-126`,
                     {
                         headers: {
                             Authorization:
@@ -46,13 +46,13 @@ export default function CompletedForm126() {
                 URL.revokeObjectURL(pdfUrl);
             }
         };
-    }, [id]);
+    }, [application_no]);
 
 
     const downloadPdf = async () => {
         try {
             const response = await axios.get(
-                `${API_URL}/applications/${id}/completed-form-126/download`,
+                `${API_URL}/applications/${application_no}/completed-form-126/download`,
                 {
                     headers: {
                         Authorization:
@@ -70,7 +70,7 @@ export default function CompletedForm126() {
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.download = `Form_126_${id}.pdf`;
+            link.download = `Form_126_${application_no}.pdf`;
             document.body.appendChild(link);
 
             link.click();

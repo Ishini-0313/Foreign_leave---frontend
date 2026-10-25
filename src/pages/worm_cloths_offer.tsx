@@ -7,6 +7,8 @@ import Navbar from "../components/navbar";
 import Topbar from "../components/topbar";
 import Footer from "../components/footer";
 import { useAuth } from "../context/AuthContext";
+import { useLeaveCategory } from "../context/LeaveCategoryContext";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function FormCard({ children }: { children: React.ReactNode }) {
   return (
@@ -29,34 +31,49 @@ export default function WormClothsOffer() {
   const {id} = useParams();
   const {user} = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const {applicationData, setApplicationData, isEditMode, applicationId} = useApplication();
   const [institutes, setInstitutes] = useState([]);
   const [designations, setDesignations] = useState([]);
-
+  const {leaveCategory} = useLeaveCategory();
   const navigate = useNavigate();
 
-  //fetch institutes
-  useEffect(() => {
-    if (!applicationData.ministry_id) return;
-    const fetchSubOffices = async () => {
+  //fetch all offices
+  const fetchAllOffices = async () => {
     try {
         const response = await axios.get(
-        "http://127.0.0.1:8000/api/sub-offices",
-        {
-            params: {
-            parent_office_id: applicationData.ministry_id,
-            },
-        }
+        `${API_URL}/offices`,
         );
         setInstitutes(response.data);
     } catch (error) {
         console.error(error);
     }
-    };
+  };
 
-    fetchSubOffices();
+  //fetch suboffices
+  const fetchSubOffices = async () => {
+  try {
+      const response = await axios.get(
+        `${API_URL}/sub-offices`,
+        {
+            params: {
+            parent_office_id: applicationData.ministry_id,
+            },
+        }
+      );
+      setInstitutes(response.data);
+  } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!applicationData.ministry_id){
+      fetchAllOffices();
+    }else{
+      fetchSubOffices();
+    }
   }, [applicationData.ministry_id]);
+
 
   //fetch desinations
   useEffect(()=>{
@@ -136,17 +153,33 @@ export default function WormClothsOffer() {
                   <label className="text-[#44474E] text-sm font-semibold leading-6">
                     02. ආයතනය / අමාත්‍යාංශය
                   </label>
-                  <select 
-                    name="institute_id"
-                    value={applicationData.institute_id}
-                    onChange={(e)=> setApplicationData({...applicationData, institute_id:e.target.value})}
-                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
-                  >
-                    <option value="">-- Select Institute --</option>
-                    {institutes.map((institute: any)=>(
-                      <option key={institute.id} value={institute.id}>{institute.name}</option>
-                    ))}
-                  </select>
+                  {
+                    leaveCategory === 'warm_cloths_and_additional_offer_only' ? (
+                      <select 
+                        name="institute_id"
+                        value={applicationData.institute_id}
+                        onChange={(e)=> setApplicationData({...applicationData, institute_id:e.target.value})}
+                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      >
+                        <option value="">-- Select Institute --</option>
+                        {institutes.map((institute: any)=>(
+                          <option key={institute.id} value={institute.id}>{institute.name}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      <select 
+                        name="institute_id"
+                        value={applicationData.institute_id}
+                        onChange={(e)=> setApplicationData({...applicationData, institute_id:e.target.value})}
+                        className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                      >
+                        <option value="">-- Select Institute --</option>
+                        {institutes.map((institute: any)=>(
+                          <option key={institute.id} value={institute.id}>{institute.name}</option>
+                        ))}
+                      </select>
+                    )
+                  }
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 flex flex-col gap-2">
@@ -192,11 +225,11 @@ export default function WormClothsOffer() {
                       <label key={opt} className="flex items-center gap-3 cursor-pointer">
                         <input 
                           type="radio" 
-                          name="nature_of_leave" 
+                          name="leave_nature_warm" 
                           className="w-4 h-4 accent-[#002046]" 
                           value={opt} 
-                          checked={applicationData.expenses_mainly_to_be_met === opt}
-                          onChange={(e)=> setApplicationData({...applicationData, expenses_mainly_to_be_met:e.target.value})}
+                          checked={applicationData.leave_nature_warm === opt}
+                          onChange={(e)=> setApplicationData({...applicationData, leave_nature_warm:e.target.value})}
                         />
                         <span className="text-base text-black tracking-[0.6px] uppercase">
                           {opt}
@@ -225,21 +258,23 @@ export default function WormClothsOffer() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="flex items-center gap-2 w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-sm text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors">
                       <input
-                        name="Letter_of_invitation_for_training"
+                        name="has_letter_of_invitation_for_training"
                         type="radio"
                         value="ඇත"
-                        checked={applicationData.Letter_of_invitation_for_training === "ඇත"}
-                        onChange={(e)=> setApplicationData({...applicationData, Letter_of_invitation_for_training:e.target.value})}
+                        className="w-4 h-4 accent-[#002046]" 
+                        checked={applicationData.has_letter_of_invitation_for_training === "ඇත"}
+                        onChange={(e)=> setApplicationData({...applicationData, has_letter_of_invitation_for_training:e.target.value})}
                       />
                       <label htmlFor="">ඇත</label>
                     </div>
                     <div className="flex items-center gap-2 w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors">
                       <input
-                        name="Letter_of_invitation_for_training"
+                        name="has_letter_of_invitation_for_training"
                         type="radio"
                         value="නැත"
-                        checked={applicationData.Letter_of_invitation_for_training === "නැත"}
-                        onChange={(e)=> setApplicationData({...applicationData, Letter_of_invitation_for_training:e.target.value})}
+                        className="w-4 h-4 accent-[#002046]" 
+                        checked={applicationData.has_letter_of_invitation_for_training === "නැත"}
+                        onChange={(e)=> setApplicationData({...applicationData, has_letter_of_invitation_for_training:e.target.value})}
                       />
                       <label htmlFor="">නැත</label>
                     </div>
@@ -280,6 +315,7 @@ export default function WormClothsOffer() {
                         name="has_approval_letter"
                         type="radio"
                         value="ඇත"
+                        className="w-4 h-4 accent-[#002046]" 
                         checked={applicationData.has_approval_letter === "ඇත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
@@ -290,6 +326,7 @@ export default function WormClothsOffer() {
                         name="has_approval_letter"
                         type="radio"
                         value="නැත"
+                        className="w-4 h-4 accent-[#002046]" 
                         checked={applicationData.has_approval_letter === "නැත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
@@ -300,6 +337,7 @@ export default function WormClothsOffer() {
                         name="has_approval_letter"
                         type="radio"
                         value="අනුමැතිය සදහා ඉදිරිපත් කර ඇත"
+                        className="w-4 h-4 accent-[#002046]" 
                         checked={applicationData.has_approval_letter === "අනුමැතිය සදහා ඉදිරිපත් කර ඇත"}
                         onChange={(e)=> setApplicationData({...applicationData, has_approval_letter:e.target.value})}
                       />
@@ -318,6 +356,7 @@ export default function WormClothsOffer() {
                         name="have_received_warm_clothing_allowance_within_five_years"
                         type="radio"
                         value="ඔව්"
+                        className="w-4 h-4 accent-[#002046]" 
                         checked={applicationData.have_received_warm_clothing_allowance_within_five_years === "ඔව්"}
                         onChange={(e)=> setApplicationData({...applicationData, have_received_warm_clothing_allowance_within_five_years:e.target.value})}
                       />
@@ -328,6 +367,7 @@ export default function WormClothsOffer() {
                         name="have_received_warm_clothing_allowance_within_five_years"
                         type="radio"
                         value="නැත"
+                        className="w-4 h-4 accent-[#002046]" 
                         checked={applicationData.have_received_warm_clothing_allowance_within_five_years === "නැත"}
                         onChange={(e)=> setApplicationData({...applicationData, have_received_warm_clothing_allowance_within_five_years:e.target.value})}
                       />
@@ -340,7 +380,20 @@ export default function WormClothsOffer() {
                   <label className="text-[#44474E] text-sm font-semibold leading-6">
                     12. පුහුණුව පැවැත්වෙන දින
                   </label>
-                
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <input
+                      type="date"
+                      value={applicationData.commencement_date_of_trainig}
+                      onChange={(e)=> setApplicationData({...applicationData, commencement_date_of_trainig:e.target.value})}
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    />
+                    <input
+                      type="date"
+                      value={applicationData.completion_date_of_trainig}
+                      onChange={(e)=> setApplicationData({...applicationData, completion_date_of_trainig:e.target.value})}
+                      className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                    />
+                  </div>
                 </div>
               </div>
             </FormCard>

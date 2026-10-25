@@ -25,37 +25,45 @@ export default function MyApplications() {
       return;
     }
     setUser(JSON.parse(storedUser));
-    loadMyQueue();
   }, []);
 
   useEffect(() => {
     console.log("User details", user);
   }, [user]);
 
-  const loadMyQueue = async ()=>{
+  const loadMyApplications = async ()=>{
     try{
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(`${API_URL}/my-application`,{
-        headers:{
-          Authorization: `Bearer ${token}`,
-        }
-      });
+      const [applicationResponse, offerResponse] = await Promise.all([
+        axios.get(`${API_URL}/my-application`,{
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        }),
+        axios.get(`${API_URL}/my-offer-application`,{
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        })
+      ]); 
 
-      const data = await response.data;
+      const applications = applicationResponse.data;
+      const offers = offerResponse.data;
 
-      console.log(data);
-
-      setApplications(data);
+      //combine both arrays
+      setApplications([
+        ...applications,
+        ...offers
+      ]);
 
     }catch(error){
       console.error(error);
     }
   };
 
-
   useEffect(() => {
-      loadMyQueue();
+      loadMyApplications();
   }, []);
 
 
@@ -223,7 +231,7 @@ export default function MyApplications() {
                           </td>
                           <td className="px-4 py-6 text-right">
                             <button className="px-4 py-2 rounded-sm   font-bold text-xs leading-4 hover:bg-green-100 transition-colors"
-                              onClick={()=> navigate(`/my-application/${app.id}`)}>
+                              onClick={()=> navigate(app.leave_category === 'warm_cloths_and_additional_offer_only' ?`/my-offer/${app.application_no}` : `/my-application/${app.application_no}`)}>
                               <Eye className="text-gray-600 hover:text-green-600"/>
                             </button>
                           </td>

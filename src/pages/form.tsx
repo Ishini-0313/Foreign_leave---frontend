@@ -68,6 +68,7 @@ export default function Form() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [services, setServices] = useState([]);
   const [ministries, setMinistries] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [institutes, setInstitutes] = useState([]);
   const [designations , setDesignations] = useState([]);
   
@@ -229,11 +230,11 @@ export default function Form() {
     fetchData();
   }, []);
 
-  // fetch suboffices
+  // fetch departments
   useEffect(() => {
     if (!applicationData.ministry_id) return;
 
-    const fetchSubOffices = async () => {
+    const fetchDepartments = async () => {
       try {
         const response = await axios.get(
           "http://127.0.0.1:8000/api/sub-offices",
@@ -244,14 +245,38 @@ export default function Form() {
           }
         );
 
+        setDepartments(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchDepartments();
+  }, [applicationData.ministry_id]);
+
+  // fetch institutes
+  useEffect(() => {
+    if (!applicationData.department_id) return;
+
+    const fetchInstitutes = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/sub-offices",
+          {
+            params: {
+              parent_office_id: applicationData.department_id,
+            },
+          }
+        );
+
         setInstitutes(response.data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchSubOffices();
-  }, [applicationData.ministry_id]);
+    fetchInstitutes();
+  }, [applicationData.department_id]);
 
   //fetch desinations
   useEffect(()=>{
@@ -415,9 +440,27 @@ export default function Form() {
                     ))}
                   </select>
                 </div>
+                {/* department */}
                 <div className="flex flex-col gap-2">
                   <label className="text-[#44474E] text-sm font-semibold leading-6">
-                    3:2 දෙපාර්තමේන්තුව / ආයතනය
+                    3:2 දෙපාර්තමේන්තුව
+                  </label>
+                  <select 
+                    name="department_id"
+                    value={applicationData.department_id}
+                    onChange={(e)=> setApplicationData({...applicationData, department_id:e.target.value})}
+                    className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
+                  >
+                    <option value="">-- Select Department --</option>
+                    {departments.map((department: any)=>(
+                      <option key={department.id} value={department.id}>{department.name}</option>
+                    ))}
+                  </select>
+                </div>
+                {/* institute */}
+                <div className="flex flex-col gap-2">
+                  <label className="text-[#44474E] text-sm font-semibold leading-6">
+                    ආයතනය
                   </label>
                   <select 
                     name="institute_id"
@@ -425,7 +468,7 @@ export default function Form() {
                     onChange={(e)=> setApplicationData({...applicationData, institute_id:e.target.value})}
                     className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   >
-                    <option value="">-- Select Department / Institute --</option>
+                    <option value="">-- Select Institute --</option>
                     {institutes.map((institute: any)=>(
                       <option key={institute.id} value={institute.id}>{institute.name}</option>
                     ))}

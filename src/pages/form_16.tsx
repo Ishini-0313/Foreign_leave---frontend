@@ -141,8 +141,8 @@ export default function Form_16() {
       </div>
 
       <div className="col-span-6">
-        <p className='mb-2'>{applicationData.application.ministry.name}</p>
-        <p className='mb-2'>{applicationData.application.institute.name}</p>
+        <p className='mb-2'>{applicationData?.application?.ministry?.name}</p>
+        <p className='mb-2'>{applicationData?.application?.institute?.name}</p>
       </div>
     </div>
   </div>

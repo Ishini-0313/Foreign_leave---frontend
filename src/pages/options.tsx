@@ -21,8 +21,18 @@ export default function Options() {
     const [signaturePreview, setSignaturePreview] = useState<string>("");
     const [loading, setLoading] = useState(false);
 
-    const signatureCompleted =
-     Boolean(applicationData?.signature_path) || Boolean(signatureFile);
+    const signatureCompleted = Boolean(applicationData?.signature_path) || Boolean(signatureFile);
+
+    //load user
+  useEffect(()=>{
+    const storedUser = localStorage.getItem("user");
+    console.log("Stored User:", storedUser);
+    if(!storedUser){
+      navigate("/");
+      return;
+    }
+    setUser(JSON.parse(storedUser));
+  },[]);
 
     const isForm16Completed = () => {
       if (!applicationData) return false;
@@ -34,7 +44,6 @@ export default function Options() {
         applicationData.dob &&
         applicationData.nic &&
         applicationData.ministry_id &&
-        applicationData.institute_id &&
         applicationData.arrangement_made_to_cover_duty &&
         applicationData.purpose &&
         applicationData.awarding_agency &&
@@ -56,7 +65,6 @@ export default function Options() {
       if (!applicationData) return false;
 
       return Boolean(
-        applicationData.institute_id &&
         applicationData.name_and_designation &&
         applicationData.service_id &&
         applicationData.first_appoinment_date &&
@@ -80,28 +88,24 @@ export default function Options() {
 
       study: [
         "request_letter",
-        "agreement",
         "admission_letter",
         "passport_copy",
       ],
 
       employment: [
         "request_letter",
-        "agreement",
         "employment_letter",
         "passport_copy",
       ],
 
       study_and_employment: [
         "request_letter",
-        "agreement",
         "admission_letter",
         "passport_copy",
       ],
 
       spouse: [
         "request_letter",
-        "agreement",
         "spouse_invitation",
         "passport_copy",
       ],
@@ -114,20 +118,9 @@ export default function Options() {
         "request_letter",
       ],
 
-      leave_with_warm_cloths_offer: [
-        "invitation_letter",
-        "service_confirmation",
-        "duty_cover_letter",
-        "passport_copy",
-        "flight_details",
-        "request_letter",
-        "letter_stating_that_allowances_will_not_be_paid",
-      ],
-
       leave_with_additional_offer: [
         "invitation_letter",
         "service_confirmation",
-        "duty_cover_letter",
         "passport_copy",
         "flight_details",
         "request_letter",
@@ -137,7 +130,15 @@ export default function Options() {
       leave_with_warm_cloths_and_additional_offer: [
         "invitation_letter",
         "service_confirmation",
-        "duty_cover_letter",
+        "passport_copy",
+        "flight_details",
+        "request_letter",
+        "letter_stating_that_allowances_will_not_be_paid",
+      ],
+
+      warm_cloths_and_additional_offer_only: [
+        "invitation_letter",
+        "service_confirmation",
         "passport_copy",
         "flight_details",
         "request_letter",
@@ -163,7 +164,8 @@ export default function Options() {
 
     const requiresAdditionalOffer =
       leaveCategory === "leave_with_additional_offer" ||
-      leaveCategory === "leave_with_warm_cloths_and_additional_offer";
+      leaveCategory === "leave_with_warm_cloths_and_additional_offer" ||
+      leaveCategory === "warm_cloths_and_additional_offer_only";
 
     const isAdditionalOfferCompleted = () => {
       if (!requiresAdditionalOffer) return true;
@@ -173,7 +175,7 @@ export default function Options() {
         applicationData.institute_id &&
         applicationData.position &&
         applicationData.purpose &&
-        applicationData.leave_nature &&
+        applicationData.leave_nature_additional &&
         applicationData.country &&
         applicationData.has_letter_of_invitation_for_training &&
         applicationData.has_approval_letter &&
@@ -186,10 +188,9 @@ export default function Options() {
       );
     };
 
-    //
-
     const requiresWarmClothsOffer = 
-      leaveCategory === "leave_with_warm_cloths_and_additional_offer";
+      leaveCategory === "leave_with_warm_cloths_and_additional_offer" ||
+      leaveCategory === "warm_cloths_and_additional_offer_only" ;
 
     const isWarmClothsOfferCompleted = () => {
       if (!requiresWarmClothsOffer) return true;
@@ -202,24 +203,48 @@ export default function Options() {
         applicationData.country &&
         applicationData.has_letter_of_invitation_for_training &&
         applicationData.has_approval_letter && 
-        applicationData.have_received_warm_clothing_allowance_within_five_years
+        applicationData.have_received_warm_clothing_allowance_within_five_years &&
+        applicationData.leave_nature_warm
       );
     };
 
-    const checklist = [
-      {
-        key: "form16",
-        title: "Form 16",
-        completed: isForm16Completed(),
-        required: true,
-      },
-      {
-        key: "form126",
-        title: "Form 126",
-        completed: isForm126Completed(),
-        required: true,
-      },
-      ...(requiresAdditionalOffer
+    const checklist = () => {
+      if(leaveCategory === "warm_cloths_and_additional_offer_only"){
+        return[
+          {
+            key: "additionalOffer",
+            title: "Additional Offer",
+            completed: isAdditionalOfferCompleted(),
+            required: true,
+          },
+          {
+            key: "warmClothOffer",
+            title: "Warm Cloth Offer",
+            completed: isWarmClothsOfferCompleted(),
+            required: true,
+          },
+          {
+            key: "documents",
+            title: "Supporting Documents",
+            completed: isDocumentsCompleted(),
+            required: true,
+          },
+        ];
+      }
+      return [
+        {
+          key: "form16",
+          title: "Form 16",
+          completed: isForm16Completed(),
+          required: true,
+        },
+        {
+          key: "form126",
+          title: "Form 126",
+          completed: isForm126Completed(),
+          required: true,
+        },
+        ...(requiresAdditionalOffer
         ? [
             {
               key: "additionalOffer",
@@ -229,7 +254,7 @@ export default function Options() {
             },
           ]
         : []),
-      ...(requiresWarmClothsOffer
+        ...(requiresWarmClothsOffer
         ? [
             {
               key: "warmClothOffer",
@@ -239,19 +264,21 @@ export default function Options() {
             }
           ]
         : []),
-      {
-        key: "documents",
-        title: "Supporting Documents",
-        completed: isDocumentsCompleted(),
-        required: true,
-      },
-    ];
+        {
+          key: "documents",
+          title: "Supporting Documents",
+          completed: isDocumentsCompleted(),
+          required: true,
+        },
+      ]
+    };
+      
 
-    const completedSteps = checklist.filter(
+    const completedSteps = checklist().filter(
       (step) => step.completed
     ).length;
 
-    const totalSteps = checklist.length;
+    const totalSteps = checklist().length;
 
     const progressPercentage =
       totalSteps > 0
@@ -259,7 +286,7 @@ export default function Options() {
         : 0;
 
     const allCompleted =
-      checklist.every(step => step.completed) && signatureCompleted;
+      checklist().every(step => step.completed) && signatureCompleted;
 
     let number = 0;
 
@@ -464,6 +491,7 @@ export default function Options() {
         formData.append("nic", applicationData.nic);
 
         formData.append("ministry_id", applicationData.ministry_id);
+        formData.append("department_id", applicationData.department_id);
         formData.append("institute_id", applicationData.institute_id);
 
         formData.append("arrangement_made_to_cover_duty", applicationData.arrangement_made_to_cover_duty);
@@ -547,6 +575,103 @@ export default function Options() {
         }else{
           response = await axios.post(
             `${API_URL}/application`,
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+        }
+
+        toast.success(response.data.message);
+        navigate("/my-applications");
+      }catch(error:any){
+        console.error(error);
+
+        // validate errors
+        if(error.response?.status === 422){
+          const errors = error.response.data.errors;
+          Object.values(errors).forEach((messages:any)=>{
+            toast.error(messages[0]);
+          });
+          return;
+        }
+
+        // backend returned an error message
+        toast.error(
+          error.response?.data?.error ||
+          error.response?.data?.message ||
+          "Something went wrong."
+        );
+      }finally{
+        setLoading(false);
+      }
+    };
+
+    const submitOffer = async()=>{
+      try{
+        setLoading(true);
+        const formData = new FormData();
+
+        formData.append("name", applicationData.name);
+        formData.append("position", applicationData.position);
+        formData.append("institute_id", applicationData.institute_id);
+        formData.append("purpose", applicationData.purpose);
+        formData.append("nature_of_trip",natureOfTrip ?? "" );
+        formData.append("leave_category",leaveCategory ?? "");
+        formData.append("commencement_date_of_trainig", applicationData.commencement_date_of_trainig);
+        formData.append("completion_date_of_trainig", applicationData.completion_date_of_trainig);
+        formData.append("departure_date", applicationData.departure_date);
+        formData.append("return_date", applicationData.return_date);
+        formData.append("country", applicationData.country);
+        formData.append("leave_nature_additional", applicationData.leave_nature_additional);
+        formData.append("leave_nature_warm", applicationData.leave_nature_warm);
+        formData.append("has_letter_of_invitation_for_training", applicationData.has_letter_of_invitation_for_training);
+        formData.append("has_approval_letter", applicationData.has_approval_letter);
+        formData.append("has_government_also_been_invited_for_training", applicationData.has_government_also_been_invited_for_training);
+        formData.append("has_government_nominated_to_participate_in_it", applicationData.has_government_nominated_to_participate_in_it);
+        formData.append("institution_designated_in_that_manner", applicationData.institution_designated_in_that_manner);
+        formData.append("departure_time", applicationData.departure_time);
+        formData.append("return_time", applicationData.return_time);
+        formData.append("provides_other_allowances_that_provide_by_awarding_institution", applicationData.provides_other_allowances_that_provide_by_awarding_institution);
+        formData.append("amount_to_be_paid", applicationData.amount_to_be_paid);
+        formData.append("have_received_warm_clothing_allowance_within_five_years", applicationData.have_received_warm_clothing_allowance_within_five_years);
+
+        Object.entries(applicationData.documents).forEach(
+          ([key, file]) => {
+            if(file){
+              formData.append(key, file as File)
+            }
+          }
+        );
+
+        //formData.append("signature", applicationData.signature);
+        if (applicationData.signature instanceof File) {
+          formData.append("signature", applicationData.signature);
+          }
+
+        const token = localStorage.getItem("token");
+
+        let response;
+
+        if(isEditMode){
+          response = await axios.put(
+            `${API_URL}/offer/${applicationId}/resubmit`,
+            formData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+          );
+          setIsEditMode(false);
+          setApplicationId(null);
+        }else{
+          response = await axios.post(
+            `${API_URL}/offer`,
             formData,
             {
               headers: {
@@ -1363,7 +1488,7 @@ export default function Options() {
 
                         {/* Number */}
                         <div className="absolute top-0 right-0">
-                          {isWarmClothsOfferCompleted() ? (
+                          {isAdditionalOfferCompleted() ? (
                             <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
                               {++number}
                               <CheckCircle2 size={15} />
@@ -1414,9 +1539,19 @@ export default function Options() {
                         </div>
 
                         {/* Number */}
-                        <span className="absolute top-0 right-0 text-xs font-bold text-[#e912c9] bg-[#faece8] px-2.5 py-1 rounded-full">
-                          {++number}
-                        </span>
+                        <div className="absolute top-0 right-0">
+                          {isWarmClothsOfferCompleted() ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#087F5B] bg-[#DDF5EA] px-3 py-1.5 rounded-full">
+                              {++number}
+                              <CheckCircle2 size={15} />
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="text-xs font-bold text-[#7659A9] bg-[#F0E8FA] px-2.5 py-1 rounded-full">
+                              {++number}
+                            </span>
+                          )}
+                        </div>
 
                         {/* Content */}
                         <div className="mt-6">
@@ -1645,7 +1780,7 @@ export default function Options() {
                       allCompleted ? `bg-[#002046] hover:bg-[#001533] text-white`
                       : `bg-[#E5E7EB] text-[#9CA3AF] cursor-not-allowed`
                     }`}
-                  onClick={submitApplication}
+                  onClick={leaveCategory === 'warm_cloths_and_additional_offer_only'? submitOffer :submitApplication}
                   disabled = {loading}
                 >
                   {loading ? "Submitting Application..." :"Submit Application"}

@@ -10,7 +10,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export default function ApplicationTracking() {
   const {user} = useAuth();
-  const { id } = useParams();
+  const { application_no } = useParams();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [tracking, setTracking] = useState<any>();
@@ -18,7 +18,7 @@ export default function ApplicationTracking() {
   useEffect(() => {
     axios
       .get(
-        `${API_URL}/applications/${id}/tracking`,
+        `${API_URL}/applications/${application_no}/tracking`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

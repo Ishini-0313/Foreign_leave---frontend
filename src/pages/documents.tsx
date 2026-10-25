@@ -17,7 +17,7 @@ function ChevronRight() {
 
 export default function Documents() {
   const [user, setUser] = useState<any>(null);
-  const {id} = useParams();
+  const {application_no} = useParams();
   const navigate = useNavigate();
   const [applicationData, setApplicationData]= useState<any>(null);
   const [documents, setDocuments] = useState<any[]>([]);
@@ -41,7 +41,7 @@ export default function Documents() {
   // load application data
   useEffect(() => {
         axios.get(
-            `${API_URL}/applications/${id}`,
+            `${API_URL}/applications/${application_no}`,
             {
                 headers: {
                     Authorization:
@@ -84,7 +84,7 @@ export default function Documents() {
   useEffect(()=>{
 
         axios.get(
-        `${API_URL}/applications/${id}/documents`,
+        `${API_URL}/applications/${application_no}/documents`,
         {
             headers:{
                 Authorization:

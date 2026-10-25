@@ -1,12 +1,11 @@
 import axios from "axios";
-import { ChevronsRight, ClipboardPenLine, FileStack, FileUser, FolderUp, MessageSquareMore, TrendingUp } from "lucide-react";
+import { ChevronsRight, ClipboardPenLine, FileStack, FileText, FileUser, FolderUp, MessageSquareMore, TrendingUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import Topbar from "../components/topbar";
 import { useLeaveCategory } from "../context/LeaveCategoryContext";
-import { useApplication } from "../context/ApplicationContext";
 const API_URL = import.meta.env.VITE_API_URL;
 
 function ChevronRight() {
@@ -24,6 +23,8 @@ export default function ApplicationReview() {
   const [applicationData, setApplicationData]= useState<any>(null);
   const [role, setRole] = useState("");
   const {leaveCategory, setLeaveCategory} = useLeaveCategory();
+  const [approvalLetterUrl, setApprovalLetterUrl] = useState<string | null>(null);
+
 
   //load user
   useEffect(()=>{
@@ -59,6 +60,50 @@ export default function ApplicationReview() {
         });
 
     }, []);
+
+    useEffect(() => {
+        if (applicationData?.application?.status !== "Approved") {
+            return;
+        }
+
+        const loadApprovalLetter = async () => {
+            try {
+                const response = await axios.get(
+                    `${API_URL}/applications/${id}/approval-letter`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                        responseType: "blob",
+                    }
+                );
+
+                const pdfBlob = new Blob(
+                    [response.data],
+                    { type: "application/pdf" }
+                );
+
+                const url = URL.createObjectURL(pdfBlob);
+
+                setApprovalLetterUrl(url);
+
+            } catch (error) {
+                console.error(
+                    "Failed to load approval letter:",
+                    error
+                );
+            }
+        };
+
+        loadApprovalLetter();
+
+        return () => {
+            if (approvalLetterUrl) {
+            URL.revokeObjectURL(approvalLetterUrl);
+            }
+        };
+    }, [applicationData, id]);
+
 
   useEffect(()=>{
     if (!user?.role_id) return;
@@ -375,6 +420,44 @@ export default function ApplicationReview() {
                 </div>
                 <ChevronsRight/>
             </div>
+
+            {/* approval letter */}
+           {applicationData?.application?.status === "Approved" &&
+                approvalLetterUrl && (
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        {/* Header */}
+                        <div className="flex items-center justify-between px-6 py-4 border-b">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                                    <FileText className="text-green-600" size={22} />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-semibold text-[#002046]">Approval Letter</h3>
+                                    <p className="text-sm text-gray-500">Official approval letter</p>
+                                </div>
+                            </div>
+
+                            <a
+                                href={approvalLetterUrl}
+                                download={`Approval_Letter_${applicationData.application.application_no}.pdf`}
+                                className="px-4 py-2 bg-[#002046] text-white rounded-md font-semibold hover:bg-[#001530] transition"
+                            >
+                                Download PDF
+                            </a>
+                        </div>
+
+                        {/* PDF */}
+                        <div className="w-full h-175 bg-gray-100">
+                            <iframe
+                                src={approvalLetterUrl}
+                                title="Approval Letter"
+                                className="w-full h-full border-0"
+                            />
+
+                        </div>
+                    </div>
+                )
+           }
             
           </div>
 

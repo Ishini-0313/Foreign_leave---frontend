@@ -38,6 +38,7 @@ export const ApplicationProvider = ({children}: any) => {
 
         // 3
         ministry_id: "",
+        department_id: "",
         institute_id: "",
 
         // 4
@@ -132,7 +133,8 @@ export const ApplicationProvider = ({children}: any) => {
         
         signature: "",
 
-        leave_nature: "" ,
+        leave_nature_additional: "" ,
+        leave_nature_warm: "",
 
         has_letter_of_invitation_for_training : "",
 

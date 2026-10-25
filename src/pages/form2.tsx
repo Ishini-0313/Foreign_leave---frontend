@@ -151,8 +151,8 @@ export default function Form2() {
                   </label>
                   <select 
                     name="institute_id"
-                    value={applicationData.institute_id}
-                    onChange={(e)=> setApplicationData({...applicationData, institute_id:e.target.value})}
+                    value={applicationData.department_id}
+                    onChange={(e)=> setApplicationData({...applicationData, department_id:e.target.value})}
                     className="w-full border border-[#C4C6CF] rounded bg-white px-3 py-3.5 text-base text-[#1A1B1E] outline-none focus:border-[#002046] focus:ring-1 focus:ring-[#002046] transition-colors"
                   >
                     <option value="">-- Select Department / Institute --</option>

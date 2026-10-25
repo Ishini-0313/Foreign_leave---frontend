@@ -185,51 +185,6 @@ export default function NewDocumentUpload() {
       },
     ],
 
-    leave_with_warm_cloths_offer: [
-      {
-        key: "invitation_letter",
-        label: "අදාළ නිලධාරියා නමට එවන ලද කැඳවීම් ලිපිය",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "service_confirmation",
-        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "duty_cover_letter",
-        label: "රාජකාරි ආවරණ ලිපිය",
-        isRequired: false,
-        file: null
-      },
-      {
-        key: "passport_copy",
-        label: "විදේශ ගමන් බලපත්‍රය",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "flight_details",
-        label: "ගුවන් ගමන් විස්තරය",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "request_letter",
-        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
-        isRequired: true,
-        file: null
-      },
-      {
-        key: "letter_stating_that_allowances_will_not_be_paid",
-        label: "දීමනා නොගෙවන බවට ලිපිය",
-        isRequired: true,
-        file: null
-      },
-    ],
-
     leave_with_additional_offer: [
       {
         key: "invitation_letter",
@@ -276,6 +231,51 @@ export default function NewDocumentUpload() {
     ],
     
     leave_with_warm_cloths_and_additional_offer: [
+      {
+        key: "invitation_letter",
+        label: "අදාළ නිලධාරියා නමට එවන ලද කැඳවීම් ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "service_confirmation",
+        label: "සේවය ස්ථීර කිරීමේ ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "duty_cover_letter",
+        label: "රාජකාරි ආවරණ ලිපිය",
+        isRequired: false,
+        file: null
+      },
+      {
+        key: "passport_copy",
+        label: "විදේශ ගමන් බලපත්‍රය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "flight_details",
+        label: "ගුවන් ගමන් විස්තරය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "request_letter",
+        label: "අයදුම්කරුගේ ඉල්ලීම් ලිපිය",
+        isRequired: true,
+        file: null
+      },
+      {
+        key: "letter_stating_that_allowances_will_not_be_paid",
+        label: "දීමනා නොගෙවන බවට ලිපිය",
+        isRequired: true,
+        file: null
+      },
+    ],
+
+    warm_cloths_and_additional_offer_only: [
       {
         key: "invitation_letter",
         label: "අදාළ නිලධාරියා නමට එවන ලද කැඳවීම් ලිපිය",

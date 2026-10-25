@@ -57,11 +57,6 @@ export default function ApplicationReview() {
     useState<File | null>(null);
 
 
-  const {
-    applicationData: contextApplicationData
-  } = useApplication();
-
-
   // ======================================
   // GET LOGGED-IN USER
   // ======================================
@@ -325,111 +320,49 @@ export default function ApplicationReview() {
 
         Object.values(errors).forEach(
           (messages: any) => {
-
             toast.error(messages[0]);
-
           }
         );
-
         return;
-
       }
 
-
-      toast.error(
-
-        error.response?.data?.error ||
-
-        error.response?.data?.message ||
-
-        "Something went wrong."
-
-      );
-
+      toast.error(error.response?.data?.error ||error.response?.data?.message ||"Something went wrong.");
     }
 
   };
-
-
-  // ======================================
-  // FORWARD
-  // ======================================
 
   const handleForward = async () => {
-
     try {
-
       if (!canForward) {
-
-        toast.error(
-          "You are not allowed to forward."
-        );
-
+        toast.error("You are not allowed to forward.");
         return;
-
       }
 
-
       if (isRecommendedOfficer) {
-
         if (!recommendation) {
-
-          toast.error(
-            "Please select Recommendation."
-          );
-
+          toast.error("Please select Recommendation.");
           return;
-
         }
-
 
         if (!signature) {
-
-          toast.error(
-            "Please upload your signature."
-          );
-
+          toast.error("Please upload your signature.");
           return;
-
         }
-
       }
 
-
-      const token =
-        localStorage.getItem("token");
-
-
+      const token = localStorage.getItem("token");
       const formData = new FormData();
 
-
-      formData.append(
-        "remarks",
-        remarks
-      );
-
+      formData.append("remarks",remarks);
 
       if (isRecommendedOfficer) {
-
-        formData.append(
-          "recommendation",
-          recommendation
-        );
-
-        formData.append(
-          "signature",
-          signature as File
-        );
-
+        formData.append("recommendation", recommendation);
+        formData.append("signature", signature as File);
       }
 
-
       const response = await axios.post(
-
         `${API_URL}/applications/${id}/forward`,
-
         formData,
-
         {
           headers: {
             Authorization:
@@ -443,193 +376,82 @@ export default function ApplicationReview() {
 
       );
 
-
-      toast.success(
-        response.data.message
-      );
-
+      toast.success(response.data.message);
 
       navigate("/dashboard");
 
-
     } catch (error: any) {
-
       console.error(error);
-
-
-      if (
-        error.response?.status === 422
-      ) {
-
-        const errors =
-          error.response.data.errors;
-
+      if (error.response?.status === 422) {
+        const errors = error.response.data.errors;
         Object.values(errors).forEach(
           (messages: any) => {
-
             toast.error(messages[0]);
-
           }
         );
-
         return;
-
       }
-
-
-      toast.error(
-
-        error.response?.data?.error ||
-
-        error.response?.data?.message ||
-
-        "Something went wrong."
-
-      );
-
+      toast.error(error.response?.data?.error ||error.response?.data?.message ||"Something went wrong.");
     }
-
   };
 
-
-  // ======================================
-  // RETURN
-  // ======================================
-
   const handleReturn = async () => {
-
     try {
-
       if (!canReturn) {
-
-        toast.error(
-          "You are not allowed to return."
-        );
-
+        toast.error("You are not allowed to return.");
         return;
-
       }
-
 
       if (isRecommendedOfficer) {
-
         if (!recommendation) {
-
-          toast.error(
-            "Please select Recommended or Not Recommended."
-          );
-
+          toast.error("Please select Recommended or Not Recommended.");
           return;
-
         }
-
 
         if (!signature) {
-
-          toast.error(
-            "Please upload your signature."
-          );
-
+          toast.error("Please upload your signature.");
           return;
-
         }
-
       }
 
-
-      const token =
-        localStorage.getItem("token");
-
+      const token = localStorage.getItem("token");
 
       const formData = new FormData();
 
-
-      formData.append(
-        "remarks",
-        remarks
-      );
-
+      formData.append("remarks",remarks);
 
       if (isRecommendedOfficer) {
-
-        formData.append(
-          "recommendation",
-          recommendation
-        );
-
-        formData.append(
-          "signature",
-          signature as File
-        );
-
+        formData.append("recommendation",recommendation);
+        formData.append("signature",signature as File);
       }
-
 
       const response = await axios.post(
-
         `${API_URL}/applications/${id}/return`,
-
         formData,
-
         {
           headers: {
-            Authorization:
-              `Bearer ${token}`,
-
-            "Content-Type":
-              "multipart/form-data"
-
+            Authorization:`Bearer ${token}`,
+            "Content-Type":"multipart/form-data"
           }
         }
-
       );
 
-
-      toast.success(
-        response.data.message
-      );
-
-
+      toast.success(response.data.message);
       navigate("/dashboard");
-
-
     } catch (error: any) {
-
       console.error(error);
-
-
-      if (
-        error.response?.status === 422
-      ) {
-
-        const errors =
-          error.response.data.errors;
-
+      if (error.response?.status === 422) {
+        const errors = error.response.data.errors;
         Object.values(errors).forEach(
           (messages: any) => {
-
             toast.error(messages[0]);
-
           }
         );
-
         return;
-
       }
 
-
-      toast.error(
-
-        error.response?.data?.error ||
-
-        error.response?.data?.message ||
-
-        "Something went wrong."
-
-      );
-
+      toast.error(error.response?.data?.error ||error.response?.data?.message ||"Something went wrong.");
     }
-
   };
 
 

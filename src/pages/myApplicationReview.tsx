@@ -17,9 +17,9 @@ function ChevronRight() {
 
 export default function MyApplicationReview() {
   const [user, setUser] = useState<any>(null);
-  const {id} = useParams();
+  const {application_no} = useParams();
   const navigate = useNavigate();
-  const [applicationData, setApplicationData]= useState<any>(null);
+  const [applicationData, setApplicationData]= useState<any>([]);
   const [role, setRole] = useState("");
   const [approvalLetterUrl, setApprovalLetterUrl] = useState<string | null>(null);
 
@@ -38,7 +38,7 @@ export default function MyApplicationReview() {
 
   useEffect(() => {
         axios.get(
-            `${API_URL}/applications/${id}`,
+            `${API_URL}/applications/${application_no}`,
             {
                 headers: {
                     Authorization:
@@ -85,12 +85,12 @@ export default function MyApplicationReview() {
         const loadApprovalLetter = async () => {
             try {
                 const response = await axios.get(
-                    `${API_URL}/applications/${id}/approval-letter`,
+                    `${API_URL}/applications/${application_no}/approval-letter`,
                     {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                    responseType: "blob",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                        responseType: "blob",
                     }
                 );
 
@@ -118,7 +118,7 @@ export default function MyApplicationReview() {
             URL.revokeObjectURL(approvalLetterUrl);
             }
         };
-    }, [applicationData, id]);
+    }, [applicationData, application_no]);
 
   return (
     <div className="flex h-screen bg-[#FAF9FD] font-[Inter,sans-serif] overflow-hidden relative">
@@ -148,7 +148,7 @@ export default function MyApplicationReview() {
               <ChevronRight />
               <span className="text-[#44474E] text-xs font-semibold leading-4">Leave Request</span>
               <ChevronRight />
-              <span className="text-[#002046] font-['Noto_Sans_Sinhala'] text-xs font-bold leading-4">{applicationData?.application.application_no}</span>
+              <span className="text-[#002046] font-['Noto_Sans_Sinhala'] text-xs font-bold leading-4">{application_no}</span>
             </nav>
 
             <h2 className="text-[#002046] text-2xl sm:text-3xl font-semibold leading-10 tracking-tight mt-1">
@@ -156,10 +156,10 @@ export default function MyApplicationReview() {
             </h2>
             <div className="flex items-center gap-3 mt-1">
                 <div className="text-gray text-sm bg-blue-200 px-3 rounded-xl">
-                  {applicationData?.application.status}
+                  {applicationData?.application?.status}
                 </div>
                 <div className="text-gray-500">
-                  Submitted on: {new Date(applicationData?.application.created_at).toLocaleDateString()} : {new Date(applicationData?.application.created_at).toLocaleTimeString()}
+                  Submitted on: {new Date(applicationData?.application?.created_at).toLocaleDateString()} : {new Date(applicationData?.application?.created_at).toLocaleTimeString()}
                 </div>
             </div>
             
@@ -180,9 +180,9 @@ export default function MyApplicationReview() {
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
                         onClick={()=>{
                             if(applicationData?.application.status === "Approved"){
-                                navigate(`/application/${id}/completed-form-16`)
+                                navigate(`/application/${application_no}/completed-form-16`)
                             }else{
-                                navigate(`/application/${id}/form-16`);
+                                navigate(`/application/${application_no}/form-16`);
                             }
                             }
                         }>
@@ -198,9 +198,9 @@ export default function MyApplicationReview() {
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
                             onClick={()=>{
                                 if(applicationData?.application.status === "Approved"){
-                                    navigate(`/application/${id}/completed-form-126`)
+                                    navigate(`/application/${application_no}/completed-form-126`)
                                 }else{
-                                    navigate(`/application/${id}/form-126`);
+                                    navigate(`/application/${application_no}/form-126`);
                                 }
                             }}>
                             <div className="flex gap-2 items-center">
@@ -220,9 +220,9 @@ export default function MyApplicationReview() {
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
                         onClick={()=>{
                             if(applicationData?.application.status === "Approved"){
-                                navigate(`/application/${id}/completed-form-16`)
+                                navigate(`/application/${application_no}/completed-form-16`)
                             }else{
-                                navigate(`/application/${id}/form-16`);
+                                navigate(`/application/${application_no}/form-16`);
                             }
                             }
                         }>
@@ -238,9 +238,9 @@ export default function MyApplicationReview() {
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
                             onClick={()=>{
                                 if(applicationData?.application.status === "Approved"){
-                                    navigate(`/application/${id}/completed-form-126`)
+                                    navigate(`/application/${application_no}/completed-form-126`)
                                 }else{
-                                    navigate(`/application/${id}/form-126`);
+                                    navigate(`/application/${application_no}/form-126`);
                                 }
                             }}>
                             <div className="flex gap-2 items-center">
@@ -252,7 +252,7 @@ export default function MyApplicationReview() {
 
                         {/* Additional Offer Form */}
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
-                            onClick={()=> navigate(`/application/${id}/additional-offer`)}>
+                            onClick={()=> navigate(`/application/${application_no}/additional-offer`)}>
                             <div className="flex gap-2 items-center">
                                 <FileUser/>
                                 <p>Additional Offer Form</p>
@@ -270,9 +270,9 @@ export default function MyApplicationReview() {
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
                         onClick={()=>{
                             if(applicationData?.application.status === "Approved"){
-                                navigate(`/application/${id}/completed-form-16`)
+                                navigate(`/application/${application_no}/completed-form-16`)
                             }else{
-                                navigate(`/application/${id}/form-16`);
+                                navigate(`/application/${application_no}/form-16`);
                             }
                             }
                         }>
@@ -288,9 +288,9 @@ export default function MyApplicationReview() {
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
                             onClick={()=>{
                                 if(applicationData?.application.status === "Approved"){
-                                    navigate(`/application/${id}/completed-form-126`)
+                                    navigate(`/application/${application_no}/completed-form-126`)
                                 }else{
-                                    navigate(`/application/${id}/form-126`);
+                                    navigate(`/application/${application_no}/form-126`);
                                 }
                             }}>
                             <div className="flex gap-2 items-center">
@@ -302,7 +302,7 @@ export default function MyApplicationReview() {
 
                         {/* Additional Offer Form */}
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
-                            onClick={()=> navigate(`/application/${id}/additional-offer`)}>
+                            onClick={()=> navigate(`/application/${application_no}/additional-offer`)}>
                             <div className="flex gap-2 items-center">
                                 <FileUser/>
                                 <p>Additional Offer Form</p>
@@ -312,7 +312,7 @@ export default function MyApplicationReview() {
 
                         {/* Warm Cloths Offer Form */}
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
-                            onClick={()=>navigate(`/application/${id}/warmcloth-offer`)}>
+                            onClick={()=>navigate(`/application/${application_no}/warmcloth-offer`)}>
                             <div className="flex gap-2 items-center">
                                 <FileUser/>
                                 <p>Warm Cloths Offer Form</p>
@@ -328,7 +328,7 @@ export default function MyApplicationReview() {
                     <>
                         {/* Additional Offer Form */}
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
-                            onClick={()=> navigate(`/application/${id}/additional-offer`)}
+                            onClick={()=> navigate(`/application/${application_no}/additional-offer`)}
                         >
                             <div className="flex gap-2 items-center">
                                 <FileUser/>
@@ -341,9 +341,9 @@ export default function MyApplicationReview() {
                         <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]"
                             onClick={()=>{
                                 if(applicationData?.application.status === "Approved"){
-                                    navigate(`/application/${id}/completed-form-126`)
+                                    navigate(`/application/${application_no}/completed-form-126`)
                                 }else{
-                                    navigate(`/application/${id}/form-126`);
+                                    navigate(`/application/${application_no}/form-126`);
                                 }
                             }}>
                             <div className="flex gap-2 items-center">
@@ -357,7 +357,7 @@ export default function MyApplicationReview() {
             }
             
             {/* uploaded documents */}
-            <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]" onClick={()=>navigate(`/application/${id}/documents`)}>
+            <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]" onClick={()=>navigate(`/application/${application_no}/documents`)}>
                 <div className="flex gap-2 items-center">
                     <FileStack/>
                     <p>Uploaded Documents</p>
@@ -366,7 +366,7 @@ export default function MyApplicationReview() {
             </div>
 
             {/* tracking */}
-            <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]" onClick={()=>navigate(`/application/${id}/tracking`)}>
+            <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]" onClick={()=>navigate(`/application/${application_no}/tracking`)}>
                 <div className="flex gap-2 items-center">
                     <TrendingUp/>
                     <p>Application Tracking</p>
@@ -376,7 +376,7 @@ export default function MyApplicationReview() {
 
             {/* amendment */}
             {
-                applicationData?.application.amendments.length > 0 &&  (
+                applicationData?.application?.amendments?.length > 0 &&  (
                     <div className="flex justify-between bg-white p-8 rounded-lg shadow-sm hover:scale-102 text-[#002046]" onClick={()=>navigate(`/amendmnet-review/${applicationData?.application.amendments[0].id}`)}>
                         <div className="flex gap-2 items-center">
                             <BookCheck/>
